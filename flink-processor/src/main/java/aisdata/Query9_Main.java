@@ -227,7 +227,7 @@ public class Query9_Main {
                 String ts = millisToTimestamp(left.getTimestamp());
                 Pointer tp  = functions.tgeogpoint_in(
                         String.format("POINT(%f %f)@%s", left.getLon(), left.getLat(), ts));
-                Pointer geo = (tp != null) ? functions.temporal_end_value(tp) : null;
+                Pointer geo = (tp != null) ? functions.tgeo_end_value(tp) : null;
                 geoLefts.add(geo); // null if tgeogpoint_in or temporal_end_value failed
             }
 
@@ -236,7 +236,7 @@ public class Query9_Main {
                 String ts = millisToTimestamp(right.getTimestamp());
                 Pointer tp  = functions.tgeogpoint_in(
                         String.format("POINT(%f %f)@%s", right.getLon(), right.getLat(), ts));
-                Pointer geo = (tp != null) ? functions.temporal_end_value(tp) : null;
+                Pointer geo = (tp != null) ? functions.tgeo_end_value(tp) : null;
                 geoRights.add(geo);
             }
 

@@ -253,8 +253,8 @@ public class Query6_Main {
             // WGS-84) between the two positions regardless of their timestamps. This is
             // equivalent to nad_tgeo_tgeo only when ts_left == ts_right. For ts_left !=
             // ts_right it is a spatial-only distance.
-            Pointer geoLeft  = functions.temporal_end_value(tpointLeft);
-            Pointer geoRight = functions.temporal_end_value(tpointRight);
+            Pointer geoLeft  = functions.tgeo_end_value(tpointLeft);
+            Pointer geoRight = functions.tgeo_end_value(tpointRight);
 
             if (geoLeft == null || geoRight == null) {
                 log.error("temporal_end_value returned null for MMSI={}", left.getMmsi());
