@@ -1,0 +1,77 @@
+FROM debian:bookworm-slim
+
+# Install necessary packages
+RUN apt-get update \
+  && apt-get install -y git curl gnupg build-essential tree vim cmake postgresql-server-dev-15 libproj-dev libjson-c-dev libgsl-dev libgeos-dev postgis \
+  && export GNUPGHOME="$(mktemp -d)" \
+  && curl -fL https://apt.corretto.aws/corretto.key | gpg --batch --import \
+  && gpg --batch --export '6DC3636DAE534049C8B94623A122542AB04F24E3' > /usr/share/keyrings/corretto.gpg \
+  && rm -r "$GNUPGHOME" \
+  && unset GNUPGHOME \
+  && echo "deb [signed-by=/usr/share/keyrings/corretto.gpg] https://apt.corretto.aws stable main" > /etc/apt/sources.list.d/corretto.list \
+  && apt-get update \
+  && apt-get install -y java-21-amazon-corretto-jdk
+
+# Build MobilityDB with MEOS — marianaGarcez fork (PR #749, native EKF)
+RUN git clone --depth 1 https://github.com/marianaGarcez/MobilityDB.git \
+        -b master /usr/local/src/MobilityDB
+RUN mkdir -p /usr/local/src/MobilityDB/build
+RUN cd /usr/local/src/MobilityDB/build && \
+    cmake -DMEOS=ON .. && \
+    make -j$(nproc) && \
+    make install && \
+    ldconfig
+
+# Set up Maven
+ENV MAVEN_HOME=/usr/share/maven
+ENV MAVEN_CONFIG="/root/.m2"
+COPY --from=maven:3.9.6-eclipse-temurin-11 ${MAVEN_HOME} ${MAVEN_HOME}
+COPY --from=maven:3.9.6-eclipse-temurin-11 /usr/local/bin/mvn-entrypoint.sh /usr/local/bin/mvn-entrypoint.sh
+COPY --from=maven:3.9.6-eclipse-temurin-11 /usr/share/maven/ref/settings-docker.xml /usr/share/maven/ref/settings-docker.xml
+RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
+
+# Set up MobilityDB-JMEOS
+# We clone and rebuild the jar here so that the libmeos.so bundled inside it
+# (in resources/lib/) is the marianaGarcez EKF-capable one, not the upstream.
+# Copying a pre-built JMEOS.jar would silently embed the wrong libmeos.so,
+# since JarLibraryLoader extracts and loads the one from inside the jar at runtime.
+RUN git clone --branch fix-tests-using-docker https://github.com/MobilityDB/JMEOS /usr/local/jmeos
+RUN rm /usr/local/jmeos/src/main/resources/lib/libmeos.so
+RUN cp /usr/local/lib/libmeos.so /usr/local/jmeos/src/main/resources/lib/libmeos.so
+RUN rm /usr/local/jmeos/jar/*
+
+# Patch functions.java to expose temporal_ext_kalman_filter via JNR-FFI.
+RUN FPATH=/usr/local/jmeos/src/main/java/functions/functions.java && \
+    sed -i \
+      's/Pointer tpoint_trajectory(Pointer temp, boolean unary_union);/Pointer tpoint_trajectory(Pointer temp, boolean unary_union);\n\t\tPointer temporal_ext_kalman_filter(Pointer temp, double gate, double q, double r, boolean dropOutliers);/' \
+      "$FPATH" && \
+    sed -z -i \
+      's/\(public static Pointer tpoint_trajectory(Pointer temp, boolean unary_union) {\n\t\tvar _result = MeosLibrary.meos.tpoint_trajectory(temp, unary_union);\n\t\tMeosErrorHandler.checkError();\n\t\treturn _result;\n\t}\)/\1\n\n\tpublic static Pointer temporal_ext_kalman_filter(Pointer temp, double gate, double q, double r, boolean dropOutliers) {\n\t\tvar _result = MeosLibrary.meos.temporal_ext_kalman_filter(temp, gate, q, r, dropOutliers);\n\t\tMeosErrorHandler.checkError();\n\t\treturn _result;\n\t}/' \
+      "$FPATH"
+
+# Build JMEOS jar (with EKF-capable libmeos.so embedded + patched functions.java).
+# Jars are output to /usr/local/jmeos/jar/ (not target/).
+RUN cd /usr/local/jmeos && mvn clean package -DskipTests \
+    && mkdir -p /usr/local/jar \
+    && cp /usr/local/jmeos/jar/*.jar /usr/local/jar/
+
+# Clean up
+RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*lists/*
+RUN apt-get remove --purge --autoremove -y curl gnupg
+
+# Copy project-specific files
+COPY target/flink-kafka2postgres-1.0-SNAPSHOT.jar /app/flink-kafka2postgres.jar
+COPY wait-for-it.sh /app/wait-for-it.sh
+
+# Make the wait-for-it script executable
+RUN chmod +x /app/wait-for-it.sh
+
+# Set the library path
+ENV LD_LIBRARY_PATH=/usr/local/lib
+
+# Set working directory
+WORKDIR /app
+
+# Set entrypoint — /usr/local/jar/* expands to all jars copied above
+#ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar:/usr/local/jar/*", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "sncbdata.Query8_V2_Main"]
+ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar:/usr/local/jar/*", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "aisdata.Query8_V2_Main"]
