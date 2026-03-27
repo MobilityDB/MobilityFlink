@@ -2,11 +2,14 @@ package sncbdata;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import jnr.ffi.Memory;
+import jnr.ffi.Pointer;
+import jnr.ffi.Runtime;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.configuration.Configuration;
@@ -22,16 +25,26 @@ import org.apache.flink.util.Collector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jnr.ffi.Pointer;
 import functions.functions;
 import functions.error_handler;
 import functions.error_handler_fn;
+import types.temporal.TInterpolation;
 
 /**
  * Query 3 - Trajectory Creation (SNCB dataset)
  *
- * <p>Reconstructs the trajectory of each train from its GPS positions
- * within a sliding window.
+ * <p>Reconstructs the trajectory of each train from its GPS positions within a
+ * sliding window. Two implementations are provided:
+ *
+ * <ul>
+ *   <li><b>V1 (WKT)</b>: {@link TrajectoryCreationV1_WKT}: builds the whole sequence
+ *       as a WKT string {@code {POINT(lon lat)@ts,...}} and calls {@code tgeogpoint_in()}
+ *       once.</li>
+ *   <li><b>V2 (Expand)</b>: {@link TrajectoryCreationV2_Expand}: builds the sequence
+ *       incrementally using {@code temporal_append_tinstant()}.</li>
+ * </ul>
+ *
+ * <p>To switch implementation, change the {@code .process(...)} call in {@link #main}.
  *
  * <p>Original MobilityNebula pseudocode:
  * <pre>
@@ -77,7 +90,9 @@ public class Query3_Main {
             source
                     .keyBy(SNCBData::getDeviceId)
                     .window(SlidingEventTimeWindows.of(Time.seconds(10), Time.milliseconds(10)))
-                    .process(new TrajectoryCreationWindowFunction())
+                    // Switch here to compare implementations:
+                    .process(new TrajectoryCreationV1_WKT())
+                    //.process(new TrajectoryCreationV2_Expand())
                     .print();
 
             env.execute("Query 3 - Trajectory Creation (SNCB)");
@@ -91,10 +106,18 @@ public class Query3_Main {
         }
     }
 
-    public static class TrajectoryCreationWindowFunction
+    // =========================================================================
+    // V1: WKT StringBuilder + tgeogpoint_in
+    // =========================================================================
+
+    /**
+     * Builds the entire sequence as a WKT literal {@code {POINT(lon lat)@ts,...}}
+     * and parses it in one call to {@code tgeogpoint_in()}.
+     */
+    public static class TrajectoryCreationV1_WKT
             extends ProcessWindowFunction<SNCBData, String, Integer, TimeWindow> {
 
-        private static final Logger log = LoggerFactory.getLogger(TrajectoryCreationWindowFunction.class);
+        private static final Logger log = LoggerFactory.getLogger(TrajectoryCreationV1_WKT.class);
         private static final DateTimeFormatter TIMESTAMP_FMT =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
         private transient error_handler_fn errorHandler;
@@ -111,39 +134,132 @@ public class Query3_Main {
         public void process(Integer deviceId, Context context,
                             Iterable<SNCBData> elements, Collector<String> out) {
 
-            String windowStart = millisToTimestamp(context.window().getStart());
-            String windowEnd   = millisToTimestamp(context.window().getEnd());
+            String windowStart = millisToTs(context.window().getStart());
+            String windowEnd   = millisToTs(context.window().getEnd());
 
-            // Collect and sort by timestamp: MEOS requires strictly increasing order.
             List<SNCBData> sorted = new ArrayList<>();
             for (SNCBData e : elements) sorted.add(e);
             sorted.sort((a, b) -> Long.compare(a.getTimestamp(), b.getTimestamp()));
             if (sorted.isEmpty()) return;
 
-            // Build tgeogpoint sequence literal: {POINT(lon lat)@ts, ...}
             StringBuilder seq = new StringBuilder("{");
             for (int i = 0; i < sorted.size(); i++) {
                 SNCBData event = sorted.get(i);
-                String ts = millisToTimestamp(event.getTimestamp());
                 if (i > 0) seq.append(",");
-                seq.append(String.format("POINT(%f %f)@%s", event.getLon(), event.getLat(), ts));
+                seq.append(String.format("POINT(%f %f)@%s",
+                        event.getLon(), event.getLat(), millisToTs(event.getTimestamp())));
             }
             seq.append("}");
 
             Pointer trajectory = functions.tgeogpoint_in(seq.toString());
-            if (trajectory == null) { log.error("tgeogpoint_in returned null for sequence: {}", seq); return; }
-
-            String trajectoryWkt = functions.tspatial_as_ewkt(trajectory, 6);
-            String output = String.format(
-                    "[TRAJ][Q3] DeviceID=%-6d | points=%3d | window [%s - %s]%n           trajectory: %s",
-                    deviceId, sorted.size(), windowStart, windowEnd, trajectoryWkt);
-
-            log.info(output);
-            out.collect(output);
+            if (trajectory == null) {
+                log.error("[V1] tgeogpoint_in returned null for sequence: {}", seq);
+                return;
+            }
+            emit(out, log, "V1", deviceId, sorted.size(), windowStart, windowEnd, trajectory);
         }
 
-        private String millisToTimestamp(long millis) {
+        private String millisToTs(long millis) {
             return Instant.ofEpochMilli(millis).atOffset(ZoneOffset.UTC).format(TIMESTAMP_FMT);
         }
+    }
+
+    // =========================================================================
+    // V2: Expand: tgeogpoint_in (instant) → temporal_append_tinstant
+    // =========================================================================
+
+    /**
+     * Builds the sequence incrementally: the first instant seeds the sequence via
+     * {@code tsequence_make}, and subsequent instants are appended with
+     * {@code temporal_append_tinstant()}. MEOS handles capacity doubling internally.
+     */
+    public static class TrajectoryCreationV2_Expand
+            extends ProcessWindowFunction<SNCBData, String, Integer, TimeWindow> {
+
+        private static final Logger log = LoggerFactory.getLogger(TrajectoryCreationV2_Expand.class);
+        private static final DateTimeFormatter TIMESTAMP_FMT =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
+        private transient error_handler_fn errorHandler;
+
+        @Override
+        public void open(Configuration parameters) throws Exception {
+            super.open(parameters);
+            errorHandler = new error_handler();
+            functions.meos_initialize_timezone("UTC");
+            functions.meos_initialize_error_handler(errorHandler);
+        }
+
+        @Override
+        public void process(Integer deviceId, Context context,
+                            Iterable<SNCBData> elements, Collector<String> out) {
+
+            String windowStart = millisToTs(context.window().getStart());
+            String windowEnd   = millisToTs(context.window().getEnd());
+
+            List<SNCBData> sorted = new ArrayList<>();
+            for (SNCBData e : elements) sorted.add(e);
+            sorted.sort((a, b) -> Long.compare(a.getTimestamp(), b.getTimestamp()));
+            if (sorted.isEmpty()) return;
+
+            Runtime runtime = Runtime.getSystemRuntime();
+            Pointer trajectory = null;
+            int count = 0;
+
+            for (SNCBData event : sorted) {
+                String wkt   = String.format("POINT(%f %f)@%s",
+                        event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
+                Pointer inst = functions.tgeogpoint_in(wkt);
+                if (inst == null) {
+                    log.error("[V2] tgeogpoint_in returned null for DeviceID={} wkt={}", deviceId, wkt);
+                    continue;
+                }
+
+                if (trajectory == null) {
+                    // Seed the expandable sequence with the first instant.
+                    Pointer seedArray = Memory.allocate(runtime, Long.BYTES);
+                    seedArray.putPointer(0, inst);
+                    trajectory = functions.tsequence_make(
+                            seedArray, 1, true, true, TInterpolation.LINEAR.getValue(), true);
+                    if (trajectory == null) {
+                        log.error("[V2] tsequence_make (seed) returned null for DeviceID={}", deviceId);
+                        return;
+                    }
+                } else {
+                    // Append: MEOS expands capacity as needed.
+                    Pointer expanded = functions.temporal_append_tinstant(
+                            trajectory, inst, TInterpolation.LINEAR.getValue(), 0.0, null, true);
+                    if (expanded == null) {
+                        log.error("[V2] temporal_append_tinstant returned null for DeviceID={} wkt={}", deviceId, wkt);
+                        continue;
+                    }
+                    trajectory = expanded;
+                }
+                count++;
+            }
+
+            if (trajectory == null || count == 0) return;
+            emit(out, log, "V2", deviceId, count, windowStart, windowEnd, trajectory);
+        }
+
+        private String millisToTs(long millis) {
+            return Instant.ofEpochMilli(millis).atOffset(ZoneOffset.UTC).format(TIMESTAMP_FMT);
+        }
+    }
+
+    // =========================================================================
+    // Shared output helper
+    // =========================================================================
+
+    private static void emit(Collector<String> out, Logger log, String version,
+                             int deviceId, int points,
+                             String windowStart, String windowEnd,
+                             Pointer trajectory) {
+        String trajectoryWkt = functions.tspatial_as_ewkt(trajectory, 6);
+        String output = String.format(
+                "[TRAJ][Q3][%s] DeviceID=%-6d | points=%3d | window [%s - %s]%n"
+                        + "              trajectory: %s",
+                version, deviceId, points, windowStart, windowEnd, trajectoryWkt);
+        log.info(output);
+        out.collect(output);
     }
 }

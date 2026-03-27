@@ -2,11 +2,14 @@ package sncbdata;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import jnr.ffi.Memory;
+import jnr.ffi.Pointer;
+import jnr.ffi.Runtime;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.configuration.Configuration;
@@ -22,16 +25,26 @@ import org.apache.flink.util.Collector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jnr.ffi.Pointer;
 import functions.functions;
 import functions.error_handler;
 import functions.error_handler_fn;
+import types.temporal.TInterpolation;
 
 /**
  * Query 5 - Trajectory Creation and High-Speed Alert (SNCB dataset)
  *
- * <p>Monitors trains within a geofenced area of the Belgian railway network
- * and emits alerts when average or minimum speed exceeds defined thresholds.
+ * <p>Monitors trains within a geofenced area and emits alerts when average or
+ * minimum speed exceeds defined thresholds. Two implementations are provided:
+ *
+ * <ul>
+ *   <li><b>V1 (WKT)</b>: {@link HighSpeedAlertV1_WKT}: collects geofence-surviving
+ *       points, builds a WKT string and calls {@code tgeogpoint_in()} once for the
+ *       final trajectory.</li>
+ *   <li><b>V2 (Expand)</b>: {@link HighSpeedAlertV2_Expand}: builds the surviving
+ *       trajectory incrementally using {@code temporal_append_tinstant()}.</li>
+ * </ul>
+ *
+ * <p>To switch implementation, change the {@code .process(...)} call in {@link #main}.
  *
  * <p>Original MobilityNebula pseudocode:
  * <pre>
@@ -97,7 +110,11 @@ public class Query5_Main {
             source
                     .keyBy(SNCBData::getDeviceId)
                     .window(SlidingEventTimeWindows.of(Time.seconds(45), Time.seconds(5)))
-                    .process(new HighSpeedAlertWindowFunction(
+                    // Switch here to compare implementations:
+                    //.process(new HighSpeedAlertV1_WKT(
+                    //        GEOFENCE_WKT, GEOFENCE_DISTANCE_METERS,
+                    //        AVG_SPEED_THRESHOLD_MS, MIN_SPEED_THRESHOLD_MS))
+                    .process(new HighSpeedAlertV2_Expand(
                             GEOFENCE_WKT, GEOFENCE_DISTANCE_METERS,
                             AVG_SPEED_THRESHOLD_MS, MIN_SPEED_THRESHOLD_MS))
                     .print();
@@ -113,10 +130,18 @@ public class Query5_Main {
         }
     }
 
-    public static class HighSpeedAlertWindowFunction
+    // =========================================================================
+    // V1: Geofence filter + WKT StringBuilder + tgeogpoint_in
+    // =========================================================================
+
+    /**
+     * Filters events through the geofence, accumulates survivors in a WKT string,
+     * and calls {@code tgeogpoint_in()} once to build the final trajectory.
+     */
+    public static class HighSpeedAlertV1_WKT
             extends ProcessWindowFunction<SNCBData, String, Integer, TimeWindow> {
 
-        private static final Logger log = LoggerFactory.getLogger(HighSpeedAlertWindowFunction.class);
+        private static final Logger log = LoggerFactory.getLogger(HighSpeedAlertV1_WKT.class);
         private static final DateTimeFormatter TIMESTAMP_FMT =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
 
@@ -125,12 +150,11 @@ public class Query5_Main {
         private final double avgSpeedThresholdMs;
         private final double minSpeedThresholdMs;
 
-        // Parsed once per worker in open().
         private transient error_handler_fn errorHandler;
         private transient Pointer geofence;
 
-        public HighSpeedAlertWindowFunction(String geofenceWkt, double geofenceDistMeters,
-                                            double avgSpeedThresholdMs, double minSpeedThresholdMs) {
+        public HighSpeedAlertV1_WKT(String geofenceWkt, double geofenceDistMeters,
+                                    double avgSpeedThresholdMs, double minSpeedThresholdMs) {
             this.geofenceWkt         = geofenceWkt;
             this.geofenceDistMeters  = geofenceDistMeters;
             this.avgSpeedThresholdMs = avgSpeedThresholdMs;
@@ -143,9 +167,8 @@ public class Query5_Main {
             errorHandler = new error_handler();
             functions.meos_initialize_timezone("UTC");
             functions.meos_initialize_error_handler(errorHandler);
-            // Parse the geofence polygon once per worker, not per window call.
             geofence = functions.geog_in(geofenceWkt, -1);
-            if (geofence == null) log.error("geog_in returned null for geofence: {}", geofenceWkt);
+            if (geofence == null) log.error("[V1] geog_in returned null for geofence: {}", geofenceWkt);
         }
 
         @Override
@@ -154,15 +177,15 @@ public class Query5_Main {
 
             if (geofence == null) return;
 
-            String windowStart = millisToTimestamp(context.window().getStart());
-            String windowEnd   = millisToTimestamp(context.window().getEnd());
+            String windowStart = millisToTs(context.window().getStart());
+            String windowEnd   = millisToTs(context.window().getEnd());
             List<SNCBData> surviving = new ArrayList<>();
 
             for (SNCBData event : elements) {
-                String point = String.format("POINT(%f %f)@%s", event.getLon(), event.getLat(), millisToTimestamp(event.getTimestamp()));
-                Pointer tpoint = functions.tgeogpoint_in(point);
+                String wkt    = String.format("POINT(%f %f)@%s",
+                        event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
+                Pointer tpoint = functions.tgeogpoint_in(wkt);
                 if (tpoint == null) continue;
-                // Line 2: keep only points within the geofence
                 if (functions.edwithin_tgeo_geo(tpoint, geofence, geofenceDistMeters) != 1) continue;
                 surviving.add(event);
             }
@@ -178,8 +201,8 @@ public class Query5_Main {
             for (int i = 0; i < survivingListSize; i++) {
                 SNCBData event = surviving.get(i);
                 if (i > 0) seq.append(",");
-                seq.append(String.format("POINT(%f %f)@%s", event.getLon(), event.getLat(), millisToTimestamp(event.getTimestamp())));
-                // Convert km/h → m/s
+                seq.append(String.format("POINT(%f %f)@%s",
+                        event.getLon(), event.getLat(), millisToTs(event.getTimestamp())));
                 double speedMs = event.getGpsSpeed() * KMH_TO_MS;
                 speedSumMs += speedMs;
                 if (speedMs < minSpeedMs) minSpeedMs = speedMs;
@@ -195,25 +218,149 @@ public class Query5_Main {
             String trajectoryEwkt = (trajectory != null)
                     ? functions.tspatial_as_ewkt(trajectory, 6) : seq.toString();
 
-            String triggerReason = (avgSpeedMs > avgSpeedThresholdMs && minSpeedMs > minSpeedThresholdMs)
-                    ? "AVG+MIN" : (avgSpeedMs > avgSpeedThresholdMs ? "AVG" : "MIN");
-
-            String alert = String.format(
-                    "[ALERT][Q5] DeviceID=%-6d | avgSpeed=%6.2f m/s (>%.1f)"
-                            + " | minSpeed=%6.2f m/s (>%.1f) | points=%d | trigger=%s | window [%s - %s]%n"
-                            + "             trajectory: %s",
-                    deviceId, avgSpeedMs, avgSpeedThresholdMs, minSpeedMs, minSpeedThresholdMs,
-                    surviving.size(), triggerReason, windowStart, windowEnd, trajectoryEwkt);
-
-            log.warn(alert);
-            out.collect(alert);
+            emit(out, log, "V1", deviceId, survivingListSize, avgSpeedMs, minSpeedMs,
+                    avgSpeedThresholdMs, minSpeedThresholdMs, windowStart, windowEnd, trajectoryEwkt);
         }
 
-        private String millisToTimestamp(long millis) {
-            //Instant instant = Instant.ofEpochMilli(millis);
-            //OffsetDateTime dt = instant.atOffset(ZoneOffset.UTC);
-            //return dt.format(TIMESTAMP_FMT);
+        private String millisToTs(long millis) {
             return Instant.ofEpochMilli(millis).atOffset(ZoneOffset.UTC).format(TIMESTAMP_FMT);
         }
+    }
+
+    // =========================================================================
+    // V2: Geofence filter + tgeogpoint_in (instant) → temporal_append_tinstant
+    // =========================================================================
+
+    /**
+     * Filters events through the geofence and builds the surviving trajectory
+     * incrementally using {@code temporal_append_tinstant()}.
+     */
+    public static class HighSpeedAlertV2_Expand
+            extends ProcessWindowFunction<SNCBData, String, Integer, TimeWindow> {
+
+        private static final Logger log = LoggerFactory.getLogger(HighSpeedAlertV2_Expand.class);
+        private static final DateTimeFormatter TIMESTAMP_FMT =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
+
+        private final String geofenceWkt;
+        private final double geofenceDistMeters;
+        private final double avgSpeedThresholdMs;
+        private final double minSpeedThresholdMs;
+
+        private transient error_handler_fn errorHandler;
+        private transient Pointer geofence;
+
+        public HighSpeedAlertV2_Expand(String geofenceWkt, double geofenceDistMeters,
+                                       double avgSpeedThresholdMs, double minSpeedThresholdMs) {
+            this.geofenceWkt         = geofenceWkt;
+            this.geofenceDistMeters  = geofenceDistMeters;
+            this.avgSpeedThresholdMs = avgSpeedThresholdMs;
+            this.minSpeedThresholdMs = minSpeedThresholdMs;
+        }
+
+        @Override
+        public void open(Configuration parameters) throws Exception {
+            super.open(parameters);
+            errorHandler = new error_handler();
+            functions.meos_initialize_timezone("UTC");
+            functions.meos_initialize_error_handler(errorHandler);
+            geofence = functions.geog_in(geofenceWkt, -1);
+            if (geofence == null) log.error("[V2] geog_in returned null for geofence: {}", geofenceWkt);
+        }
+
+        @Override
+        public void process(Integer deviceId, Context context,
+                            Iterable<SNCBData> elements, Collector<String> out) {
+
+            if (geofence == null) return;
+
+            String windowStart = millisToTs(context.window().getStart());
+            String windowEnd   = millisToTs(context.window().getEnd());
+
+            // Collect and sort first: MEOS requires strictly increasing timestamps.
+            List<SNCBData> sorted = new ArrayList<>();
+            for (SNCBData e : elements) sorted.add(e);
+            sorted.sort((a, b) -> Long.compare(a.getTimestamp(), b.getTimestamp()));
+            if (sorted.isEmpty()) return;
+
+            Runtime runtime = Runtime.getSystemRuntime();
+            Pointer trajectory = null;
+            double speedSumMs  = 0.0;
+            double minSpeedMs  = Double.MAX_VALUE;
+            int count          = 0;
+
+            for (SNCBData event : sorted) {
+                String wkt    = String.format("POINT(%f %f)@%s",
+                        event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
+                Pointer inst = functions.tgeogpoint_in(wkt);
+                if (inst == null) {
+                    log.error("[V2] tgeogpoint_in returned null for DeviceID={} wkt={}", deviceId, wkt);
+                    continue;
+                }
+
+                // Geofence filter: reuse the already-parsed instant pointer.
+                if (functions.edwithin_tgeo_geo(inst, geofence, geofenceDistMeters) != 1) continue;
+
+                double speedMs = event.getGpsSpeed() * KMH_TO_MS;
+                speedSumMs += speedMs;
+                if (speedMs < minSpeedMs) minSpeedMs = speedMs;
+
+                if (trajectory == null) {
+                    Pointer seedArray = Memory.allocate(runtime, Long.BYTES);
+                    seedArray.putPointer(0, inst);
+                    trajectory = functions.tsequence_make(
+                            seedArray, 1, true, true, TInterpolation.LINEAR.getValue(), true);
+                    if (trajectory == null) {
+                        log.error("[V2] tsequence_make (seed) returned null for DeviceID={}", deviceId);
+                        return;
+                    }
+                } else {
+                    Pointer expanded = functions.temporal_append_tinstant(
+                            trajectory, inst, TInterpolation.LINEAR.getValue(), 0.0, null, true);
+                    if (expanded == null) {
+                        log.error("[V2] temporal_append_tinstant returned null for DeviceID={} wkt={}", deviceId, wkt);
+                        continue;
+                    }
+                    trajectory = expanded;
+                }
+                count++;
+            }
+
+            if (trajectory == null || count == 0) return;
+
+            double avgSpeedMs = speedSumMs / count;
+            if (avgSpeedMs <= avgSpeedThresholdMs && minSpeedMs <= minSpeedThresholdMs) return;
+
+            String trajectoryEwkt = functions.tspatial_as_ewkt(trajectory, 6);
+            emit(out, log, "V2", deviceId, count, avgSpeedMs, minSpeedMs,
+                    avgSpeedThresholdMs, minSpeedThresholdMs, windowStart, windowEnd, trajectoryEwkt);
+        }
+
+        private String millisToTs(long millis) {
+            return Instant.ofEpochMilli(millis).atOffset(ZoneOffset.UTC).format(TIMESTAMP_FMT);
+        }
+    }
+
+    // =========================================================================
+    // Shared output helper
+    // =========================================================================
+
+    private static void emit(Collector<String> out, Logger log, String version,
+                             int deviceId, int points,
+                             double avgSpeedMs, double minSpeedMs,
+                             double avgThreshold, double minThreshold,
+                             String windowStart, String windowEnd,
+                             String trajectoryEwkt) {
+        String triggerReason = (avgSpeedMs > avgThreshold && minSpeedMs > minThreshold)
+                ? "AVG+MIN" : (avgSpeedMs > avgThreshold ? "AVG" : "MIN");
+        String alert = String.format(
+                "[ALERT][Q5][%s] DeviceID=%-6d | avgSpeed=%6.2f m/s (>%.1f)"
+                        + " | minSpeed=%6.2f m/s (>%.1f) | points=%d | trigger=%s"
+                        + " | window [%s - %s]%n"
+                        + "             trajectory: %s",
+                version, deviceId, avgSpeedMs, avgThreshold, minSpeedMs, minThreshold,
+                points, triggerReason, windowStart, windowEnd, trajectoryEwkt);
+        log.warn(alert);
+        out.collect(alert);
     }
 }

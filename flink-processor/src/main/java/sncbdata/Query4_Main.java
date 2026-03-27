@@ -2,11 +2,14 @@ package sncbdata;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import jnr.ffi.Memory;
+import jnr.ffi.Pointer;
+import jnr.ffi.Runtime;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.configuration.Configuration;
@@ -22,16 +25,26 @@ import org.apache.flink.util.Collector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jnr.ffi.Pointer;
 import functions.functions;
 import functions.error_handler;
 import functions.error_handler_fn;
+import types.temporal.TInterpolation;
 
 /**
  * Query 4 - Trajectory Creation in a Restricted Space (SNCB dataset)
  *
  * <p>Applies a spatiotemporal box (STBox) filter to restrict trajectory
  * construction to the Brussels-South corridor (device 3) and the SNCB dataset date.
+ * Two implementations are provided:
+ *
+ * <ul>
+ *   <li><b>V1 (WKT)</b>: {@link RestrictedTrajectoryV1_WKT}: collects surviving
+ *       points into a WKT string and calls {@code tgeogpoint_in()} once.</li>
+ *   <li><b>V2 (Expand)</b>: {@link RestrictedTrajectoryV2_Expand}: builds the
+ *       filtered sequence incrementally using {@code temporal_append_tinstant()}.</li>
+ * </ul>
+ *
+ * <p>To switch implementation, change the {@code .process(...)} call in {@link #main}.
  *
  * <p>Original MobilityNebula pseudocode:
  * <pre>
@@ -87,7 +100,10 @@ public class Query4_Main {
             source
                     .keyBy(SNCBData::getDeviceId)
                     .window(SlidingEventTimeWindows.of(Time.seconds(10), Time.milliseconds(10)))
-                    .process(new RestrictedTrajectoryWindowFunction(
+                    // Switch here to compare implementations:
+                    //.process(new RestrictedTrajectoryV1_WKT(
+                    //        STBOX_XMIN, STBOX_XMAX, STBOX_YMIN, STBOX_YMAX, STBOX_TSPAN))
+                    .process(new RestrictedTrajectoryV2_Expand(
                             STBOX_XMIN, STBOX_XMAX, STBOX_YMIN, STBOX_YMAX, STBOX_TSPAN))
                     .print();
 
@@ -102,21 +118,28 @@ public class Query4_Main {
         }
     }
 
-    public static class RestrictedTrajectoryWindowFunction
+    // =========================================================================
+    // V1: STBox filter + WKT StringBuilder + tgeogpoint_in
+    // =========================================================================
+
+    /**
+     * Filters events through the STBox, collects survivors into a WKT literal, and
+     * calls {@code tgeogpoint_in()} once to build the trajectory.
+     */
+    public static class RestrictedTrajectoryV1_WKT
             extends ProcessWindowFunction<SNCBData, String, Integer, TimeWindow> {
 
-        private static final Logger log = LoggerFactory.getLogger(RestrictedTrajectoryWindowFunction.class);
+        private static final Logger log = LoggerFactory.getLogger(RestrictedTrajectoryV1_WKT.class);
         private static final DateTimeFormatter TIMESTAMP_FMT =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
 
         private final double xmin, xmax, ymin, ymax;
         private final String tspanLiteral;
 
-        // Built once per worker in open().
         private transient Pointer stbox;
         private transient error_handler_fn errorHandler;
 
-        public RestrictedTrajectoryWindowFunction(
+        public RestrictedTrajectoryV1_WKT(
                 double xmin, double xmax, double ymin, double ymax, String tspanLiteral) {
             this.xmin = xmin; this.xmax = xmax; this.ymin = ymin; this.ymax = ymax;
             this.tspanLiteral = tspanLiteral;
@@ -128,12 +151,12 @@ public class Query4_Main {
             errorHandler = new error_handler();
             functions.meos_initialize_timezone("UTC");
             functions.meos_initialize_error_handler(errorHandler);
-            // Build the STBox once per worker, not per window call.
             Pointer tspan = functions.tstzspan_in(tspanLiteral);
             if (tspan == null) { log.error("tstzspan_in returned null for: {}", tspanLiteral); return; }
             stbox = functions.stbox_make(true, false, true, 4326, xmin, xmax, ymin, ymax, 0, 0, tspan);
             if (stbox == null) log.error("stbox_make returned null");
-            else log.info("STBox built: xmin={} xmax={} ymin={} ymax={} tspan={}", xmin, xmax, ymin, ymax, tspanLiteral);
+            else log.info("[V1] STBox built: xmin={} xmax={} ymin={} ymax={} tspan={}",
+                    xmin, xmax, ymin, ymax, tspanLiteral);
         }
 
         @Override
@@ -142,16 +165,15 @@ public class Query4_Main {
 
             if (stbox == null) return;
 
-            String windowStart = millisToTimestamp(context.window().getStart());
-            String windowEnd   = millisToTimestamp(context.window().getEnd());
+            String windowStart = millisToTs(context.window().getStart());
+            String windowEnd   = millisToTs(context.window().getEnd());
             List<SNCBData> surviving = new ArrayList<>();
 
             for (SNCBData event : elements) {
-                String ts = millisToTimestamp(event.getTimestamp());
+                String ts = millisToTs(event.getTimestamp());
                 Pointer tpoint = functions.tgeogpoint_in(
                         String.format("POINT(%f %f)@%s", event.getLon(), event.getLat(), ts));
-                if (tpoint == null) { log.error("tgeogpoint_in returned null for DeviceID={} ts={}", deviceId, ts); continue; }
-                // Paper Line 2: tgeo_at_stbox returns null if outside the STBox
+                if (tpoint == null) continue;
                 if (functions.tgeo_at_stbox(tpoint, stbox, true) == null) continue;
                 surviving.add(event);
             }
@@ -162,26 +184,139 @@ public class Query4_Main {
             StringBuilder seq = new StringBuilder("{");
             for (int i = 0; i < surviving.size(); i++) {
                 SNCBData event = surviving.get(i);
-                String ts = millisToTimestamp(event.getTimestamp());
                 if (i > 0) seq.append(",");
-                seq.append(String.format("POINT(%f %f)@%s", event.getLon(), event.getLat(), ts));
+                seq.append(String.format("POINT(%f %f)@%s",
+                        event.getLon(), event.getLat(), millisToTs(event.getTimestamp())));
             }
             seq.append("}");
 
             Pointer trajectory = functions.tgeogpoint_in(seq.toString());
-            if (trajectory == null) { log.error("tgeogpoint_in returned null for sequence: {}", seq); return; }
+            if (trajectory == null) { log.error("[V1] tgeogpoint_in returned null for seq: {}", seq); return; }
 
-            String output = String.format(
-                    "[TRAJ][Q4] DeviceID=%-6d | points=%3d | window [%s - %s]%n           trajectory: %s",
-                    deviceId, surviving.size(), windowStart, windowEnd,
-                    functions.tspatial_as_ewkt(trajectory, 6));
-
-            log.info(output);
-            out.collect(output);
+            emit(out, log, "V1", deviceId, surviving.size(), windowStart, windowEnd, trajectory);
         }
 
-        private String millisToTimestamp(long millis) {
+        private String millisToTs(long millis) {
             return Instant.ofEpochMilli(millis).atOffset(ZoneOffset.UTC).format(TIMESTAMP_FMT);
         }
+    }
+
+    // =========================================================================
+    // V2: STBox filter + tgeogpoint_in (instant) → temporal_append_tinstant
+    // =========================================================================
+
+    /**
+     * Filters events through the STBox and builds the surviving trajectory
+     * incrementally using {@code temporal_append_tinstant()}.
+     */
+    public static class RestrictedTrajectoryV2_Expand
+            extends ProcessWindowFunction<SNCBData, String, Integer, TimeWindow> {
+
+        private static final Logger log = LoggerFactory.getLogger(RestrictedTrajectoryV2_Expand.class);
+        private static final DateTimeFormatter TIMESTAMP_FMT =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
+
+        private final double xmin, xmax, ymin, ymax;
+        private final String tspanLiteral;
+
+        private transient Pointer stbox;
+        private transient error_handler_fn errorHandler;
+
+        public RestrictedTrajectoryV2_Expand(
+                double xmin, double xmax, double ymin, double ymax, String tspanLiteral) {
+            this.xmin = xmin; this.xmax = xmax; this.ymin = ymin; this.ymax = ymax;
+            this.tspanLiteral = tspanLiteral;
+        }
+
+        @Override
+        public void open(Configuration parameters) throws Exception {
+            super.open(parameters);
+            errorHandler = new error_handler();
+            functions.meos_initialize_timezone("UTC");
+            functions.meos_initialize_error_handler(errorHandler);
+            Pointer tspan = functions.tstzspan_in(tspanLiteral);
+            if (tspan == null) { log.error("tstzspan_in returned null for: {}", tspanLiteral); return; }
+            stbox = functions.stbox_make(true, false, true, 4326, xmin, xmax, ymin, ymax, 0, 0, tspan);
+            if (stbox == null) log.error("stbox_make returned null");
+            else log.info("[V2] STBox built: xmin={} xmax={} ymin={} ymax={} tspan={}",
+                    xmin, xmax, ymin, ymax, tspanLiteral);
+        }
+
+        @Override
+        public void process(Integer deviceId, Context context,
+                            Iterable<SNCBData> elements, Collector<String> out) {
+
+            if (stbox == null) return;
+
+            String windowStart = millisToTs(context.window().getStart());
+            String windowEnd   = millisToTs(context.window().getEnd());
+
+            // Collect and sort first: MEOS requires strictly increasing timestamps.
+            List<SNCBData> sorted = new ArrayList<>();
+            for (SNCBData e : elements) sorted.add(e);
+            sorted.sort((a, b) -> Long.compare(a.getTimestamp(), b.getTimestamp()));
+            if (sorted.isEmpty()) return;
+
+            Runtime runtime = Runtime.getSystemRuntime();
+            Pointer trajectory = null;
+            int count = 0;
+
+            for (SNCBData event : sorted) {
+                String wkt   = String.format("POINT(%f %f)@%s",
+                        event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
+                Pointer inst = functions.tgeogpoint_in(wkt);
+                if (inst == null) {
+                    log.error("[V2] tgeogpoint_in returned null for DeviceID={} wkt={}", deviceId, wkt);
+                    continue;
+                }
+
+                // STBox filter: reuse the already-parsed instant pointer.
+                if (functions.tgeo_at_stbox(inst, stbox, true) == null) continue;
+
+                if (trajectory == null) {
+                    Pointer seedArray = Memory.allocate(runtime, Long.BYTES);
+                    seedArray.putPointer(0, inst);
+                    trajectory = functions.tsequence_make(
+                            seedArray, 1, true, true, TInterpolation.LINEAR.getValue(), true);
+                    if (trajectory == null) {
+                        log.error("[V2] tsequence_make (seed) returned null for DeviceID={}", deviceId);
+                        return;
+                    }
+                } else {
+                    Pointer expanded = functions.temporal_append_tinstant(
+                            trajectory, inst, TInterpolation.LINEAR.getValue(), 0.0, null, true);
+                    if (expanded == null) {
+                        log.error("[V2] temporal_append_tinstant returned null for DeviceID={} wkt={}", deviceId, wkt);
+                        continue;
+                    }
+                    trajectory = expanded;
+                }
+                count++;
+            }
+
+            if (trajectory == null || count == 0) return;
+            emit(out, log, "V2", deviceId, count, windowStart, windowEnd, trajectory);
+        }
+
+        private String millisToTs(long millis) {
+            return Instant.ofEpochMilli(millis).atOffset(ZoneOffset.UTC).format(TIMESTAMP_FMT);
+        }
+    }
+
+    // =========================================================================
+    // Shared output helper
+    // =========================================================================
+
+    private static void emit(Collector<String> out, Logger log, String version,
+                             int deviceId, int points,
+                             String windowStart, String windowEnd,
+                             Pointer trajectory) {
+        String output = String.format(
+                "[TRAJ][Q4][%s] DeviceID=%-6d | points=%3d | window [%s - %s]%n"
+                        + "              trajectory: %s",
+                version, deviceId, points, windowStart, windowEnd,
+                functions.tspatial_as_ewkt(trajectory, 6));
+        log.info(output);
+        out.collect(output);
     }
 }
