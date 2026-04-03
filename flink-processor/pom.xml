@@ -62,21 +62,21 @@
         </dependency>
 
         <!--
-            EXÉCUTION LOCALE (IntelliJ / tests unitaires) :
-               Utiliser flink-table-planner_2.12 — il embarque tout
-               (Calcite, jsonpath, table-runtime) dans le classpath.
+            Run Locally (IntelliJ / unit tests) :
+               Using "flink-table-planner_2.12" which bundles everything:
+               (Calcite, jsonpath, table-runtime).
 
-            DÉPLOIEMENT SUR CLUSTER FLINK (Docker / server) :
-               Remplacer par flink-table-planner-loader qui délègue
-               au planner fourni par le cluster.
+            Deploying on a Flink cluster (Docker / server) :
+               Replace it by "flink-table-planner-loader" which delegates
+               to the planner provided by the cluster.
         -->
-        <!-- Planner pour exécution locale (IntelliJ) -->
+        <!-- Planner for local runs (IntelliJ) -->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-table-planner_2.12</artifactId>
             <version>${flink.version}</version>
         </dependency>
-        <!-- Planner pour cluster Flink (décommenter si déploiement Docker/cluster)
+        <!-- Planner for FLink cluster
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-table-planner-loader</artifactId>
@@ -99,9 +99,7 @@
         </dependency>
 
         <!-- ======================================================= -->
-        <!-- JTS — géométries 2D (Point, Polygon, LineString, …)     -->
-        <!-- Déjà inclus dans sedona-flink-shaded, mais utile pour   -->
-        <!-- typer explicitement les objets Geometry dans ton code.  -->
+        <!-- JTS: 2D geometries (Point, Polygon, LineString, …)      -->
         <!-- ======================================================= -->
         <dependency>
             <groupId>org.locationtech.jts</groupId>
