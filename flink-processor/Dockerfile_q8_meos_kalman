@@ -73,5 +73,5 @@ ENV LD_LIBRARY_PATH=/usr/local/lib
 WORKDIR /app
 
 # Set entrypoint — /usr/local/jar/* expands to all jars copied above
-#ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar:/usr/local/jar/*", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "sncbdata.Query8_V2_Main"]
-ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar:/usr/local/jar/*", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "aisdata.Query8_V2_Main"]
+ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar:/usr/local/jar/*", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "sncbdata.Query8_V2_Main"]
+#ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar:/usr/local/jar/*", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "aisdata.Query8_V2_Main"]
