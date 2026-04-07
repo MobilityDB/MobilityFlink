@@ -110,7 +110,7 @@ public class SedonaQuery1_Main {
         EnvironmentSettings settings = EnvironmentSettings.newInstance().inStreamingMode().build();
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env, settings);
         SedonaContext.create(env, tableEnv);
-        logger.info("Sedona initialisé");
+        logger.info("Sedona initialized");
 
         // ------------------------------------------------------------------
         // 1. Source Kafka
@@ -124,9 +124,9 @@ public class SedonaQuery1_Main {
                 .build();
 
         WatermarkStrategy<AISData> aisWatermark =
-                WatermarkStrategy.<AISData>forBoundedOutOfOrderness(Duration.ofSeconds(30))
+                WatermarkStrategy.<AISData>forBoundedOutOfOrderness(Duration.ofSeconds(10))
                         .withTimestampAssigner((event, ts) -> event.getTimestamp())
-                        .withIdleness(Duration.ofMinutes(2));
+                        .withIdleness(Duration.ofMinutes(1));
 
         DataStream<AISData> source = env.fromSource(
                 kafkaSource, aisWatermark, "Kafka AIS Source");
@@ -172,9 +172,9 @@ public class SedonaQuery1_Main {
             DataStream<Row> zoneStream = tableEnv
                     .toDataStream(zoneTable)
                     .assignTimestampsAndWatermarks(
-                            WatermarkStrategy.<Row>forBoundedOutOfOrderness(Duration.ofSeconds(30))
+                            WatermarkStrategy.<Row>forBoundedOutOfOrderness(Duration.ofSeconds(10))
                                     .withTimestampAssigner(new RowTimestampAssigner())
-                                    .withIdleness(Duration.ofMinutes(2))
+                                    .withIdleness(Duration.ofMinutes(1))
                     );
 
             alertStream = (alertStream == null)
