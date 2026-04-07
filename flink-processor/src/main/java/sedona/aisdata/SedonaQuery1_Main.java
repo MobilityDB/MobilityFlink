@@ -101,7 +101,7 @@ public class SedonaQuery1_Main {
     // MAIN
     // =========================================================================
     public static void main(String[] args) throws Exception {
-        logger.info("=== SedonaQuery1_Main (AIS) - démarrage (no MEOS) ===");
+        logger.info("=== SedonaQuery1_Main (AIS) - starting (no MEOS) ===");
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);

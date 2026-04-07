@@ -223,7 +223,7 @@ public class SedonaQuery1_Main {
                 .process(new AlertWindowFunction())
                 .print();
 
-        logger.info("Lancement du job...");
+        logger.info("Job starting...");
         env.execute("SedonaQuery1-SNCB - High-Risk Zone Proximity Monitoring (sans MEOS)");
     }
 }
