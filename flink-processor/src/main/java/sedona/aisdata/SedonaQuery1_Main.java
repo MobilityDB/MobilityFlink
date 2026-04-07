@@ -2,11 +2,12 @@ package sedona.aisdata;
 
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.windowing.ProcessAllWindowFunction;
+import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
@@ -57,20 +58,26 @@ public class SedonaQuery1_Main {
         }
     }
 
+    static class MmsiKeySelector implements KeySelector<Row, Integer>, Serializable {
+        @Override
+        public Integer getKey(Row row) {
+            return row.getFieldAs("mmsi");
+        }
+    }
+
     static class AlertWindowFunction
-            extends ProcessAllWindowFunction<Row, String, TimeWindow>
+            extends ProcessWindowFunction<Row, String, Integer, TimeWindow>
             implements Serializable {
 
         private static final DateTimeFormatter FMT =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
 
         @Override
-        public void process(Context ctx, Iterable<Row> elements, Collector<String> out) {
+        public void process(Integer mmsi, Context ctx, Iterable<Row> elements, Collector<String> out) {
             String wStart = millisToTs(ctx.window().getStart());
             String wEnd   = millisToTs(ctx.window().getEnd());
 
             for (Row row : elements) {
-                Integer mmsi       = row.getFieldAs("mmsi");
                 Double  lon        = row.getFieldAs("lon");
                 Double  lat        = row.getFieldAs("lat");
                 Double  speed      = row.getFieldAs("speed");
@@ -146,7 +153,7 @@ public class SedonaQuery1_Main {
         tableEnv.createTemporaryView("ais", aisTable);
 
         // ------------------------------------------------------------------
-        // 3. Requêtes SQL Sedona
+        // 3. Sedona SQL queries
         // ------------------------------------------------------------------
         final double thresholdDeg = ALERT_DISTANCE_METERS / 111_000.0;
 
@@ -183,11 +190,12 @@ public class SedonaQuery1_Main {
         }
 
         // ------------------------------------------------------------------
-        // 4. Fenêtre tumbling 10 secondes --> alertes
+        // 4. Tumbling Windows of 10 secondes --> alerts
         // ------------------------------------------------------------------
         assert alertStream != null;
         alertStream
-                .windowAll(TumblingEventTimeWindows.of(Time.seconds(10)))
+                .keyBy(new MmsiKeySelector())
+                .window(TumblingEventTimeWindows.of(Time.seconds(10)))
                 .process(new AlertWindowFunction())
                 .print();
 

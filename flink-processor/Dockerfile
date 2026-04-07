@@ -53,4 +53,4 @@ ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 WORKDIR /app
 
 # Set entrypoint with the correct classpath
-ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar:/usr/local/jar/JMEOS.jar", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "sncbdata.Query1_Main"]
+ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar:/usr/local/jar/JMEOS.jar", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "aisdata.Query2_Main"]
