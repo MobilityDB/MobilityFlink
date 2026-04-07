@@ -29,49 +29,34 @@ import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 /**
- * SedonaQuery1_Main (SNCB) — High-Risk Zone Proximity Monitoring
- * SANS MEOS, avec Apache Sedona SQL + Flink.
- *
- * Équivalent Sedona de Query1_Main.java (version MEOS) sur les données SNCB.
- *
- * ─────────────────────────────────────────────────────────────────────────────
- * COMPARAISON AVEC Query1_Main.java (version MEOS)
- * ─────────────────────────────────────────────────────────────────────────────
- *
- * MEOS :
+ * SedonaQuery1_Main (SNCB): High-Risk Zone Proximity Monitoring
+ * MEOS:
  *   Pointer zone   = functions.geog_in(wkt, -1);
  *   Pointer tpoint = functions.tgeogpoint_in("POINT(lon lat)@ts");
  *   functions.edwithin_tgeo_geo(tpoint, zone, 20.0) == 1
- *   // → géodésique native en mètres, type tinstant couplé au timestamp
  *
- * Sedona SQL (cette classe) :
- *   ST_Point(lon, lat)                                      → Point 2D statique
- *   ST_Distance(point, polygon) <= 20.0 / 111_000.0        → planaire en degrés
- *   ST_Distance(...) * 111_000.0                            → conversion approx. en mètres
- *   // → pas de tinstant, temps géré séparément par la fenêtre Flink
- *   // → ST_DistanceSphere (géodésique exacte) absent du module Sedona Flink
- *
- * FIX timestamps : toDataStream() perd les watermarks → réassignation via RowTimestampAssigner.
+ * Sedona SQL:
+ *   ST_Point(lon, lat)                                      → 2D Point
+ *   ST_Distance(point, polygon) <= 20.0 / 111_000.0         → distance in degrees
+ *   ST_Distance(...) * 111_000.0                            → approx. conversion in meters
  */
 public class SedonaQuery1_Main {
 
     private static final Logger logger = LoggerFactory.getLogger(SedonaQuery1_Main.class);
 
     /**
-     * Seuil de distance en mètres — identique à la version MEOS (20 m).
-     * Converti en degrés pour ST_Distance (planaire) : 20 / 111 000 ≈ 0.00018°
+     * Threshold in meters.
+     * Converted in degrees for ST_Distance: 20 / 111 000 ≈ 0.00018°
      */
     private static final double ALERT_DISTANCE_METERS = 20.0;
 
     /**
-     * INPolygons — zones à risque le long du réseau ferroviaire belge.
-     * Identiques à celles de Query1_Main.java (version MEOS) pour permettre
-     * une comparaison directe des résultats.
+     * INPolygons: high-risk zones
      *
-     * Zone 1 — Brussels-South area
-     * Zone 2 — Brussels-North / Schaerbeek area
-     * Zone 3 — Ghent area
-     * Zone 4 — Antwerp area
+     * Zone 1 - Brussels-South area
+     * Zone 2 - Brussels-North / Schaerbeek area
+     * Zone 3 - Ghent area
+     * Zone 4 - Antwerp area
      */
     private static final String[] HIGH_RISK_ZONES_WKT = {
             "POLYGON((4.3550 50.6350, 4.3550 50.6550, 4.3750 50.6550, 4.3750 50.6350, 4.3550 50.6350))",
@@ -81,9 +66,9 @@ public class SedonaQuery1_Main {
     };
 
     // =========================================================================
-    // FIX — TimestampAssigner sur Row
-    // toDataStream() remet tous les timestamps à Long.MIN_VALUE.
-    // On doit relire "ts_ms" depuis le Row et le réassigner comme event-time.
+    // TimestampAssigner on Row
+    //      toDataStream() sets all timestamps at Long.MIN_VALUE as a default value
+    //          So we have to access "ts_ms" from the Row and reassign it as event-time.
     // =========================================================================
     static class RowTimestampAssigner
             implements SerializableTimestampAssigner<Row>, Serializable {
@@ -95,7 +80,7 @@ public class SedonaQuery1_Main {
     }
 
     // =========================================================================
-    // ProcessAllWindowFunction — formate les alertes par fenêtre de 10 secondes
+    // ProcessAllWindowFunction
     // =========================================================================
     static class AlertWindowFunction
             extends ProcessAllWindowFunction<Row, String, TimeWindow>
@@ -140,7 +125,7 @@ public class SedonaQuery1_Main {
     // MAIN
     // =========================================================================
     public static void main(String[] args) throws Exception {
-        logger.info("=== SedonaQuery1_Main (SNCB) — démarrage (sans MEOS) ===");
+        logger.info("=== SedonaQuery1_Main (SNCB): starting ===");
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
@@ -149,12 +134,10 @@ public class SedonaQuery1_Main {
         EnvironmentSettings settings = EnvironmentSettings.newInstance().inStreamingMode().build();
         StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env, settings);
         SedonaContext.create(env, tableEnv);
-        logger.info("Sedona initialisé");
+        logger.info("Sedona initialized");
 
         // ------------------------------------------------------------------
-        // 1. Source Kafka — topic "sncbdata", format SNCBData
-        //    Identique à Query1_Main.java (version MEOS)
-        // ------------------------------------------------------------------
+        // 1. Source Kafka
         KafkaSource<SNCBData> kafkaSource = KafkaSource.<SNCBData>builder()
                 .setBootstrapServers("kafka:29092")
                 .setGroupId("flink_consumer_sedona_sncb_q1")
@@ -173,9 +156,7 @@ public class SedonaQuery1_Main {
 
         // ------------------------------------------------------------------
         // 2. DataStream<SNCBData> → Table Sedona
-        //    On mappe les champs SNCBData vers des colonnes SQL.
-        //    "timestamp" est un mot réservé SQL → aliasé en "ts_ms".
-        //    "deviceId"  → "device_id" pour la lisibilité.
+        //    Mapping SNCBData fields to SQL columns.
         // ------------------------------------------------------------------
         Table sncbTable = tableEnv.fromDataStream(
                 source,
@@ -188,20 +169,17 @@ public class SedonaQuery1_Main {
         tableEnv.createTemporaryView("sncb", sncbTable);
 
         // ------------------------------------------------------------------
-        // 3. Requêtes SQL Sedona — une par zone à risque
+        // 3. SQL Sedona queries: one per zone
         //
-        //    MEOS équivalent (Query1_Main.java) :
+        //    MEOS (Query1_Main.java) :
         //      Pointer tpoint = tgeogpoint_in("POINT(lon lat)@ts");
         //      edwithin_tgeo_geo(tpoint, zone, 20.0) == 1
         //
         //    Sedona SQL :
-        //      ST_Point(lon, lat)             → Point JTS 2D (sans timestamp)
-        //      ST_GeomFromText(wkt)           → Polygon JTS
-        //      ST_Distance(pt, poly) <= seuil → filtre planaire en degrés
-        //      ST_Distance(...) * 111000      → conversion approx. en mètres
-        //
-        //    On ne sélectionne PAS de colonne Geometry dans le SELECT final
-        //    pour éviter les erreurs de sérialisation Flink ↔ Geometry.
+        //      ST_Point(lon, lat)                 → 2D Point (no timestamp)
+        //      ST_GeomFromText(wkt)               → Polygon
+        //      ST_Distance(pt, poly) <= threshold → filtering
+        //      ST_Distance(...) * 111000          → conversion in meters
         // ------------------------------------------------------------------
         final double thresholdDeg = ALERT_DISTANCE_METERS / 111_000.0;
 
@@ -221,8 +199,8 @@ public class SedonaQuery1_Main {
                     zoneWkt, zoneIdx, zoneWkt, thresholdDeg
             );
 
-            // FIX : réassigner les timestamps après toDataStream()
-            // (le passage Table → DataStream perd les watermarks Flink)
+            // FIX: reassigning the timestamps after toDataStream()
+            // (going from the Table API to the DataStream API causes the loss of Flink watermarks)
             DataStream<Row> zoneStream = tableEnv
                     .toDataStream(tableEnv.sqlQuery(sql))
                     .assignTimestampsAndWatermarks(
@@ -237,7 +215,7 @@ public class SedonaQuery1_Main {
         }
 
         // ------------------------------------------------------------------
-        // 4. Fenêtre tumbling 10 secondes — identique à Query1_Main.java
+        // 4. Tumbling Window of 10 secondes
         // ------------------------------------------------------------------
         assert alertStream != null;
         alertStream
@@ -246,6 +224,6 @@ public class SedonaQuery1_Main {
                 .print();
 
         logger.info("Lancement du job...");
-        env.execute("SedonaQuery1-SNCB — High-Risk Zone Proximity Monitoring (sans MEOS)");
+        env.execute("SedonaQuery1-SNCB - High-Risk Zone Proximity Monitoring (sans MEOS)");
     }
 }

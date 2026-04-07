@@ -30,14 +30,6 @@ import java.time.format.DateTimeFormatter;
 
 /**
  * SedonaQuery1_Main (AIS): High-Risk Zone Proximity Monitoring
- *
- * FIX appliqué : lorsqu'on passe d'un DataStream à une Table via la Table API,
- * puis qu'on repasse en DataStream avec toDataStream(), les timestamps et
- * watermarks sont PERDUS. Flink remet Long.MIN_VALUE sur chaque record.
- * La fenêtre TumblingEventTimeWindows crashe alors immédiatement.
- *
- * SOLUTION : réassigner les timestamps + watermarks après chaque toDataStream()
- * en lisant la colonne "ts_ms" du Row produit par la requête SQL.
  */
 public class SedonaQuery1_Main {
 
@@ -56,13 +48,6 @@ public class SedonaQuery1_Main {
             "POLYGON((4.4800 55.5500, 4.4800 55.6600, 4.6400 55.6600, 4.6400 55.5500, 4.4800 55.5500))"
     };
 
-    // =========================================================================
-    // FIX: TimestampAssigner sur Row
-    //
-    // POURQUOI : tableEnv.toDataStream() remet tous les timestamps à Long.MIN_VALUE.
-    // On doit relire "ts_ms" depuis le Row et le réassigner comme event-time.
-    // Classe statique + Serializable pour éviter ClosureCleaner + Java 21.
-    // =========================================================================
     static class RowTimestampAssigner
             implements SerializableTimestampAssigner<Row>, Serializable {
         @Override
@@ -72,9 +57,6 @@ public class SedonaQuery1_Main {
         }
     }
 
-    // =========================================================================
-    // ProcessAllWindowFunction: formate les alertes par fenêtre de 10 secondes
-    // =========================================================================
     static class AlertWindowFunction
             extends ProcessAllWindowFunction<Row, String, TimeWindow>
             implements Serializable {
@@ -119,7 +101,7 @@ public class SedonaQuery1_Main {
     // MAIN
     // =========================================================================
     public static void main(String[] args) throws Exception {
-        logger.info("=== SedonaQuery1_Main (AIS) — démarrage (sans MEOS) ===");
+        logger.info("=== SedonaQuery1_Main (AIS) - démarrage (no MEOS) ===");
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
@@ -131,7 +113,7 @@ public class SedonaQuery1_Main {
         logger.info("Sedona initialisé");
 
         // ------------------------------------------------------------------
-        // 1. Source Kafka avec timestamps assignés
+        // 1. Source Kafka
         // ------------------------------------------------------------------
         KafkaSource<AISData> kafkaSource = KafkaSource.<AISData>builder()
                 .setBootstrapServers("kafka:29092")
@@ -164,14 +146,7 @@ public class SedonaQuery1_Main {
         tableEnv.createTemporaryView("ais", aisTable);
 
         // ------------------------------------------------------------------
-        // 3. Requêtes SQL Sedona: une par zone
-        //
-        //    On NE sélectionne PAS de colonne Geometry (ST_Point) dans le SELECT
-        //    final pour éviter les problèmes de sérialisation Flink <--> Geometry.
-        //    On utilise uniquement les résultats scalaires (dist_meters, booléens).
-        //
-        //    ST_Distance retourne des degrés (plan euclidien).
-        //    Conversion : 2000 m ÷ 111 000 m/° ≈ 0.018°
+        // 3. Requêtes SQL Sedona
         // ------------------------------------------------------------------
         final double thresholdDeg = ALERT_DISTANCE_METERS / 111_000.0;
 
@@ -184,7 +159,7 @@ public class SedonaQuery1_Main {
             String sql = String.format(
                     "SELECT " +
                             "  mmsi, lon, lat, ts_ms, speed, course, " +
-                            // ST_Distance retourne des degrés — on multiplie par 111 000 pour des mètres approx.
+                            // ST_Distance return degrees.
                             "  ST_Distance(ST_Point(lon, lat), ST_GeomFromText('%s')) * 111000.0 AS dist_meters, " +
                             "  %d AS zone_index " +
                             "FROM ais " +
@@ -194,20 +169,6 @@ public class SedonaQuery1_Main {
 
             Table zoneTable = tableEnv.sqlQuery(sql);
 
-            // ------------------------------------------------------------------
-            // FIX: réassigner les timestamps après toDataStream()
-            //
-            // POURQUOI toDataStream() perd les timestamps :
-            //   Le passage DataStream → Table → DataStream traverse la "boundary"
-            //   entre l'API DataStream et la Table API. Flink ne propage pas
-            //   automatiquement les event-time watermarks à travers cette frontière.
-            //   Le Row résultant a Long.MIN_VALUE comme timestamp interne, ce qui
-            //   fait crasher TumblingEventTimeWindows avec :
-            //   "Record has Long.MIN_VALUE timestamp (= no timestamp marker)"
-            //
-            // SOLUTION : lire "ts_ms" depuis le Row et appeler
-            //   assignTimestampsAndWatermarks() sur le DataStream<Row>.
-            // ------------------------------------------------------------------
             DataStream<Row> zoneStream = tableEnv
                     .toDataStream(zoneTable)
                     .assignTimestampsAndWatermarks(
@@ -230,7 +191,7 @@ public class SedonaQuery1_Main {
                 .process(new AlertWindowFunction())
                 .print();
 
-        logger.info("Lancement du job...");
-        env.execute("SedonaQuery1-AIS — High-Risk Zone Proximity Monitoring (sans MEOS)");
+        logger.info("Job starting...");
+        env.execute("SedonaQuery1-AIS - High-Risk Zone Proximity Monitoring");
     }
 }
