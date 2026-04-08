@@ -54,7 +54,7 @@
               <transformers>
                 <transformer />
                 <transformer>
-                  <mainClass>sedona.aisdata.SedonaQuery1_Main</mainClass>
+                  <mainClass>sedona.sncbdata.SedonaQuery3_Main</mainClass>
                 </transformer>
               </transformers>
             </configuration>
