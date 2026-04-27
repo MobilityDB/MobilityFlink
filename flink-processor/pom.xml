@@ -8,6 +8,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <queryMainClass>aisdata.Query1_Main</queryMainClass>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -255,7 +256,8 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>sedona.aisdata.SedonaQuery9_Main</mainClass>
+                                    <mainClass>${queryMainClass}</mainClass>
+                                    <!--mainClass>aisdata.Query1_Main</mainClass-->
                                 </transformer>
                             </transformers>
                         </configuration>
