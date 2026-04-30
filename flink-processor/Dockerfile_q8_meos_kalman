@@ -59,8 +59,17 @@ RUN cd /usr/local/jmeos && mvn clean package -DskipTests \
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*lists/*
 RUN apt-get remove --purge --autoremove -y curl gnupg
 
-# Copy project-specific files
-COPY target/flink-kafka2postgres-1.0-SNAPSHOT.jar /app/flink-kafka2postgres.jar
+# Copy application sources and compile inside Docker.
+# This is necessary because temporal_ext_kalman_filter only exists in the
+# patched JMEOS built above thus the application cannot be compiled on the host.
+COPY src /build/src
+COPY pom.xml /build/pom.xml
+RUN mkdir -p /build/jar && cp /usr/local/jar/JMEOS.jar /build/jar/JMEOS.jar
+RUN cd /build \
+    && mvn clean package -DskipTests -DqueryMainClass="aisdata.Query8_V2_Main" -q \
+    && mkdir -p /app \
+    && cp target/flink-kafka2postgres-1.0-SNAPSHOT.jar /app/flink-kafka2postgres.jar
+
 COPY wait-for-it.sh /app/wait-for-it.sh
 
 # Make the wait-for-it script executable
@@ -73,5 +82,5 @@ ENV LD_LIBRARY_PATH=/usr/local/lib
 WORKDIR /app
 
 # Set entrypoint — /usr/local/jar/* expands to all jars copied above
-ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar:/usr/local/jar/*", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "sncbdata.Query8_V2_Main"]
-#ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar:/usr/local/jar/*", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "aisdata.Query8_V2_Main"]
+#ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar:/usr/local/jar/*", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "sncbdata.Query8_V2_Main"]
+ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar:/usr/local/jar/*", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "aisdata.Query8_V2_Main"]
