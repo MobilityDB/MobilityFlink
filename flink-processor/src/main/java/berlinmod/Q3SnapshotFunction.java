@@ -1,0 +1,91 @@
+package berlinmod;
+
+import org.apache.flink.api.common.state.ValueState;
+import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.typeinfo.TypeHint;
+import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.configuration.Configuration;
+import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
+import org.apache.flink.util.Collector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * BerlinMOD-Q3 — <b>snapshot form</b>.
+ *
+ * <p><i>"At time T, which vehicles are within {@code d} metres of point P?"</i>
+ *
+ * <p>This is the <b>parity-oracle form</b>: streaming output at watermark T
+ * must equal the batch BerlinMOD-Q3 result on the same data up to T.
+ *
+ * <p>Keyed by vehicleId. Maintains a per-vehicle {@code lastKnownPosition}
+ * state. On each event, update the state, then register an event-time timer
+ * for the snapshot tick. When the timer fires at time T, evaluate the radius
+ * predicate against the most recent known position and emit
+ * {@code (T, vehicleId)} if the vehicle is within {@code d} of P at that
+ * snapshot.
+ *
+ * <p>Predicate today: pure-Java great-circle distance (see {@link Haversine}).
+ * TODO(meos): replace with the MEOS {@code edwithin_tgeo_geo} operator via
+ * JMEOS for native streaming-snapshot semantics that match the batch
+ * BerlinMOD-Q3 byte-for-byte.
+ */
+public class Q3SnapshotFunction
+        extends KeyedProcessFunction<Integer, BerlinMODTrip, Tuple2<Long, Integer>> {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Q3SnapshotFunction.class);
+
+    private final double pLon;
+    private final double pLat;
+    private final double radiusMetres;
+    private final long snapshotTickMillis;
+
+    private transient ValueState<Tuple3<Double, Double, Long>> lastKnown; // (lon, lat, ts)
+
+    public Q3SnapshotFunction(
+            double pLon, double pLat, double radiusMetres, long snapshotTickMillis) {
+        this.pLon = pLon;
+        this.pLat = pLat;
+        this.radiusMetres = radiusMetres;
+        this.snapshotTickMillis = snapshotTickMillis;
+    }
+
+    @Override
+    public void open(Configuration parameters) {
+        TypeInformation<Tuple3<Double, Double, Long>> tInfo =
+                TypeInformation.of(new TypeHint<Tuple3<Double, Double, Long>>() {});
+        ValueStateDescriptor<Tuple3<Double, Double, Long>> desc =
+                new ValueStateDescriptor<>("lastKnownPosition", tInfo);
+        lastKnown = getRuntimeContext().getState(desc);
+    }
+
+    @Override
+    public void processElement(
+            BerlinMODTrip trip,
+            Context ctx,
+            Collector<Tuple2<Long, Integer>> out) throws Exception {
+        lastKnown.update(new Tuple3<>(trip.getLon(), trip.getLat(), trip.getTimestamp()));
+        long nextTick = ((trip.getTimestamp() / snapshotTickMillis) + 1) * snapshotTickMillis;
+        ctx.timerService().registerEventTimeTimer(nextTick);
+    }
+
+    @Override
+    public void onTimer(
+            long timestamp,
+            OnTimerContext ctx,
+            Collector<Tuple2<Long, Integer>> out) throws Exception {
+        Tuple3<Double, Double, Long> p = lastKnown.value();
+        if (p == null) {
+            return;
+        }
+        if (Haversine.withinMetres(p.f0, p.f1, pLon, pLat, radiusMetres)) {
+            Integer vehicleId = ctx.getCurrentKey();
+            out.collect(new Tuple2<>(timestamp, vehicleId));
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Q3-snapshot: T={} vehicle={}", timestamp, vehicleId);
+            }
+        }
+    }
+}
