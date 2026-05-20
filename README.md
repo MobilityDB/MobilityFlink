@@ -62,3 +62,35 @@ Kafka producer
 Flink Processor
 <img src="doc/images/flink-processor.png" width="700" alt="Flink Processor" />
 
+
+# BerlinMOD-9 × 3 streaming forms — the parity matrix on Flink
+
+The streaming-side parity matrix runs all nine BerlinMOD reference queries (Q1..Q9) in three streaming forms each on this runtime: **continuous** (always-on, per-event emission), **windowed** (tumbling 10-second aggregation), and **snapshot** (5-second tick — the parity-oracle form whose output at watermark T equals the batch BerlinMOD-Q result on data up to T).
+
+| Q | Topic | Continuous | Windowed | Snapshot |
+|---|---|---|---|---|
+| Q1 | "which vehicles have appeared in the stream?" | ✓ | ✓ | ✓ |
+| Q2 | "where is vehicle X at time T?" | ✓ | ✓ | ✓ |
+| Q3 | "vehicles within d of P at time T?" | ✓ | ✓ | ✓ |
+| Q4 | "vehicles entered region R, and when?" | ✓ | ✓ | ✓ |
+| Q5 | "pairs of vehicles meeting near P" | ✓ | ✓ | ✓ |
+| Q6 | "cumulative distance per vehicle" | ✓ | ✓ | ✓ |
+| Q7 | "first passage of vehicles through POIs" | ✓ | ✓ | ✓ |
+| Q8 | "vehicles close to a road segment" | ✓ | ✓ | ✓ |
+| Q9 | "distance between vehicles X and Y at time T" | ✓ | ✓ | ✓ |
+
+**27 / 27 cells** = the full MobilityFlink parity-matrix row. Each cell has a dedicated `Q<N>{Continuous,Windowed,Snapshot}Function` class in [`flink-processor/src/main/java/berlinmod/`](flink-processor/src/main/java/berlinmod/) and is locally verified via the companion `BerlinMODQ<N>LocalTest` driver running on a Flink mini-cluster.
+
+The streaming snapshot form converges to the batch BerlinMOD result on the same scale-factor corpus, anchored against the cross-platform outputs in [MobilityDB-BerlinMOD](https://github.com/MobilityDB/MobilityDB-BerlinMOD).
+
+Spatial predicates today use pure-Java great-circle ([`Haversine`](flink-processor/src/main/java/berlinmod/Haversine.java)) and planar segment-distance ([`SegmentDistance`](flink-processor/src/main/java/berlinmod/SegmentDistance.java)) utilities; each call site is marked `TODO(meos)` for JMEOS-bridge migration after [JMEOS#15](https://github.com/MobilityDB/JMEOS/pull/15) (the MEOS 1.4 regen) settles.
+
+The Kafka-source entry points for Q2 and Q3 are [`BerlinMODQ2Main`](flink-processor/src/main/java/berlinmod/BerlinMODQ2Main.java) and [`BerlinMODQ3Main`](flink-processor/src/main/java/berlinmod/BerlinMODQ3Main.java); the companion producer is [`python-producer-berlinmod.py`](kafka-producer/python-producer-berlinmod.py). Generate a BerlinMOD CSV with the upstream generator (`meos/examples/data/generate_berlinmod_trips.sql` in MobilityDB) at any scale factor and feed it to the producer. The form-by-form definition with default parameters lives in [`doc/berlinmod-q3-streaming-forms.md`](doc/berlinmod-q3-streaming-forms.md).
+
+### Sibling parity work in the ecosystem
+
+- [MobilityKafka#1](https://github.com/MobilityDB/MobilityKafka/pull/1) — the same 27-cell row on Kafka Streams
+- [MobilityNebula#15](https://github.com/MobilityDB/MobilityNebula/pull/15) — 15 of 27 cells on NebulaStream (Q1, Q2, Q3, Q4, Q7-via-POI-fanout)
+- [MobilityDB-BerlinMOD#29](https://github.com/MobilityDB/MobilityDB-BerlinMOD/pull/29) — the batch BerlinMOD-9 cross-platform timings (the snapshot form's gold-answer source)
+- [MobilityDB/.github#10](https://github.com/MobilityDB/.github/pull/10) — the ecosystem-profile description of the stream-layers tier
+
