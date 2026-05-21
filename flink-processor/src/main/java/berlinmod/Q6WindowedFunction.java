@@ -37,7 +37,7 @@ public class Q6WindowedFunction
         for (int i = 1; i < sorted.size(); i++) {
             BerlinMODTrip prev = sorted.get(i - 1);
             BerlinMODTrip curr = sorted.get(i);
-            total += Haversine.distanceMetres(prev.getLon(), prev.getLat(),
+            total += MEOSBridge.distanceMetres(prev.getLon(), prev.getLat(),
                                               curr.getLon(), curr.getLat());
         }
         out.collect(new Tuple4<>(ctx.window().getStart(), ctx.window().getEnd(), vehicleId, total));

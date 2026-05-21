@@ -71,7 +71,7 @@ public class Q8SnapshotFunction
         if (p == null) {
             return;
         }
-        if (SegmentDistance.withinMetres(p.f0, p.f1, s1Lon, s1Lat, s2Lon, s2Lat, radiusMetres)) {
+        if (MEOSBridge.dwithinSegmentMetres(p.f0, p.f1, s1Lon, s1Lat, s2Lon, s2Lat, radiusMetres)) {
             out.collect(new Tuple2<>(timestamp, ctx.getCurrentKey()));
         }
     }

@@ -56,7 +56,9 @@ public class Main {
         // Initialize MEOS with proper error handling
         try {
             logger.info("Initializing MEOS library");
-            functions.meos_initialize("UTC", errorHandler);
+            // JMEOS 1.4 split: no-arg meos_initialize() + separate tz + error-handler entry points
+            functions.meos_initialize();
+            functions.meos_initialize_timezone("UTC");
             
             final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
             

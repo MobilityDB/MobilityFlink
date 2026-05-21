@@ -31,9 +31,9 @@ import java.util.Map;
  * known pairs and emit {@code (a, b, eventTime, distanceMetres)} for every
  * currently-meeting pair (with {@code a < b} for stable identity).
  *
- * <p>Predicate today: pure-Java great-circle distance (see {@link Haversine}).
- * TODO(meos): replace with the MEOS NAD / `edwithin_tgeo_tgeo` operator pair
- * via the JMEOS bridge.
+ * <p>Predicate: {@link MEOSBridge#dwithinMetres} for the near-P filter and
+ * for the pairwise meeting predicate — MEOS {@code geog_dwithin} when
+ * libmeos is loadable, with {@link Haversine} fallback otherwise.
  */
 public class Q5ContinuousFunction
         extends KeyedProcessFunction<Integer, BerlinMODTrip, Tuple4<Integer, Integer, Long, Double>> {
@@ -71,7 +71,7 @@ public class Q5ContinuousFunction
         List<Map.Entry<Integer, Tuple2<Double, Double>>> nearP = new ArrayList<>();
         for (Map.Entry<Integer, Tuple2<Double, Double>> e : snap.entrySet()) {
             Tuple2<Double, Double> p = e.getValue();
-            if (Haversine.withinMetres(p.f0, p.f1, pLon, pLat, dPMetres)) {
+            if (MEOSBridge.dwithinMetres(p.f0, p.f1, pLon, pLat, dPMetres)) {
                 nearP.add(e);
             }
         }
@@ -81,7 +81,7 @@ public class Q5ContinuousFunction
             for (int j = i + 1; j < nearP.size(); j++) {
                 Tuple2<Double, Double> a = nearP.get(i).getValue();
                 Tuple2<Double, Double> b = nearP.get(j).getValue();
-                double d = Haversine.distanceMetres(a.f0, a.f1, b.f0, b.f1);
+                double d = MEOSBridge.distanceMetres(a.f0, a.f1, b.f0, b.f1);
                 if (d <= dMeetMetres) {
                     out.collect(new Tuple4<>(
                             nearP.get(i).getKey(), nearP.get(j).getKey(),

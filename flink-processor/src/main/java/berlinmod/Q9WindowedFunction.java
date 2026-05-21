@@ -45,7 +45,7 @@ public class Q9WindowedFunction
             }
         }
         if (latestX != null && latestY != null) {
-            double d = Haversine.distanceMetres(
+            double d = MEOSBridge.distanceMetres(
                     latestX.getLon(), latestX.getLat(),
                     latestY.getLon(), latestY.getLat());
             out.collect(new Tuple3<>(ctx.window().getStart(), ctx.window().getEnd(), d));

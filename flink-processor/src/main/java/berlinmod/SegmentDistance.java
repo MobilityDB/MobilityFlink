@@ -4,11 +4,11 @@ package berlinmod;
  * Distance from a (lon, lat) point to a (lon, lat) line segment, in metres,
  * via a local equirectangular projection centred on the segment midpoint.
  *
- * <p>Good to a few-metres accuracy over short segments (≤ 10 km) at mid-
- * latitudes, which covers the BerlinMOD-Q8 streaming scaffold. For longer
- * segments or higher accuracy the MEOS-native {@code distance} between
- * {@code tgeompoint} and {@code geometry(LINESTRING)} via the JMEOS bridge
- * is the production path — marked {@code TODO(meos)} in the call sites.
+ * <p>Pure-Java fallback for {@link MEOSBridge#dwithinSegmentMetres}, used
+ * by the BerlinMOD-Q8 streaming scaffold when libmeos is not loadable on
+ * the runtime path. The primary point-to-line spatial predicate is
+ * {@link MEOSBridge#dwithinSegmentMetres}, which routes through MEOS'
+ * {@code geog_dwithin} on a LineString geography when available.
  */
 public final class SegmentDistance {
 

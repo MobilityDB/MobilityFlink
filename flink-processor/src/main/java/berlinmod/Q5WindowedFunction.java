@@ -53,7 +53,7 @@ public class Q5WindowedFunction
         List<Map.Entry<Integer, Tuple2<Double, Double>>> nearP = new ArrayList<>();
         for (Map.Entry<Integer, BerlinMODTrip> e : latest.entrySet()) {
             BerlinMODTrip t = e.getValue();
-            if (Haversine.withinMetres(t.getLon(), t.getLat(), pLon, pLat, dPMetres)) {
+            if (MEOSBridge.dwithinMetres(t.getLon(), t.getLat(), pLon, pLat, dPMetres)) {
                 nearP.add(new HashMap.SimpleEntry<>(e.getKey(), new Tuple2<>(t.getLon(), t.getLat())));
             }
         }
@@ -63,7 +63,7 @@ public class Q5WindowedFunction
             for (int j = i + 1; j < nearP.size(); j++) {
                 Tuple2<Double, Double> a = nearP.get(i).getValue();
                 Tuple2<Double, Double> b = nearP.get(j).getValue();
-                double d = Haversine.distanceMetres(a.f0, a.f1, b.f0, b.f1);
+                double d = MEOSBridge.distanceMetres(a.f0, a.f1, b.f0, b.f1);
                 if (d <= dMeetMetres) {
                     out.collect(new Tuple5<>(
                             ctx.window().getStart(), ctx.window().getEnd(),

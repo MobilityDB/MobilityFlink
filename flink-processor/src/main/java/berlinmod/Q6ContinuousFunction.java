@@ -51,7 +51,7 @@ public class Q6ContinuousFunction
             total = 0.0;
         }
         if (prev != null) {
-            total += Haversine.distanceMetres(prev.f0, prev.f1, trip.getLon(), trip.getLat());
+            total += MEOSBridge.distanceMetres(prev.f0, prev.f1, trip.getLon(), trip.getLat());
         }
         lastPos.update(new Tuple2<>(trip.getLon(), trip.getLat()));
         totalDist.update(total);

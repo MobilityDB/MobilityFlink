@@ -41,7 +41,7 @@ public class Q8WindowedFunction
             Collector<Tuple3<Long, Long, Long>> out) {
         Set<Integer> distinctNear = new HashSet<>();
         for (BerlinMODTrip trip : elements) {
-            if (SegmentDistance.withinMetres(
+            if (MEOSBridge.dwithinSegmentMetres(
                     trip.getLon(), trip.getLat(),
                     s1Lon, s1Lat, s2Lon, s2Lat,
                     radiusMetres)) {

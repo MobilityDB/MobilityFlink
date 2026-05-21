@@ -76,7 +76,7 @@ public class Q5SnapshotFunction
         List<Map.Entry<Integer, Tuple2<Double, Double>>> nearP = new ArrayList<>();
         for (Map.Entry<Integer, Tuple2<Double, Double>> e : snap.entrySet()) {
             Tuple2<Double, Double> p = e.getValue();
-            if (Haversine.withinMetres(p.f0, p.f1, pLon, pLat, dPMetres)) {
+            if (MEOSBridge.dwithinMetres(p.f0, p.f1, pLon, pLat, dPMetres)) {
                 nearP.add(e);
             }
         }
@@ -86,7 +86,7 @@ public class Q5SnapshotFunction
             for (int j = i + 1; j < nearP.size(); j++) {
                 Tuple2<Double, Double> a = nearP.get(i).getValue();
                 Tuple2<Double, Double> b = nearP.get(j).getValue();
-                double d = Haversine.distanceMetres(a.f0, a.f1, b.f0, b.f1);
+                double d = MEOSBridge.distanceMetres(a.f0, a.f1, b.f0, b.f1);
                 if (d <= dMeetMetres) {
                     out.collect(new Tuple4<>(timestamp,
                             nearP.get(i).getKey(), nearP.get(j).getKey(), d));

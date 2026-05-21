@@ -62,7 +62,7 @@ public class Q9ContinuousFunction
         }
         xy.update(s);
         if (!Double.isNaN(s.f0) && !Double.isNaN(s.f2)) {
-            double d = Haversine.distanceMetres(s.f0, s.f1, s.f2, s.f3);
+            double d = MEOSBridge.distanceMetres(s.f0, s.f1, s.f2, s.f3);
             out.collect(new Tuple2<>(trip.getTimestamp(), d));
         }
     }

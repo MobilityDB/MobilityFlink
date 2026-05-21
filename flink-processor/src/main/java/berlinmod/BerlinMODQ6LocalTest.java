@@ -60,6 +60,7 @@ public class BerlinMODQ6LocalTest {
     private static final double V300_DLON = -200.0 / (111_000.0 * Math.cos(Math.toRadians(50.85)));
 
     public static void main(String[] args) throws Exception {
+        System.setProperty("mobilityflink.meos.enabled", "false");
         LOG.info("BerlinMODQ6LocalTest starting; window={}s tick={}ms",
                 WINDOW_SIZE_SECONDS, SNAPSHOT_TICK_MILLIS);
 

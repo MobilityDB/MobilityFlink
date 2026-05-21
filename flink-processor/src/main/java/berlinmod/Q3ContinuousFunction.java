@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
  * predicate and emit {@code (vehicleId, eventTimeMillis, isNear)} per event.
  * No windowing — output updates per event, watermark-independent.
  *
- * <p>Predicate today: pure-Java great-circle distance (see {@link Haversine}).
- * TODO(meos): replace with the MEOS {@code edwithin_tgeo_geo} operator via
- * JMEOS once that call is wired through (same predicate semantics, native MEOS).
+ * <p>Predicate: {@link MEOSBridge#dwithinMetres} — MEOS' {@code geog_dwithin}
+ * over WGS84 geographies when libmeos is loadable, with a pure-Java great-circle
+ * fallback ({@link Haversine}) for runtimes without MEOS.
  */
 public class Q3ContinuousFunction extends ProcessFunction<BerlinMODTrip, Tuple3<Integer, Long, Boolean>> {
 
@@ -39,7 +39,7 @@ public class Q3ContinuousFunction extends ProcessFunction<BerlinMODTrip, Tuple3<
             BerlinMODTrip trip,
             Context ctx,
             Collector<Tuple3<Integer, Long, Boolean>> out) {
-        boolean near = Haversine.withinMetres(trip.getLon(), trip.getLat(), pLon, pLat, radiusMetres);
+        boolean near = MEOSBridge.dwithinMetres(trip.getLon(), trip.getLat(), pLon, pLat, radiusMetres);
         out.collect(new Tuple3<>(trip.getVehicleId(), trip.getTimestamp(), near));
         if (LOG.isDebugEnabled()) {
             LOG.debug("Q3-continuous: vehicle={} ts={} near={}", trip.getVehicleId(), trip.getTimestamp(), near);

@@ -15,10 +15,9 @@ import org.apache.flink.util.Collector;
  * per event. No windowing — same shape as {@link Q3ContinuousFunction} but
  * with a segment-distance predicate instead of a point-radius one.
  *
- * <p>Predicate today: pure-Java planar projection over an equirectangular
- * frame centred on the segment midpoint (see {@link SegmentDistance}).
- * TODO(meos): replace with the MEOS {@code distance(tgeompoint,
- * geometry(LINESTRING))} call via the JMEOS bridge.
+ * <p>Predicate: {@link MEOSBridge#dwithinSegmentMetres} — MEOS
+ * {@code geog_dwithin} against a LineString geography when libmeos is
+ * loadable, with {@link SegmentDistance} fallback otherwise.
  */
 public class Q8ContinuousFunction extends ProcessFunction<BerlinMODTrip, Tuple3<Integer, Long, Boolean>> {
 
@@ -39,7 +38,7 @@ public class Q8ContinuousFunction extends ProcessFunction<BerlinMODTrip, Tuple3<
             BerlinMODTrip trip,
             Context ctx,
             Collector<Tuple3<Integer, Long, Boolean>> out) {
-        boolean near = SegmentDistance.withinMetres(
+        boolean near = MEOSBridge.dwithinSegmentMetres(
                 trip.getLon(), trip.getLat(),
                 s1Lon, s1Lat, s2Lon, s2Lat,
                 radiusMetres);

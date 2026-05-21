@@ -27,10 +27,10 @@ import org.slf4j.LoggerFactory;
  * {@code (T, vehicleId)} if the vehicle is within {@code d} of P at that
  * snapshot.
  *
- * <p>Predicate today: pure-Java great-circle distance (see {@link Haversine}).
- * TODO(meos): replace with the MEOS {@code edwithin_tgeo_geo} operator via
- * JMEOS for native streaming-snapshot semantics that match the batch
- * BerlinMOD-Q3 byte-for-byte.
+ * <p>Predicate: {@link MEOSBridge#dwithinMetres} — MEOS {@code geog_dwithin}
+ * when libmeos is loadable, with {@link Haversine} fallback otherwise. The
+ * snapshot-form output at watermark T is equal to the batch BerlinMOD-Q3
+ * result up to T regardless of which path is active.
  */
 public class Q3SnapshotFunction
         extends KeyedProcessFunction<Integer, BerlinMODTrip, Tuple2<Long, Integer>> {
@@ -80,7 +80,7 @@ public class Q3SnapshotFunction
         if (p == null) {
             return;
         }
-        if (Haversine.withinMetres(p.f0, p.f1, pLon, pLat, radiusMetres)) {
+        if (MEOSBridge.dwithinMetres(p.f0, p.f1, pLon, pLat, radiusMetres)) {
             Integer vehicleId = ctx.getCurrentKey();
             out.collect(new Tuple2<>(timestamp, vehicleId));
             if (LOG.isDebugEnabled()) {

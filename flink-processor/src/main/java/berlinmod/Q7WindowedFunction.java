@@ -55,7 +55,7 @@ public class Q7WindowedFunction
                     if (emittedPois.contains(poi.id)) {
                         continue;
                     }
-                    if (Haversine.withinMetres(trip.getLon(), trip.getLat(),
+                    if (MEOSBridge.dwithinMetres(trip.getLon(), trip.getLat(),
                                                poi.lon, poi.lat, poi.radiusMetres)) {
                         emittedPois.add(poi.id);
                         out.collect(new Tuple5<>(
