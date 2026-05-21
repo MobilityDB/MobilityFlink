@@ -10,7 +10,7 @@ per **streaming tier** (per
 | `stateless` | [`MeosStatelessMap`](MeosStatelessMap.java) (generic `MapFunction`) · [`MeosStatelessFilter`](MeosStatelessFilter.java) (generic `FilterFunction`) | ✅ shipped |
 | `bounded-state` | [`MeosBoundedStateMap`](MeosBoundedStateMap.java) (generic `KeyedProcessFunction` with `ValueState<byte[]>` per key — state crosses the operator boundary as MEOS-WKB/WKT bytes so checkpoints/rescaling/savepoints are safe; raw `Pointer` never leaves the JVM-local operator instance) | ✅ shipped |
 | `windowed` | [`MeosWindowedAggregate`](MeosWindowedAggregate.java) (generic `ProcessWindowFunction`; window-close-only aggregation; no MEOS handles persist across window boundaries) | ✅ shipped |
-| `cross-stream` | `MeosCrossStreamJoin` (generic `KeyedCoProcessFunction` or interval-join) | next follow-up |
+| `cross-stream` | [`MeosCrossStreamJoin`](MeosCrossStreamJoin.java) (generic `ProcessJoinFunction` over `KeyedStream.intervalJoin(other)`; time-bounded match window; same-key pairing) | ✅ shipped |
 | `io-meta` | covered transitively by the stateless wirings (no state, no window) | n/a |
 | `sequence-only` | inherently non-streamable — no wiring | n/a |
 
