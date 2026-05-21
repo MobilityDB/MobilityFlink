@@ -59,6 +59,7 @@ public class BerlinMODQ7LocalTest {
             new PointOfInterest(3, 4.2100, 50.7600, 2_000.0));
 
     public static void main(String[] args) throws Exception {
+        System.setProperty("mobilityflink.meos.enabled", "false");
         LOG.info("BerlinMODQ7LocalTest starting; #POIs={} window={}s tick={}ms",
                 POIS.size(), WINDOW_SIZE_SECONDS, SNAPSHOT_TICK_MILLIS);
 

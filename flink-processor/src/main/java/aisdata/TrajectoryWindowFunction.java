@@ -31,7 +31,9 @@ ProcessWindowFunction<Tuple4<Integer, Double, Double, Long>, TGeomPointSeq, Inte
     public void open(Configuration parameters) throws Exception {
         super.open(parameters);
         errorHandler = new error_handler(); // Initialize error handler here
-        functions.meos_initialize("UTC", errorHandler);
+        // JMEOS 1.4 split: no-arg meos_initialize() + separate tz + error-handler entry points
+        functions.meos_initialize();
+        functions.meos_initialize_timezone("UTC");
         logger.info("MEOS initialized in TrajectoryWindowFunction.open()");
     }
 

@@ -73,7 +73,7 @@ public class Q9SnapshotFunction
             Collector<Tuple2<Long, Double>> out) throws Exception {
         Tuple4<Double, Double, Double, Double> s = xy.value();
         if (s != null && !Double.isNaN(s.f0) && !Double.isNaN(s.f2)) {
-            double d = Haversine.distanceMetres(s.f0, s.f1, s.f2, s.f3);
+            double d = MEOSBridge.distanceMetres(s.f0, s.f1, s.f2, s.f3);
             out.collect(new Tuple2<>(timestamp, d));
         }
     }

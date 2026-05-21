@@ -3,11 +3,12 @@ package berlinmod;
 /**
  * Great-circle distance in metres between two WGS84 (lon, lat) points.
  *
- * <p>Used by the BerlinMOD-Q3 scaffold for "is this vehicle within {@code d}
- * metres of point P" predicates. This is the same semantic as the MEOS
- * {@code edwithin_tgeo_geo} operator used by {@code MobilityNebula/Queries/Query1.yaml};
- * keeping the predicate as pure Java here lets the scaffold compile and run
- * before the JMEOS bridge for {@code edwithin_tgeo_geo} is wired through.
+ * <p>Pure-Java fallback for {@link MEOSBridge#dwithinMetres} and
+ * {@link MEOSBridge#distanceMetres}, used by the BerlinMOD-9 × 3-form
+ * streaming scaffold when libmeos is not loadable on the runtime path
+ * (e.g. the mini-cluster local tests in {@code BerlinMODQ*LocalTest}). The
+ * primary spatial-predicate surface is {@link MEOSBridge}; this class is a
+ * fallback only.
  */
 public final class Haversine {
 

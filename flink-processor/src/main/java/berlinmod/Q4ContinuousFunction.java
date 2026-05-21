@@ -18,9 +18,10 @@ import org.apache.flink.util.Collector;
  * inside-or-outside, and if the transition is outside→inside, emits
  * {@code (vehicleId, entryTime)}.
  *
- * <p>Predicate today: pure-Java point-in-box. TODO(meos): replace with the
- * MEOS {@code eintersects_tgeo_geo} operator via the JMEOS bridge of an
- * STBox containment test for a generic polygon-R variant.
+ * <p>Predicate: pure-Java axis-aligned point-in-box. The rectangular region
+ * is degenerate as a geographic predicate (no projection needed); a generic
+ * polygon-R variant would route through {@link MEOSBridge} for MEOS
+ * {@code eintersects_tgeo_geo}.
  */
 public class Q4ContinuousFunction
         extends KeyedProcessFunction<Integer, BerlinMODTrip, Tuple2<Integer, Long>> {

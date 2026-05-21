@@ -21,9 +21,9 @@ import java.util.Set;
  * for which at least one event satisfies the radius predicate, and emit
  * {@code (windowStart, windowEnd, distinctCount)}.
  *
- * <p>Predicate today: pure-Java great-circle distance (see {@link Haversine}).
- * TODO(meos): replace with the MEOS {@code edwithin_tgeo_geo} operator via
- * JMEOS once that call is wired through.
+ * <p>Predicate: {@link MEOSBridge#dwithinMetres} — MEOS {@code geog_dwithin}
+ * over WGS84 geographies when libmeos is loadable, with {@link Haversine}
+ * fallback otherwise.
  */
 public class Q3WindowedFunction
         extends ProcessAllWindowFunction<BerlinMODTrip, Tuple3<Long, Long, Long>, TimeWindow> {
@@ -47,7 +47,7 @@ public class Q3WindowedFunction
             Collector<Tuple3<Long, Long, Long>> out) {
         Set<Integer> distinctNear = new HashSet<>();
         for (BerlinMODTrip trip : elements) {
-            if (Haversine.withinMetres(trip.getLon(), trip.getLat(), pLon, pLat, radiusMetres)) {
+            if (MEOSBridge.dwithinMetres(trip.getLon(), trip.getLat(), pLon, pLat, radiusMetres)) {
                 distinctNear.add(trip.getVehicleId());
             }
         }

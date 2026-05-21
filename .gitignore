@@ -1,3 +1,4 @@
 *.csv
 .DS_Store
 *.jar
+flink-processor/target/

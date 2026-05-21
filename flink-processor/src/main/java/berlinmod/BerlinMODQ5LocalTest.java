@@ -52,6 +52,7 @@ public class BerlinMODQ5LocalTest {
     private static final long T0 = 1_735_711_200_000L;
 
     public static void main(String[] args) throws Exception {
+        System.setProperty("mobilityflink.meos.enabled", "false");
         LOG.info("BerlinMODQ5LocalTest starting; P=({}, {}) dP={}m dMeet={}m",
                 P_LON, P_LAT, D_P_METRES, D_MEET_METRES);
 

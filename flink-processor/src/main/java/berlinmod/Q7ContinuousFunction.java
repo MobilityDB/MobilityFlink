@@ -48,7 +48,7 @@ public class Q7ContinuousFunction
             if (firstPassed.contains(poi.id)) {
                 continue;
             }
-            if (Haversine.withinMetres(trip.getLon(), trip.getLat(), poi.lon, poi.lat, poi.radiusMetres)) {
+            if (MEOSBridge.dwithinMetres(trip.getLon(), trip.getLat(), poi.lon, poi.lat, poi.radiusMetres)) {
                 firstPassed.put(poi.id, trip.getTimestamp());
                 out.collect(new Tuple3<>(trip.getVehicleId(), poi.id, trip.getTimestamp()));
             }
