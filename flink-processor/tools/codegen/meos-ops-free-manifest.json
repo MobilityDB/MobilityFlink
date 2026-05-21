@@ -1,0 +1,52 @@
+{
+  "generator": "codegen_flink_free.py",
+  "jmeos_method_total": 2699,
+  "baseline_free_fn_count": 1396,
+  "emitted_methods": 1346,
+  "absent_from_jmeos": 50,
+  "absent_from_jmeos_sample": [
+    "temptype_subtype",
+    "temptype_subtype_all",
+    "tempsubtype_name",
+    "tempsubtype_from_string",
+    "meosoper_name",
+    "interptype_name",
+    "meostype_name",
+    "temptype_basetype",
+    "geo_basetype",
+    "meos_basetype",
+    "alphanum_basetype",
+    "alphanum_temptype",
+    "time_type",
+    "numset_type",
+    "ensure_numset_type",
+    "timeset_type",
+    "ensure_set_spantype",
+    "alphanumset_type",
+    "ensure_geoset_type",
+    "spatialset_type"
+  ],
+  "tier_breakdown": {
+    "io-meta": 96,
+    "stateless": 712,
+    "bounded-state": 284,
+    "windowed": 121,
+    "cross-stream": 133
+  },
+  "classes_emitted": [
+    "MeosOpsFreeCbuffer",
+    "MeosOpsFreeCore",
+    "MeosOpsFreeGeo",
+    "MeosOpsFreeNpoint",
+    "MeosOpsFreePose",
+    "MeosOpsFreeRgeo"
+  ],
+  "methods_per_header": {
+    "meos.h": 746,
+    "meos_cbuffer.h": 149,
+    "meos_geo.h": 262,
+    "meos_npoint.h": 82,
+    "meos_pose.h": 76,
+    "meos_rgeo.h": 31
+  }
+}
