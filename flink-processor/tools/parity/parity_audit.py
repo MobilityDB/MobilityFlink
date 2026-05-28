@@ -177,15 +177,17 @@ def main():
             L.append(f"- **`{h}`** ({len(ms)}): " + ", ".join(f"`{n}`" for n in ms))
     L.append("")
     L.append("## 4. MobilityDB SQL-surface cross-check\n")
-    L.append("For comparability with the SQL-surface bindings, the facade is also matched "
-             "against the underlying MEOS C symbol of each addressable `CREATE FUNCTION` in "
-             "`mobilitydb/sql/**/*.in.sql` (PG-only sections and helper symbols bucketed out; "
-             f"{oos} out-of-scope, {sqlc} SQL/plpgsql-composed functions with no single C symbol). "
-             "The extension wrapper occasionally renames the MEOS function it calls, so this view "
-             "is a lower bound.\n")
+    L.append("The facade is also matched against the underlying MEOS C symbol of each addressable "
+             "`CREATE FUNCTION` in `mobilitydb/sql/**/*.in.sql` (PG-only sections and helper symbols "
+             f"bucketed out; {oos} out-of-scope, {sqlc} SQL/plpgsql-composed functions with no single "
+             "C symbol). Functions the SQL layer implements through the internal MEOS headers "
+             "(`meos_internal*.h`) are exposed via `MeosOpsSqlSurface`.\n")
     L.append(f"- Addressable distinct C symbols: **{len(addr)}**; bound by JMEOS: **{sql_bindable}**; "
              f"exposed by the facade: **{sql_cov}** "
              f"({pct(sql_cov, sql_bindable):.1f}% of the JMEOS-bindable SQL surface).\n")
+    L.append(f"- The remaining **{len(addr) - sql_bindable}** addressable C symbols are not exported "
+             "by JMEOS under the name the SQL layer's extension wrapper uses; the wrapper names "
+             "differ from the MEOS function names they call.\n")
 
     if a.libmeos:
         libsyms = libmeos_symbols(a.libmeos)
