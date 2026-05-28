@@ -41,3 +41,16 @@ For comparability with the SQL-surface bindings, the facade is also matched agai
 
 - Addressable distinct C symbols: **1335**; bound by JMEOS: **1065**; exposed by the facade: **939** (88.2% of the JMEOS-bindable SQL surface).
 
+## 5. Runtime symbol resolution
+
+Every facade method delegates to a libmeos symbol of the same name. Against a libmeos built with the extended modules (`-DCBUFFER=ON -DNPOINT=ON -DPOSE=ON -DRGEO=ON`), **2152 of 2160** facade methods resolve to an exported symbol. The following require a libmeos built from current MEOS sources:
+
+- `geog_from_binary`
+- `nad_stbox_trgeo`
+- `tcbuffer_from_mfjson`
+- `tfloat_avg_value`
+- `tnpoint_from_mfjson`
+- `trgeo_points`
+- `trgeo_rotation`
+- `trgeo_segments`
+

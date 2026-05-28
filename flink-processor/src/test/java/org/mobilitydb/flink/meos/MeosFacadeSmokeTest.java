@@ -41,6 +41,14 @@ class MeosFacadeSmokeTest {
     }
 
     @Test
+    void coreIntspan() {
+        Pointer span = MeosOpsIntSpan.intspan_in("[1, 5)");
+        assertNotNull(span);
+        String out = MeosOpsIntSpan.intspan_out(span);
+        assertTrue(out.contains("1") && out.contains("5"));
+    }
+
+    @Test
     void geoStbox() {
         Pointer stbox = MeosOpsSTBox.stbox_in("STBOX X((1,1),(2,2))");
         assertNotNull(stbox);
@@ -75,5 +83,6 @@ class MeosFacadeSmokeTest {
         Pointer pose = MeosOpsFreePose.pose_in("Pose(Point(1 1), 0.5)");
         assertNotNull(pose);
         assertNotNull(MeosOpsFreePose.pose_out(pose, 6));
+        assertEquals(0.5, MeosOpsFreePose.pose_rotation(pose), 1e-9);
     }
 }
