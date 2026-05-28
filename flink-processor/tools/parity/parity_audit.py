@@ -69,6 +69,11 @@ def facade_methods(d):
     return syms
 
 
+def libmeos_symbols(path):
+    out = subprocess.run(["nm", "-D", path], capture_output=True, text=True).stdout
+    return {line.split()[-1] for line in out.splitlines() if line.strip()}
+
+
 def public_surface(inc):
     fam, allpub = {}, set()
     for h in PUBLIC_HEADERS:
@@ -106,10 +111,14 @@ def main():
     ap.add_argument("--facade", default=os.path.join(here, "src/main/java/org/mobilitydb/flink/meos"))
     ap.add_argument("--mdb-sql", default="/home/esteban/src/MobilityDB/mobilitydb/sql")
     ap.add_argument("--out", default=os.path.join(here, "docs", "parity-status.md"))
+    ap.add_argument("--libmeos", default=None,
+                    help="path to a built libmeos.so; cross-checks that every facade method "
+                         "resolves to an exported symbol (runtime resolution check)")
     a = ap.parse_args()
 
     jm = jmeos_symbols(a.jar)
-    fa = facade_methods(a.facade) & jm
+    fa_all = facade_methods(a.facade)
+    fa = fa_all & jm
     pub, fam = public_surface(a.meos_include)
     bindable = pub & jm
     covered = bindable & fa
@@ -177,6 +186,21 @@ def main():
     L.append(f"- Addressable distinct C symbols: **{len(addr)}**; bound by JMEOS: **{sql_bindable}**; "
              f"exposed by the facade: **{sql_cov}** "
              f"({pct(sql_cov, sql_bindable):.1f}% of the JMEOS-bindable SQL surface).\n")
+
+    if a.libmeos:
+        libsyms = libmeos_symbols(a.libmeos)
+        resolved = fa_all & libsyms
+        unresolved = sorted(fa_all - libsyms)
+        L.append("## 5. Runtime symbol resolution\n")
+        L.append("Every facade method delegates to a libmeos symbol of the same name. Against a "
+                 "libmeos built with the extended modules (`-DCBUFFER=ON -DNPOINT=ON -DPOSE=ON "
+                 "-DRGEO=ON`), "
+                 f"**{len(resolved)} of {len(fa_all)}** facade methods resolve to an exported "
+                 "symbol. The following require a libmeos built from current MEOS sources:\n")
+        L.append(("\n".join(f"- `{n}`" for n in unresolved) if unresolved
+                  else "- (none — all facade methods resolve)") + "\n")
+        print(f"libmeos resolution:         {len(resolved)}/{len(fa_all)} "
+              f"({len(unresolved)} unresolved)")
 
     md = "\n".join(L) + "\n"
     os.makedirs(os.path.dirname(a.out), exist_ok=True)
