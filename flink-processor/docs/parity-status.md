@@ -45,14 +45,10 @@ The facade is also matched against the underlying MEOS C symbol of each addressa
 
 ## 5. Runtime symbol resolution
 
-Every facade method delegates to a libmeos symbol of the same name. Against a libmeos built with the extended modules (`-DCBUFFER=ON -DNPOINT=ON -DPOSE=ON -DRGEO=ON`), **2278 of 2286** facade methods resolve to an exported symbol. The following require a libmeos built from current MEOS sources:
+Every facade method delegates to a libmeos symbol of the same name. Against a MEOS shared library built with the extended modules (`-DCBUFFER=ON -DNPOINT=ON -DPOSE=ON -DRGEO=ON`), **2277 of 2286** facade methods resolve to an exported symbol.
 
-- `geog_from_binary`
-- `nad_stbox_trgeo`
-- `tcbuffer_from_mfjson`
-- `tfloat_avg_value`
-- `tnpoint_from_mfjson`
-- `trgeo_points`
-- `trgeo_rotation`
-- `trgeo_segments`
+The remaining 9 are present in the JMEOS jar but not exported by the MEOS shared library (a JMEOS-jar / library version skew):
+
+- declared in the public headers, not exported by this build (7): `geog_from_binary`, `nad_stbox_trgeo`, `tfloat_avg_value`, `trgeo_points`, `trgeo_rotation`, `trgeo_segments`, `trgeo_traversed_area`
+- not declared in the current public headers, JMEOS jar ahead of the library (2): `tcbuffer_from_mfjson`, `tnpoint_from_mfjson`
 
