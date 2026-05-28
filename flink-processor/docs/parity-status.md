@@ -37,13 +37,15 @@ Per-family runtime behaviour is asserted by `src/test/java/org/mobilitydb/flink/
 
 ## 4. MobilityDB SQL-surface cross-check
 
-For comparability with the SQL-surface bindings, the facade is also matched against the underlying MEOS C symbol of each addressable `CREATE FUNCTION` in `mobilitydb/sql/**/*.in.sql` (PG-only sections and helper symbols bucketed out; 874 out-of-scope, 113 SQL/plpgsql-composed functions with no single C symbol). The extension wrapper occasionally renames the MEOS function it calls, so this view is a lower bound.
+The facade is also matched against the underlying MEOS C symbol of each addressable `CREATE FUNCTION` in `mobilitydb/sql/**/*.in.sql` (PG-only sections and helper symbols bucketed out; 874 out-of-scope, 113 SQL/plpgsql-composed functions with no single C symbol). Functions the SQL layer implements through the internal MEOS headers (`meos_internal*.h`) are exposed via `MeosOpsSqlSurface`.
 
-- Addressable distinct C symbols: **1335**; bound by JMEOS: **1065**; exposed by the facade: **939** (88.2% of the JMEOS-bindable SQL surface).
+- Addressable distinct C symbols: **1335**; bound by JMEOS: **1065**; exposed by the facade: **1065** (100.0% of the JMEOS-bindable SQL surface).
+
+- The remaining **270** addressable C symbols are not exported by JMEOS under the name the SQL layer's extension wrapper uses; the wrapper names differ from the MEOS function names they call.
 
 ## 5. Runtime symbol resolution
 
-Every facade method delegates to a libmeos symbol of the same name. Against a libmeos built with the extended modules (`-DCBUFFER=ON -DNPOINT=ON -DPOSE=ON -DRGEO=ON`), **2152 of 2160** facade methods resolve to an exported symbol. The following require a libmeos built from current MEOS sources:
+Every facade method delegates to a libmeos symbol of the same name. Against a libmeos built with the extended modules (`-DCBUFFER=ON -DNPOINT=ON -DPOSE=ON -DRGEO=ON`), **2278 of 2286** facade methods resolve to an exported symbol. The following require a libmeos built from current MEOS sources:
 
 - `geog_from_binary`
 - `nad_stbox_trgeo`
