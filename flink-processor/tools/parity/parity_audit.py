@@ -195,12 +195,24 @@ def main():
         unresolved = sorted(fa_all - libsyms)
         L.append("## 5. Runtime symbol resolution\n")
         L.append("Every facade method delegates to a libmeos symbol of the same name. Against a "
-                 "libmeos built with the extended modules (`-DCBUFFER=ON -DNPOINT=ON -DPOSE=ON "
-                 "-DRGEO=ON`), "
+                 "MEOS shared library built with the extended modules (`-DCBUFFER=ON -DNPOINT=ON "
+                 "-DPOSE=ON -DRGEO=ON`), "
                  f"**{len(resolved)} of {len(fa_all)}** facade methods resolve to an exported "
-                 "symbol. The following require a libmeos built from current MEOS sources:\n")
-        L.append(("\n".join(f"- `{n}`" for n in unresolved) if unresolved
-                  else "- (none — all facade methods resolve)") + "\n")
+                 "symbol.\n")
+        if unresolved:
+            hdr_only = sorted(n for n in unresolved if n in pub)
+            jmeos_only = sorted(n for n in unresolved if n not in pub)
+            L.append(f"The remaining {len(unresolved)} are present in the JMEOS jar but not "
+                     "exported by the MEOS shared library (a JMEOS-jar / library version skew):\n")
+            if hdr_only:
+                L.append(f"- declared in the public headers, not exported by this build "
+                         f"({len(hdr_only)}): " + ", ".join(f"`{n}`" for n in hdr_only))
+            if jmeos_only:
+                L.append(f"- not declared in the current public headers, JMEOS jar ahead of the "
+                         f"library ({len(jmeos_only)}): " + ", ".join(f"`{n}`" for n in jmeos_only))
+            L.append("")
+        else:
+            L.append("All facade methods resolve.\n")
         print(f"libmeos resolution:         {len(resolved)}/{len(fa_all)} "
               f"({len(unresolved)} unresolved)")
 
