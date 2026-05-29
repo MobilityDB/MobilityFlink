@@ -216,4 +216,101 @@
             </plugin>
         </plugins>
     </build>
+
+    <!-- Optional extended temporal-type families, mirroring the MEOS/MobilityDB
+         build flags (-DCBUFFER/-DNPOINT/-DPOSE/-DRGEO). Each family is included
+         by default; pass -D<family>=false to drop that family's generated MEOS
+         facade sources from the build so a subset jar ships without it. -->
+    <profiles>
+        <profile>
+            <id>no-cbuffer</id>
+            <activation>
+                <property><name>cbuffer</name><value>false</value></property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <excludes combine.children="append">
+                                <exclude>**/meos/MeosOpsTCbuffer.java</exclude>
+                                <exclude>**/meos/MeosOpsFreeCbuffer.java</exclude>
+                                <exclude>**/meos/MeosOpsCbufferSet.java</exclude>
+                            </excludes>
+                            <testExcludes combine.children="append">
+                                <testExclude>**/MeosFacadeSmokeTest.java</testExclude>
+                            </testExcludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>no-npoint</id>
+            <activation>
+                <property><name>npoint</name><value>false</value></property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <excludes combine.children="append">
+                                <exclude>**/meos/MeosOpsTNpoint.java</exclude>
+                                <exclude>**/meos/MeosOpsTNpointInst.java</exclude>
+                                <exclude>**/meos/MeosOpsFreeNpoint.java</exclude>
+                                <exclude>**/meos/MeosOpsNpointSet.java</exclude>
+                            </excludes>
+                            <testExcludes combine.children="append">
+                                <testExclude>**/MeosFacadeSmokeTest.java</testExclude>
+                            </testExcludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>no-pose</id>
+            <activation>
+                <property><name>pose</name><value>false</value></property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <excludes combine.children="append">
+                                <exclude>**/meos/MeosOpsTPose.java</exclude>
+                                <exclude>**/meos/MeosOpsFreePose.java</exclude>
+                                <exclude>**/meos/MeosOpsPoseSet.java</exclude>
+                            </excludes>
+                            <testExcludes combine.children="append">
+                                <testExclude>**/MeosFacadeSmokeTest.java</testExclude>
+                            </testExcludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>no-rgeo</id>
+            <activation>
+                <property><name>rgeo</name><value>false</value></property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <excludes combine.children="append">
+                                <exclude>**/meos/MeosOpsTRGeometry.java</exclude>
+                                <exclude>**/meos/MeosOpsTRGeometryInst.java</exclude>
+                                <exclude>**/meos/MeosOpsFreeRgeo.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
