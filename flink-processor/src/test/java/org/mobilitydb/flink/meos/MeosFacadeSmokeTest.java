@@ -7,16 +7,18 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Per-family runtime check that the generated MEOS facade calls into libmeos and
- * returns correct results. Each family constructs a value through a {@code MeosOps*}
- * facade method and reads it back. Runs only with {@code -Dmobilityflink.meos.enabled=true}
- * and a libmeos on the load path; the extended families (cbuffer, npoint, pose) require a
- * libmeos built with {@code -DCBUFFER=ON -DNPOINT=ON -DPOSE=ON -DRGEO=ON}.
+ * Runtime check that the always-built MEOS facade families (core and geo) call
+ * into libmeos and return correct results. Each constructs a value through a
+ * {@code MeosOps*} facade method and reads it back. Runs only with
+ * {@code -Dmobilityflink.meos.enabled=true} and a libmeos on the load path. The
+ * optional families have their own gated smoke tests
+ * ({@link MeosCbufferSmokeTest}, {@link MeosNpointSmokeTest},
+ * {@link MeosPoseSmokeTest}), each compiled only when its build flag includes
+ * the family.
  */
 @EnabledIfSystemProperty(named = "mobilityflink.meos.enabled", matches = "true")
 class MeosFacadeSmokeTest {
@@ -60,29 +62,5 @@ class MeosFacadeSmokeTest {
         Pointer geom = MeosOpsFreeGeo.geom_in("POINT(1 1)", 0);
         assertNotNull(geom);
         assertTrue(MeosOpsFreeGeo.geo_as_text(geom, 6).toUpperCase().contains("POINT"));
-    }
-
-    @Test
-    void cbuffer() {
-        Pointer cb = MeosOpsFreeCbuffer.cbuffer_make(MeosOpsFreeGeo.geom_in("POINT(1 1)", 0), 0.5);
-        assertNotNull(cb);
-        assertEquals(0.5, MeosOpsFreeCbuffer.cbuffer_radius(cb), 1e-9);
-        assertNotNull(MeosOpsFreeCbuffer.cbuffer_out(cb, 6));
-    }
-
-    @Test
-    void npoint() {
-        Pointer np = MeosOpsFreeNpoint.npoint_make(1, 0.5);
-        assertNotNull(np);
-        assertEquals(1, MeosOpsFreeNpoint.npoint_route(np));
-        assertEquals(0.5, MeosOpsFreeNpoint.npoint_position(np), 1e-9);
-    }
-
-    @Test
-    void pose() {
-        Pointer pose = MeosOpsFreePose.pose_in("Pose(Point(1 1), 0.5)");
-        assertNotNull(pose);
-        assertNotNull(MeosOpsFreePose.pose_out(pose, 6));
-        assertEquals(0.5, MeosOpsFreePose.pose_rotation(pose), 1e-9);
     }
 }
