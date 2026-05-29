@@ -115,39 +115,11 @@ public final class MeosOpsParityGaps {
         return functions.GeneratedFunctions.line_substring(arg0, arg1, arg2);
     }
 
-    /** MEOS {@code mult_float_tfloat} — meos.h · scalar / stateless. */
-    public static jnr.ffi.Pointer mult_float_tfloat(double arg0, jnr.ffi.Pointer arg1) {
+    /** MEOS {@code mindistance_tgeo_tgeo} — meos_geo.h · scalar / stateless. */
+    public static double mindistance_tgeo_tgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, double arg2) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
-            throw new UnsupportedOperationException("mult_float_tfloat requires libmeos — set -Dmobilityflink.meos.enabled=true");
-        return functions.GeneratedFunctions.mult_float_tfloat(arg0, arg1);
-    }
-
-    /** MEOS {@code mult_int_tint} — meos.h · scalar / stateless. */
-    public static jnr.ffi.Pointer mult_int_tint(int arg0, jnr.ffi.Pointer arg1) {
-        if (!MeosOpsRuntime.MEOS_AVAILABLE)
-            throw new UnsupportedOperationException("mult_int_tint requires libmeos — set -Dmobilityflink.meos.enabled=true");
-        return functions.GeneratedFunctions.mult_int_tint(arg0, arg1);
-    }
-
-    /** MEOS {@code mult_tfloat_float} — meos.h · scalar / stateless. */
-    public static jnr.ffi.Pointer mult_tfloat_float(jnr.ffi.Pointer arg0, double arg1) {
-        if (!MeosOpsRuntime.MEOS_AVAILABLE)
-            throw new UnsupportedOperationException("mult_tfloat_float requires libmeos — set -Dmobilityflink.meos.enabled=true");
-        return functions.GeneratedFunctions.mult_tfloat_float(arg0, arg1);
-    }
-
-    /** MEOS {@code mult_tint_int} — meos.h · scalar / stateless. */
-    public static jnr.ffi.Pointer mult_tint_int(jnr.ffi.Pointer arg0, int arg1) {
-        if (!MeosOpsRuntime.MEOS_AVAILABLE)
-            throw new UnsupportedOperationException("mult_tint_int requires libmeos — set -Dmobilityflink.meos.enabled=true");
-        return functions.GeneratedFunctions.mult_tint_int(arg0, arg1);
-    }
-
-    /** MEOS {@code mult_tnumber_tnumber} — meos.h · scalar / stateless. */
-    public static jnr.ffi.Pointer mult_tnumber_tnumber(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
-        if (!MeosOpsRuntime.MEOS_AVAILABLE)
-            throw new UnsupportedOperationException("mult_tnumber_tnumber requires libmeos — set -Dmobilityflink.meos.enabled=true");
-        return functions.GeneratedFunctions.mult_tnumber_tnumber(arg0, arg1);
+            throw new UnsupportedOperationException("mindistance_tgeo_tgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+        return functions.GeneratedFunctions.mindistance_tgeo_tgeo(arg0, arg1, arg2);
     }
 
     /** MEOS {@code nsegment_end_position} — meos_npoint.h · scalar / stateless. */
@@ -274,6 +246,13 @@ public final class MeosOpsParityGaps {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("tfloatseqset_from_base_tstzspanset requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.tfloatseqset_from_base_tstzspanset(arg0, arg1, arg2);
+    }
+
+    /** MEOS {@code tgeoarr_tgeoarr_mindist} — meos_geo.h · scalar / stateless. */
+    public static double tgeoarr_tgeoarr_mindist(jnr.ffi.Pointer arg0, int arg1, jnr.ffi.Pointer arg2, int arg3) {
+        if (!MeosOpsRuntime.MEOS_AVAILABLE)
+            throw new UnsupportedOperationException("tgeoarr_tgeoarr_mindist requires libmeos — set -Dmobilityflink.meos.enabled=true");
+        return functions.GeneratedFunctions.tgeoarr_tgeoarr_mindist(arg0, arg1, arg2, arg3);
     }
 
     /** MEOS {@code tgeoseq_from_base_tstzset} — meos_geo.h · whole-sequence constructor — not a per-event op. */

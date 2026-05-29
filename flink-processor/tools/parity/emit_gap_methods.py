@@ -15,10 +15,13 @@ Run from flink-processor/:
 import re, os, sys, glob
 
 HERE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-INC = "/home/esteban/src/MobilityDB/meos/include"
+INC = os.environ.get("MEOS_INCLUDE", "/home/esteban/src/MobilityDB/meos/include")
 PUBLIC_HEADERS = ["meos.h", "meos_geo.h", "meos_cbuffer.h", "meos_npoint.h", "meos_pose.h", "meos_rgeo.h"]
 FACADE = os.path.join(HERE, "src/main/java/org/mobilitydb/flink/meos")
 OUT = os.path.join(FACADE, "MeosOpsParityGaps.java")
+# Forwarder facades are themselves derived; the "already covered" baseline is the
+# tier-aware generated OO classes only, so the generator reproduces idempotently.
+DERIVED = {"MeosOpsParityGaps.java", "MeosOpsSqlSurface.java"}
 
 _DECL = re.compile(r'^\s*extern\s+.+?\b([a-z][A-Za-z0-9_]*)\s*\(', re.M)
 _PUBSTATIC = re.compile(r'public static [A-Za-z0-9_.<>\[\]]+ ([a-z0-9_]+)\(')
@@ -45,6 +48,8 @@ def main():
             pub.add(n); fam.setdefault(n, h)
     facade = set()
     for f in glob.glob(os.path.join(FACADE, "MeosOps*.java")):
+        if os.path.basename(f) in DERIVED:
+            continue
         facade |= set(_PUBSTATIC.findall(open(f).read()))
     # all JMEOS signatures, grouped by name
     sigs = {}
