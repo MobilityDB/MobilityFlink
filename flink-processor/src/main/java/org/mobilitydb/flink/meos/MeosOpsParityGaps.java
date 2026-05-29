@@ -10,6 +10,27 @@ public final class MeosOpsParityGaps {
 
     private MeosOpsParityGaps() { /* utility */ }
 
+    /** MEOS {@code acovers_geo_tgeo} — meos_geo.h · scalar / stateless. */
+    public static int acovers_geo_tgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+        if (!MeosOpsRuntime.MEOS_AVAILABLE)
+            throw new UnsupportedOperationException("acovers_geo_tgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+        return functions.GeneratedFunctions.acovers_geo_tgeo(arg0, arg1);
+    }
+
+    /** MEOS {@code acovers_tcbuffer_tcbuffer} — meos_cbuffer.h · scalar / stateless. */
+    public static int acovers_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+        if (!MeosOpsRuntime.MEOS_AVAILABLE)
+            throw new UnsupportedOperationException("acovers_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
+        return functions.GeneratedFunctions.acovers_tcbuffer_tcbuffer(arg0, arg1);
+    }
+
+    /** MEOS {@code acovers_tgeo_geo} — meos_geo.h · scalar / stateless. */
+    public static int acovers_tgeo_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+        if (!MeosOpsRuntime.MEOS_AVAILABLE)
+            throw new UnsupportedOperationException("acovers_tgeo_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+        return functions.GeneratedFunctions.acovers_tgeo_geo(arg0, arg1);
+    }
+
     /** MEOS {@code bearing_tpoint_point} — meos_geo.h · scalar / stateless. */
     public static jnr.ffi.Pointer bearing_tpoint_point(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
@@ -22,6 +43,27 @@ public final class MeosOpsParityGaps {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("bearing_tpoint_tpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.bearing_tpoint_tpoint(arg0, arg1);
+    }
+
+    /** MEOS {@code bigintspan_to_floatspan} — meos.h · scalar / stateless. */
+    public static jnr.ffi.Pointer bigintspan_to_floatspan(jnr.ffi.Pointer arg0) {
+        if (!MeosOpsRuntime.MEOS_AVAILABLE)
+            throw new UnsupportedOperationException("bigintspan_to_floatspan requires libmeos — set -Dmobilityflink.meos.enabled=true");
+        return functions.GeneratedFunctions.bigintspan_to_floatspan(arg0);
+    }
+
+    /** MEOS {@code bigintspan_to_intspan} — meos.h · scalar / stateless. */
+    public static jnr.ffi.Pointer bigintspan_to_intspan(jnr.ffi.Pointer arg0) {
+        if (!MeosOpsRuntime.MEOS_AVAILABLE)
+            throw new UnsupportedOperationException("bigintspan_to_intspan requires libmeos — set -Dmobilityflink.meos.enabled=true");
+        return functions.GeneratedFunctions.bigintspan_to_intspan(arg0);
+    }
+
+    /** MEOS {@code floatspan_to_bigintspan} — meos.h · scalar / stateless. */
+    public static jnr.ffi.Pointer floatspan_to_bigintspan(jnr.ffi.Pointer arg0) {
+        if (!MeosOpsRuntime.MEOS_AVAILABLE)
+            throw new UnsupportedOperationException("floatspan_to_bigintspan requires libmeos — set -Dmobilityflink.meos.enabled=true");
+        return functions.GeneratedFunctions.floatspan_to_bigintspan(arg0);
     }
 
     /** MEOS {@code geogpoint_make2d} — meos_geo.h · scalar / stateless. */
@@ -87,6 +129,13 @@ public final class MeosOpsParityGaps {
         return functions.GeneratedFunctions.intersection_pose_set(arg0, arg1);
     }
 
+    /** MEOS {@code intspan_to_bigintspan} — meos.h · scalar / stateless. */
+    public static jnr.ffi.Pointer intspan_to_bigintspan(jnr.ffi.Pointer arg0) {
+        if (!MeosOpsRuntime.MEOS_AVAILABLE)
+            throw new UnsupportedOperationException("intspan_to_bigintspan requires libmeos — set -Dmobilityflink.meos.enabled=true");
+        return functions.GeneratedFunctions.intspan_to_bigintspan(arg0);
+    }
+
     /** MEOS {@code line_interpolate_point} — meos_geo.h · scalar / stateless. */
     public static jnr.ffi.Pointer line_interpolate_point(jnr.ffi.Pointer arg0, double arg1, boolean arg2) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
@@ -113,6 +162,13 @@ public final class MeosOpsParityGaps {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("line_substring requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.line_substring(arg0, arg1, arg2);
+    }
+
+    /** MEOS {@code meos_initialize_noexit_error_handler} — meos.h · scalar / stateless. */
+    public static void meos_initialize_noexit_error_handler() {
+        if (!MeosOpsRuntime.MEOS_AVAILABLE)
+            throw new UnsupportedOperationException("meos_initialize_noexit_error_handler requires libmeos — set -Dmobilityflink.meos.enabled=true");
+        functions.GeneratedFunctions.meos_initialize_noexit_error_handler();
     }
 
     /** MEOS {@code mindistance_tgeo_tgeo} — meos_geo.h · scalar / stateless. */
@@ -239,6 +295,13 @@ public final class MeosOpsParityGaps {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("tboolseqset_from_base_tstzspanset requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.tboolseqset_from_base_tstzspanset(arg0, arg1);
+    }
+
+    /** MEOS {@code tbox_to_bigintspan} — meos.h · scalar / stateless. */
+    public static jnr.ffi.Pointer tbox_to_bigintspan(jnr.ffi.Pointer arg0) {
+        if (!MeosOpsRuntime.MEOS_AVAILABLE)
+            throw new UnsupportedOperationException("tbox_to_bigintspan requires libmeos — set -Dmobilityflink.meos.enabled=true");
+        return functions.GeneratedFunctions.tbox_to_bigintspan(arg0);
     }
 
     /** MEOS {@code tfloatbox_time_tiles} — meos.h · multidimensional tiling (windowed). */

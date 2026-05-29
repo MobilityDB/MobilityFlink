@@ -16,7 +16,7 @@ import re, os, sys, glob
 
 HERE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 INC = os.environ.get("MEOS_INCLUDE", "/home/esteban/src/MobilityDB/meos/include")
-PUBLIC_HEADERS = ["meos.h", "meos_geo.h", "meos_cbuffer.h", "meos_npoint.h", "meos_pose.h", "meos_rgeo.h"]
+PUBLIC_HEADERS = ["meos.h", "meos_geo.h", "meos_cbuffer.h", "meos_npoint.h", "meos_pose.h", "meos_rgeo.h", "meos_h3.h"]
 FACADE = os.path.join(HERE, "src/main/java/org/mobilitydb/flink/meos")
 OUT = os.path.join(FACADE, "MeosOpsParityGaps.java")
 # Forwarder facades are themselves derived; the "already covered" baseline is the
