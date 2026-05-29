@@ -21,7 +21,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: constructor of instant/scalar</p>
      */
-    public static Pointer set_copy(Pointer arg0) {
+    public static jnr.ffi.Pointer set_copy(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_copy requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer set_to_span(Pointer arg0) {
+    public static jnr.ffi.Pointer set_to_span(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_to_span requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -49,7 +49,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer set_to_spanset(Pointer arg0) {
+    public static jnr.ffi.Pointer set_to_spanset(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_to_spanset requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -63,7 +63,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer set_to_tbox(Pointer arg0) {
+    public static jnr.ffi.Pointer set_to_tbox(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_to_tbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -77,7 +77,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code predicate}.</p>
      * <p>Classification: predicate on 1 temporal</p>
      */
-    public static int set_cmp(Pointer arg0, Pointer arg1) {
+    public static int set_cmp(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_cmp requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -91,7 +91,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code predicate}.</p>
      * <p>Classification: predicate on 1 temporal</p>
      */
-    public static int set_eq(Pointer arg0, Pointer arg1) {
+    public static boolean set_eq(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_eq requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -105,7 +105,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code predicate}.</p>
      * <p>Classification: predicate on 1 temporal</p>
      */
-    public static int set_ge(Pointer arg0, Pointer arg1) {
+    public static boolean set_ge(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_ge requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -119,7 +119,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code predicate}.</p>
      * <p>Classification: predicate on 1 temporal</p>
      */
-    public static int set_gt(Pointer arg0, Pointer arg1) {
+    public static boolean set_gt(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_gt requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -133,7 +133,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int set_hash(Pointer arg0) {
+    public static int set_hash(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_hash requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -147,7 +147,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int set_hash_extended(Pointer arg0, int arg1) {
+    public static long set_hash_extended(jnr.ffi.Pointer arg0, long arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_hash_extended requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -161,7 +161,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code predicate}.</p>
      * <p>Classification: predicate on 1 temporal</p>
      */
-    public static int set_le(Pointer arg0, Pointer arg1) {
+    public static boolean set_le(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_le requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -175,7 +175,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code predicate}.</p>
      * <p>Classification: predicate on 1 temporal</p>
      */
-    public static int set_lt(Pointer arg0, Pointer arg1) {
+    public static boolean set_lt(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_lt requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -189,7 +189,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code predicate}.</p>
      * <p>Classification: predicate on 1 temporal</p>
      */
-    public static int set_ne(Pointer arg0, Pointer arg1) {
+    public static boolean set_ne(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_ne requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -203,7 +203,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int set_num_values(Pointer arg0) {
+    public static int set_num_values(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_num_values requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -217,7 +217,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer set_round(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer set_round(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_round requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -231,7 +231,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer set_spans(Pointer arg0) {
+    public static jnr.ffi.Pointer set_spans(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_spans requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -245,7 +245,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer set_split_each_n_spans(Pointer arg0, int arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer set_split_each_n_spans(jnr.ffi.Pointer arg0, int arg1, jnr.ffi.Pointer arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_split_each_n_spans requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -259,7 +259,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer set_split_n_spans(Pointer arg0, int arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer set_split_n_spans(jnr.ffi.Pointer arg0, int arg1, jnr.ffi.Pointer arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_split_n_spans requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -273,7 +273,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer set_extent_transfn(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer set_extent_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_extent_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -287,7 +287,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer set_union_finalfn(Pointer arg0) {
+    public static jnr.ffi.Pointer set_union_finalfn(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_union_finalfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -301,7 +301,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer set_union_transfn(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer set_union_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_union_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -315,7 +315,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code output}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static String set_as_hexwkb(Pointer arg0, byte arg1) {
+    public static java.lang.String set_as_hexwkb(jnr.ffi.Pointer arg0, byte arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_as_hexwkb requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -329,7 +329,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code output}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer set_as_wkb(Pointer arg0, byte arg1) {
+    public static jnr.ffi.Pointer set_as_wkb(jnr.ffi.Pointer arg0, byte arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_as_wkb requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -343,7 +343,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer set_from_hexwkb(String arg0) {
+    public static jnr.ffi.Pointer set_from_hexwkb(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_from_hexwkb requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -357,7 +357,7 @@ public final class MeosOpsSet {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer set_from_wkb(Pointer arg0, long arg1) {
+    public static jnr.ffi.Pointer set_from_wkb(jnr.ffi.Pointer arg0, long arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "set_from_wkb requires libmeos — set -Dmobilityflink.meos.enabled=true");

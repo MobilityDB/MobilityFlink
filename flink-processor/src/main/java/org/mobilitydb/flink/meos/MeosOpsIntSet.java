@@ -21,7 +21,7 @@ public final class MeosOpsIntSet {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: constructor of instant/scalar</p>
      */
-    public static Pointer intset_make(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer intset_make(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "intset_make requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsIntSet {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer intset_to_floatset(Pointer arg0) {
+    public static jnr.ffi.Pointer intset_to_floatset(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "intset_to_floatset requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -49,7 +49,7 @@ public final class MeosOpsIntSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int intset_end_value(Pointer arg0) {
+    public static int intset_end_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "intset_end_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -63,7 +63,7 @@ public final class MeosOpsIntSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer intset_shift_scale(Pointer arg0, int arg1, int arg2, int arg3, int arg4) {
+    public static jnr.ffi.Pointer intset_shift_scale(jnr.ffi.Pointer arg0, int arg1, int arg2, boolean arg3, boolean arg4) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "intset_shift_scale requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -77,7 +77,7 @@ public final class MeosOpsIntSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int intset_start_value(Pointer arg0) {
+    public static int intset_start_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "intset_start_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -91,12 +91,12 @@ public final class MeosOpsIntSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int intset_value_n(Pointer arg0, int arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer intset_value_n(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "intset_value_n requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.intset_value_n(arg0, arg1, arg2);
+        return GeneratedFunctions.intset_value_n(arg0, arg1);
     }
 
     /**
@@ -105,7 +105,7 @@ public final class MeosOpsIntSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer intset_values(Pointer arg0) {
+    public static jnr.ffi.Pointer intset_values(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "intset_values requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -119,7 +119,7 @@ public final class MeosOpsIntSet {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer intset_in(String arg0) {
+    public static jnr.ffi.Pointer intset_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "intset_in requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -133,7 +133,7 @@ public final class MeosOpsIntSet {
      * <p>Object-model role: {@code output}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static String intset_out(Pointer arg0) {
+    public static java.lang.String intset_out(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "intset_out requires libmeos — set -Dmobilityflink.meos.enabled=true");

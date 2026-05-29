@@ -14,8 +14,8 @@ Run from flink-processor/:
 import re, os, sys, glob
 
 HERE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-INC = "/home/esteban/src/MobilityDB/meos/include"
-MDB_SQL = "/home/esteban/src/MobilityDB/mobilitydb/sql"
+INC = os.environ.get("MEOS_INCLUDE", "/home/esteban/src/MobilityDB/meos/include")
+MDB_SQL = os.environ.get("MDB_SQL", "/home/esteban/src/MobilityDB/mobilitydb/sql")
 FACADE = os.path.join(HERE, "src/main/java/org/mobilitydb/flink/meos")
 OUT = os.path.join(FACADE, "MeosOpsSqlSurface.java")
 

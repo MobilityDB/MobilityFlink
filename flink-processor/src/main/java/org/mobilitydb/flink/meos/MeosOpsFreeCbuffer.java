@@ -22,7 +22,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int cbuffer_cmp(Pointer arg0, Pointer arg1) {
+    public static int cbuffer_cmp(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_cmp requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static Pointer cbuffer_copy(Pointer arg0) {
+    public static jnr.ffi.Pointer cbuffer_copy(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_copy requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -48,7 +48,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int cbuffer_eq(Pointer arg0, Pointer arg1) {
+    public static boolean cbuffer_eq(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_eq requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -61,7 +61,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int cbuffer_ge(Pointer arg0, Pointer arg1) {
+    public static boolean cbuffer_ge(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_ge requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -74,7 +74,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int cbuffer_gt(Pointer arg0, Pointer arg1) {
+    public static boolean cbuffer_gt(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_gt requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -87,7 +87,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int cbuffer_hash(Pointer arg0) {
+    public static int cbuffer_hash(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_hash requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -100,7 +100,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int cbuffer_hash_extended(Pointer arg0, int arg1) {
+    public static long cbuffer_hash_extended(jnr.ffi.Pointer arg0, long arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_hash_extended requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -113,7 +113,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int cbuffer_le(Pointer arg0, Pointer arg1) {
+    public static boolean cbuffer_le(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_le requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -126,7 +126,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int cbuffer_lt(Pointer arg0, Pointer arg1) {
+    public static boolean cbuffer_lt(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_lt requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -139,7 +139,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: make/from_base of instant/scalar</p>
      */
-    public static Pointer cbuffer_make(Pointer arg0, double arg1) {
+    public static jnr.ffi.Pointer cbuffer_make(jnr.ffi.Pointer arg0, double arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_make requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -152,7 +152,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int cbuffer_ne(Pointer arg0, Pointer arg1) {
+    public static boolean cbuffer_ne(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_ne requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -165,7 +165,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static int cbuffer_nsame(Pointer arg0, Pointer arg1) {
+    public static boolean cbuffer_nsame(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_nsame requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -178,7 +178,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static Pointer cbuffer_point(Pointer arg0) {
+    public static jnr.ffi.Pointer cbuffer_point(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_point requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -191,7 +191,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static double cbuffer_radius(Pointer arg0) {
+    public static double cbuffer_radius(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_radius requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -204,7 +204,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: transform/normalize (pure)</p>
      */
-    public static Pointer cbuffer_round(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer cbuffer_round(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_round requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -217,7 +217,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static int cbuffer_same(Pointer arg0, Pointer arg1) {
+    public static boolean cbuffer_same(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_same requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -230,7 +230,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static void cbuffer_set_srid(Pointer arg0, int arg1) {
+    public static void cbuffer_set_srid(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_set_srid requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -243,7 +243,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static int cbuffer_srid(Pointer arg0) {
+    public static int cbuffer_srid(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_srid requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -256,7 +256,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: name pattern is _to_<type></p>
      */
-    public static Pointer cbuffer_timestamptz_to_stbox(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer cbuffer_timestamptz_to_stbox(jnr.ffi.Pointer arg0, java.time.OffsetDateTime arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_timestamptz_to_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -269,7 +269,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: name pattern is _to_<type></p>
      */
-    public static Pointer cbuffer_to_geom(Pointer arg0) {
+    public static jnr.ffi.Pointer cbuffer_to_geom(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_to_geom requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -282,7 +282,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: name pattern is _to_<type></p>
      */
-    public static Pointer cbuffer_to_set(Pointer arg0) {
+    public static jnr.ffi.Pointer cbuffer_to_set(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_to_set requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -295,7 +295,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: name pattern is _to_<type></p>
      */
-    public static Pointer cbuffer_to_stbox(Pointer arg0) {
+    public static jnr.ffi.Pointer cbuffer_to_stbox(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_to_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -308,7 +308,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static Pointer cbuffer_transform(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer cbuffer_transform(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_transform requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -321,7 +321,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static Pointer cbuffer_transform_pipeline(Pointer arg0, String arg1, int arg2, int arg3) {
+    public static jnr.ffi.Pointer cbuffer_transform_pipeline(jnr.ffi.Pointer arg0, java.lang.String arg1, int arg2, boolean arg3) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_transform_pipeline requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -334,7 +334,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: name pattern is _to_<type></p>
      */
-    public static Pointer cbuffer_tstzspan_to_stbox(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer cbuffer_tstzspan_to_stbox(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_tstzspan_to_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -347,7 +347,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static Pointer cbuffer_union_transfn(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer cbuffer_union_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_union_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -360,7 +360,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: transform/normalize (pure)</p>
      */
-    public static Pointer cbufferarr_round(Pointer arg0, int arg1, int arg2) {
+    public static jnr.ffi.Pointer cbufferarr_round(jnr.ffi.Pointer arg0, int arg1, int arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbufferarr_round requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -373,7 +373,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: name pattern is _to_<type></p>
      */
-    public static Pointer cbufferarr_to_geom(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer cbufferarr_to_geom(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbufferarr_to_geom requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -386,7 +386,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: topology/position rel on 2 scalars (box/span algebra)</p>
      */
-    public static int contained_cbuffer_set(Pointer arg0, Pointer arg1) {
+    public static boolean contained_cbuffer_set(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "contained_cbuffer_set requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -399,7 +399,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: topology/position rel on 2 scalars (box/span algebra)</p>
      */
-    public static int contains_cbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int contains_cbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "contains_cbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -412,7 +412,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: set/span/box algebra (pure)</p>
      */
-    public static int contains_set_cbuffer(Pointer arg0, Pointer arg1) {
+    public static boolean contains_set_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "contains_set_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -425,7 +425,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar in/out (default-stateless catch-all)</p>
      */
-    public static int covers_cbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int covers_cbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "covers_cbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -438,7 +438,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar in/out (default-stateless catch-all)</p>
      */
-    public static int disjoint_cbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int disjoint_cbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "disjoint_cbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -451,7 +451,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar in/out (default-stateless catch-all)</p>
      */
-    public static int dwithin_cbuffer_cbuffer(Pointer arg0, Pointer arg1, double arg2) {
+    public static int dwithin_cbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, double arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "dwithin_cbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -464,7 +464,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static Pointer geom_to_cbuffer(Pointer arg0) {
+    public static jnr.ffi.Pointer geom_to_cbuffer(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "geom_to_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -477,7 +477,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: set/span/box algebra (pure)</p>
      */
-    public static Pointer intersection_set_cbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer intersection_set_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "intersection_set_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -490,7 +490,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar in/out (default-stateless catch-all)</p>
      */
-    public static int intersects_cbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int intersects_cbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "intersects_cbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -503,7 +503,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: temporal comparison (per-instant)</p>
      */
-    public static Pointer teq_cbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer teq_cbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "teq_cbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -516,7 +516,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: temporal comparison (per-instant)</p>
      */
-    public static Pointer teq_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer teq_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "teq_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -529,7 +529,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: temporal comparison (per-instant)</p>
      */
-    public static Pointer tne_cbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tne_cbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tne_cbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -542,7 +542,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: temporal comparison (per-instant)</p>
      */
-    public static Pointer tne_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tne_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tne_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -555,7 +555,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar in/out (default-stateless catch-all)</p>
      */
-    public static int touches_cbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int touches_cbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "touches_cbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -568,7 +568,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: set/span/box algebra (pure)</p>
      */
-    public static Pointer union_set_cbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer union_set_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "union_set_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -581,7 +581,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int acontains_cbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int acontains_cbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "acontains_cbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -594,7 +594,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int acontains_geo_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int acontains_geo_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "acontains_geo_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -607,7 +607,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int acontains_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int acontains_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "acontains_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -620,7 +620,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int acontains_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static int acontains_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "acontains_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -633,7 +633,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int acovers_cbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int acovers_cbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "acovers_cbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -646,7 +646,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int acovers_geo_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int acovers_geo_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "acovers_geo_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -659,7 +659,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int acovers_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int acovers_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "acovers_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -672,7 +672,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int acovers_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static int acovers_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "acovers_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -685,7 +685,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int adisjoint_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int adisjoint_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "adisjoint_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -698,7 +698,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int adisjoint_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static int adisjoint_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "adisjoint_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -711,7 +711,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int adwithin_tcbuffer_cbuffer(Pointer arg0, Pointer arg1, double arg2) {
+    public static int adwithin_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, double arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "adwithin_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -724,7 +724,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int adwithin_tcbuffer_geo(Pointer arg0, Pointer arg1, double arg2) {
+    public static int adwithin_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, double arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "adwithin_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -737,7 +737,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int aintersects_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int aintersects_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "aintersects_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -750,7 +750,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int aintersects_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static int aintersects_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "aintersects_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -763,7 +763,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int atouches_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int atouches_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "atouches_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -776,7 +776,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int atouches_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static int atouches_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "atouches_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -789,7 +789,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static double distance_cbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static double distance_cbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "distance_cbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -802,7 +802,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static double distance_cbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static double distance_cbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "distance_cbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -815,7 +815,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static double distance_cbuffer_stbox(Pointer arg0, Pointer arg1) {
+    public static double distance_cbuffer_stbox(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "distance_cbuffer_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -828,7 +828,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int econtains_cbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int econtains_cbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "econtains_cbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -841,7 +841,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int econtains_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int econtains_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "econtains_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -854,7 +854,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int econtains_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static int econtains_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "econtains_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -867,7 +867,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int ecovers_cbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int ecovers_cbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ecovers_cbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -880,7 +880,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int ecovers_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int ecovers_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ecovers_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -893,7 +893,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int ecovers_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static int ecovers_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ecovers_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -906,7 +906,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int edisjoint_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int edisjoint_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "edisjoint_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -919,7 +919,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int edisjoint_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static int edisjoint_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "edisjoint_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -932,7 +932,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int edwithin_tcbuffer_cbuffer(Pointer arg0, Pointer arg1, double arg2) {
+    public static int edwithin_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, double arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "edwithin_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -945,7 +945,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int edwithin_tcbuffer_geo(Pointer arg0, Pointer arg1, double arg2) {
+    public static int edwithin_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, double arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "edwithin_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -958,7 +958,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int eintersects_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int eintersects_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "eintersects_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -971,7 +971,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int eintersects_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static int eintersects_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "eintersects_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -984,7 +984,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int etouches_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int etouches_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "etouches_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -997,7 +997,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 1 temporal</p>
      */
-    public static int etouches_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static int etouches_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "etouches_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1010,7 +1010,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: restriction name pattern</p>
      */
-    public static Pointer minus_cbuffer_set(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer minus_cbuffer_set(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "minus_cbuffer_set requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1023,7 +1023,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: restriction name pattern</p>
      */
-    public static Pointer minus_set_cbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer minus_set_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "minus_set_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1036,7 +1036,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static double nad_cbuffer_stbox(Pointer arg0, Pointer arg1) {
+    public static double nad_cbuffer_stbox(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nad_cbuffer_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1049,7 +1049,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static double nad_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static double nad_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nad_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1062,7 +1062,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static double nad_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static double nad_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nad_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1075,7 +1075,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static double nad_tcbuffer_stbox(Pointer arg0, Pointer arg1) {
+    public static double nad_tcbuffer_stbox(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nad_tcbuffer_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1088,7 +1088,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static Pointer nai_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer nai_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nai_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1101,7 +1101,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static Pointer nai_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer nai_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nai_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1114,7 +1114,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static Pointer shortestline_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer shortestline_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "shortestline_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1127,7 +1127,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static Pointer shortestline_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer shortestline_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "shortestline_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1140,7 +1140,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tcontains_cbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tcontains_cbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcontains_cbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1153,7 +1153,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tcontains_geo_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tcontains_geo_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcontains_geo_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1166,7 +1166,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tcontains_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tcontains_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcontains_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1179,7 +1179,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tcontains_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tcontains_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcontains_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1192,7 +1192,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tcovers_cbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tcovers_cbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcovers_cbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1205,7 +1205,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tcovers_geo_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tcovers_geo_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcovers_geo_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1218,7 +1218,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tcovers_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tcovers_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcovers_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1231,7 +1231,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tcovers_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tcovers_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcovers_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1244,7 +1244,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tdisjoint_cbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tdisjoint_cbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tdisjoint_cbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1257,7 +1257,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tdisjoint_geo_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tdisjoint_geo_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tdisjoint_geo_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1270,7 +1270,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tdisjoint_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tdisjoint_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tdisjoint_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1283,7 +1283,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tdisjoint_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tdisjoint_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tdisjoint_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1296,7 +1296,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static Pointer tdistance_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tdistance_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tdistance_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1309,7 +1309,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static Pointer tdistance_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tdistance_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tdistance_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1322,7 +1322,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tdwithin_geo_tcbuffer(Pointer arg0, Pointer arg1, double arg2) {
+    public static jnr.ffi.Pointer tdwithin_geo_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, double arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tdwithin_geo_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1335,7 +1335,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tdwithin_tcbuffer_cbuffer(Pointer arg0, Pointer arg1, double arg2) {
+    public static jnr.ffi.Pointer tdwithin_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, double arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tdwithin_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1348,7 +1348,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tdwithin_tcbuffer_geo(Pointer arg0, Pointer arg1, double arg2) {
+    public static jnr.ffi.Pointer tdwithin_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, double arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tdwithin_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1361,7 +1361,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tintersects_cbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tintersects_cbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tintersects_cbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1374,7 +1374,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tintersects_geo_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tintersects_geo_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tintersects_geo_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1387,7 +1387,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tintersects_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tintersects_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tintersects_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1400,7 +1400,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer tintersects_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tintersects_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tintersects_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1413,7 +1413,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer ttouches_cbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer ttouches_cbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ttouches_cbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1426,7 +1426,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer ttouches_geo_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer ttouches_geo_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ttouches_geo_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1439,7 +1439,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer ttouches_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer ttouches_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ttouches_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1452,7 +1452,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 1 temporal</p>
      */
-    public static Pointer ttouches_tcbuffer_geo(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer ttouches_tcbuffer_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ttouches_tcbuffer_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1465,7 +1465,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int always_eq_cbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int always_eq_cbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "always_eq_cbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1478,7 +1478,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int always_eq_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int always_eq_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "always_eq_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1491,7 +1491,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int always_ne_cbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int always_ne_cbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "always_ne_cbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1504,7 +1504,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int always_ne_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int always_ne_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "always_ne_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1517,7 +1517,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int ever_eq_cbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int ever_eq_cbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ever_eq_cbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1530,7 +1530,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int ever_eq_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int ever_eq_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ever_eq_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1543,7 +1543,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int ever_ne_cbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int ever_ne_cbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ever_ne_cbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1556,7 +1556,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int ever_ne_tcbuffer_cbuffer(Pointer arg0, Pointer arg1) {
+    public static int ever_ne_tcbuffer_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ever_ne_tcbuffer_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1569,7 +1569,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 2 temporals</p>
      */
-    public static int adisjoint_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int adisjoint_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "adisjoint_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1582,7 +1582,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 2 temporals</p>
      */
-    public static int adwithin_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1, double arg2) {
+    public static int adwithin_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, double arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "adwithin_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1595,7 +1595,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 2 temporals</p>
      */
-    public static int aintersects_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int aintersects_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "aintersects_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1608,7 +1608,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 2 temporals</p>
      */
-    public static int always_eq_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int always_eq_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "always_eq_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1621,7 +1621,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 2 temporals</p>
      */
-    public static int always_ne_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int always_ne_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "always_ne_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1634,7 +1634,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 2 temporals</p>
      */
-    public static int atouches_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int atouches_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "atouches_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1647,7 +1647,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 2 temporals</p>
      */
-    public static int ecovers_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int ecovers_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ecovers_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1660,7 +1660,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 2 temporals</p>
      */
-    public static int edwithin_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1, double arg2) {
+    public static int edwithin_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, double arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "edwithin_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1673,7 +1673,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 2 temporals</p>
      */
-    public static int eintersects_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int eintersects_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "eintersects_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1686,7 +1686,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always spatial-rel on 2 temporals</p>
      */
-    public static int etouches_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int etouches_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "etouches_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1699,7 +1699,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 2 temporals</p>
      */
-    public static int ever_eq_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int ever_eq_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ever_eq_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1712,7 +1712,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 2 temporals</p>
      */
-    public static int ever_ne_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static int ever_ne_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ever_ne_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1725,7 +1725,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static double nad_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static double nad_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nad_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1738,7 +1738,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static Pointer nai_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer nai_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nai_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1751,7 +1751,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static Pointer shortestline_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer shortestline_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "shortestline_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1764,7 +1764,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 2 temporals</p>
      */
-    public static Pointer tcontains_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tcontains_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcontains_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1777,7 +1777,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 2 temporals</p>
      */
-    public static Pointer tcovers_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tcovers_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcovers_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1790,7 +1790,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 2 temporals</p>
      */
-    public static Pointer tdisjoint_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tdisjoint_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tdisjoint_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1803,7 +1803,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static Pointer tdistance_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tdistance_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tdistance_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1816,7 +1816,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 2 temporals</p>
      */
-    public static Pointer tdwithin_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1, double arg2) {
+    public static jnr.ffi.Pointer tdwithin_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, double arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tdwithin_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1829,7 +1829,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 2 temporals</p>
      */
-    public static Pointer tintersects_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tintersects_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tintersects_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1842,7 +1842,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: temporal spatial-rel lift on 2 temporals</p>
      */
-    public static Pointer ttouches_tcbuffer_tcbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer ttouches_tcbuffer_tcbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ttouches_tcbuffer_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1855,7 +1855,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static String cbuffer_as_ewkt(Pointer arg0, int arg1) {
+    public static java.lang.String cbuffer_as_ewkt(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_as_ewkt requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1868,7 +1868,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static String cbuffer_as_hexwkb(Pointer arg0, byte arg1, Pointer arg2) {
+    public static java.lang.String cbuffer_as_hexwkb(jnr.ffi.Pointer arg0, byte arg1, jnr.ffi.Pointer arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_as_hexwkb requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1881,7 +1881,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static String cbuffer_as_text(Pointer arg0, int arg1) {
+    public static java.lang.String cbuffer_as_text(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_as_text requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1894,7 +1894,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static Pointer cbuffer_as_wkb(Pointer arg0, byte arg1) {
+    public static jnr.ffi.Pointer cbuffer_as_wkb(jnr.ffi.Pointer arg0, byte arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_as_wkb requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1907,7 +1907,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static Pointer cbuffer_from_hexwkb(String arg0) {
+    public static jnr.ffi.Pointer cbuffer_from_hexwkb(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_from_hexwkb requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1920,7 +1920,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static Pointer cbuffer_from_wkb(Pointer arg0, long arg1) {
+    public static jnr.ffi.Pointer cbuffer_from_wkb(jnr.ffi.Pointer arg0, long arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_from_wkb requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1933,7 +1933,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static Pointer cbuffer_in(String arg0) {
+    public static jnr.ffi.Pointer cbuffer_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_in requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1946,7 +1946,7 @@ public final class MeosOpsFreeCbuffer {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static String cbuffer_out(Pointer arg0, int arg1) {
+    public static java.lang.String cbuffer_out(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbuffer_out requires libmeos — set -Dmobilityflink.meos.enabled=true");

@@ -21,7 +21,7 @@ public final class MeosOpsNpointSet {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: constructor of instant/scalar</p>
      */
-    public static Pointer npointset_make(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer npointset_make(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npointset_make requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsNpointSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer npointset_end_value(Pointer arg0) {
+    public static jnr.ffi.Pointer npointset_end_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npointset_end_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -49,7 +49,7 @@ public final class MeosOpsNpointSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer npointset_routes(Pointer arg0) {
+    public static jnr.ffi.Pointer npointset_routes(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npointset_routes requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -63,7 +63,7 @@ public final class MeosOpsNpointSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer npointset_start_value(Pointer arg0) {
+    public static jnr.ffi.Pointer npointset_start_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npointset_start_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -77,12 +77,12 @@ public final class MeosOpsNpointSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int npointset_value_n(Pointer arg0, int arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer npointset_value_n(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npointset_value_n requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.npointset_value_n(arg0, arg1, arg2);
+        return GeneratedFunctions.npointset_value_n(arg0, arg1);
     }
 
     /**
@@ -91,7 +91,7 @@ public final class MeosOpsNpointSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer npointset_values(Pointer arg0) {
+    public static jnr.ffi.Pointer npointset_values(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npointset_values requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -105,7 +105,7 @@ public final class MeosOpsNpointSet {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer npointset_in(String arg0) {
+    public static jnr.ffi.Pointer npointset_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npointset_in requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -119,7 +119,7 @@ public final class MeosOpsNpointSet {
      * <p>Object-model role: {@code output}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static String npointset_out(Pointer arg0, int arg1) {
+    public static java.lang.String npointset_out(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npointset_out requires libmeos — set -Dmobilityflink.meos.enabled=true");

@@ -21,7 +21,7 @@ public final class MeosOpsBigintSet {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: constructor of instant/scalar</p>
      */
-    public static Pointer bigintset_make(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer bigintset_make(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintset_make requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsBigintSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int bigintset_end_value(Pointer arg0) {
+    public static long bigintset_end_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintset_end_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -49,7 +49,7 @@ public final class MeosOpsBigintSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer bigintset_shift_scale(Pointer arg0, int arg1, int arg2, int arg3, int arg4) {
+    public static jnr.ffi.Pointer bigintset_shift_scale(jnr.ffi.Pointer arg0, long arg1, long arg2, boolean arg3, boolean arg4) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintset_shift_scale requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -63,7 +63,7 @@ public final class MeosOpsBigintSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int bigintset_start_value(Pointer arg0) {
+    public static long bigintset_start_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintset_start_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -77,12 +77,12 @@ public final class MeosOpsBigintSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int bigintset_value_n(Pointer arg0, int arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer bigintset_value_n(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintset_value_n requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.bigintset_value_n(arg0, arg1, arg2);
+        return GeneratedFunctions.bigintset_value_n(arg0, arg1);
     }
 
     /**
@@ -91,7 +91,7 @@ public final class MeosOpsBigintSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer bigintset_values(Pointer arg0) {
+    public static jnr.ffi.Pointer bigintset_values(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintset_values requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -105,7 +105,7 @@ public final class MeosOpsBigintSet {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer bigintset_in(String arg0) {
+    public static jnr.ffi.Pointer bigintset_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintset_in requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -119,7 +119,7 @@ public final class MeosOpsBigintSet {
      * <p>Object-model role: {@code output}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static String bigintset_out(Pointer arg0) {
+    public static java.lang.String bigintset_out(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintset_out requires libmeos — set -Dmobilityflink.meos.enabled=true");

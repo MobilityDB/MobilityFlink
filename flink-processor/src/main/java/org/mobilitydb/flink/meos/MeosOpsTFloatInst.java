@@ -21,7 +21,7 @@ public final class MeosOpsTFloatInst {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: constructor of instant/scalar</p>
      */
-    public static Pointer tfloatinst_make(double arg0, int arg1) {
+    public static jnr.ffi.Pointer tfloatinst_make(double arg0, java.time.OffsetDateTime arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tfloatinst_make requires libmeos — set -Dmobilityflink.meos.enabled=true");

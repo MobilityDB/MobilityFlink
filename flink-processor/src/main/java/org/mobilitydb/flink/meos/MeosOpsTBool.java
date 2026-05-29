@@ -21,7 +21,7 @@ public final class MeosOpsTBool {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: constructor of instant/scalar</p>
      */
-    public static Pointer tbool_from_base_temp(int arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tbool_from_base_temp(boolean arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tbool_from_base_temp requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsTBool {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer tbool_to_tint(Pointer arg0) {
+    public static jnr.ffi.Pointer tbool_to_tint(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tbool_to_tint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -49,7 +49,7 @@ public final class MeosOpsTBool {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tbool_at_value(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer tbool_at_value(jnr.ffi.Pointer arg0, boolean arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tbool_at_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -63,7 +63,7 @@ public final class MeosOpsTBool {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int tbool_end_value(Pointer arg0) {
+    public static boolean tbool_end_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tbool_end_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -77,7 +77,7 @@ public final class MeosOpsTBool {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tbool_minus_value(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer tbool_minus_value(jnr.ffi.Pointer arg0, boolean arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tbool_minus_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -91,7 +91,7 @@ public final class MeosOpsTBool {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int tbool_start_value(Pointer arg0) {
+    public static boolean tbool_start_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tbool_start_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -105,7 +105,7 @@ public final class MeosOpsTBool {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static int tbool_value_at_timestamptz(Pointer arg0, int arg1, int arg2, Pointer arg3) {
+    public static boolean tbool_value_at_timestamptz(jnr.ffi.Pointer arg0, java.time.OffsetDateTime arg1, boolean arg2, jnr.ffi.Pointer arg3) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tbool_value_at_timestamptz requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -119,12 +119,12 @@ public final class MeosOpsTBool {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int tbool_value_n(Pointer arg0, int arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer tbool_value_n(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tbool_value_n requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.tbool_value_n(arg0, arg1, arg2);
+        return GeneratedFunctions.tbool_value_n(arg0, arg1);
     }
 
     /**
@@ -133,7 +133,7 @@ public final class MeosOpsTBool {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tbool_values(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tbool_values(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tbool_values requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -147,7 +147,7 @@ public final class MeosOpsTBool {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tbool_when_true(Pointer arg0) {
+    public static jnr.ffi.Pointer tbool_when_true(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tbool_when_true requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -161,7 +161,7 @@ public final class MeosOpsTBool {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer tbool_tand_transfn(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tbool_tand_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tbool_tand_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -175,7 +175,7 @@ public final class MeosOpsTBool {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer tbool_tor_transfn(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tbool_tor_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tbool_tor_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -189,7 +189,7 @@ public final class MeosOpsTBool {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer tbool_from_mfjson(String arg0) {
+    public static jnr.ffi.Pointer tbool_from_mfjson(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tbool_from_mfjson requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -203,7 +203,7 @@ public final class MeosOpsTBool {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer tbool_in(String arg0) {
+    public static jnr.ffi.Pointer tbool_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tbool_in requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -217,7 +217,7 @@ public final class MeosOpsTBool {
      * <p>Object-model role: {@code output}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static String tbool_out(Pointer arg0) {
+    public static java.lang.String tbool_out(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tbool_out requires libmeos — set -Dmobilityflink.meos.enabled=true");

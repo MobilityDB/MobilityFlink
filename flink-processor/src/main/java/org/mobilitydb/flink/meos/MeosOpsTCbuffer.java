@@ -21,7 +21,7 @@ public final class MeosOpsTCbuffer {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: constructor of instant/scalar</p>
      */
-    public static Pointer tcbuffer_make(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tcbuffer_make(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcbuffer_make requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsTCbuffer {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer tcbuffer_to_tfloat(Pointer arg0) {
+    public static jnr.ffi.Pointer tcbuffer_to_tfloat(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcbuffer_to_tfloat requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -49,7 +49,7 @@ public final class MeosOpsTCbuffer {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer tcbuffer_to_tgeompoint(Pointer arg0) {
+    public static jnr.ffi.Pointer tcbuffer_to_tgeompoint(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcbuffer_to_tgeompoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -63,7 +63,7 @@ public final class MeosOpsTCbuffer {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tcbuffer_at_cbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tcbuffer_at_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcbuffer_at_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -77,7 +77,7 @@ public final class MeosOpsTCbuffer {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tcbuffer_at_geom(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tcbuffer_at_geom(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcbuffer_at_geom requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -91,7 +91,7 @@ public final class MeosOpsTCbuffer {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tcbuffer_at_stbox(Pointer arg0, Pointer arg1, int arg2) {
+    public static jnr.ffi.Pointer tcbuffer_at_stbox(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcbuffer_at_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -105,7 +105,7 @@ public final class MeosOpsTCbuffer {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tcbuffer_expand(Pointer arg0, double arg1) {
+    public static jnr.ffi.Pointer tcbuffer_expand(jnr.ffi.Pointer arg0, double arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcbuffer_expand requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -119,7 +119,7 @@ public final class MeosOpsTCbuffer {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tcbuffer_minus_cbuffer(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tcbuffer_minus_cbuffer(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcbuffer_minus_cbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -133,7 +133,7 @@ public final class MeosOpsTCbuffer {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tcbuffer_minus_geom(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tcbuffer_minus_geom(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcbuffer_minus_geom requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -147,7 +147,7 @@ public final class MeosOpsTCbuffer {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tcbuffer_minus_stbox(Pointer arg0, Pointer arg1, int arg2) {
+    public static jnr.ffi.Pointer tcbuffer_minus_stbox(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcbuffer_minus_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -161,7 +161,7 @@ public final class MeosOpsTCbuffer {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tcbuffer_points(Pointer arg0) {
+    public static jnr.ffi.Pointer tcbuffer_points(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcbuffer_points requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -175,7 +175,7 @@ public final class MeosOpsTCbuffer {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tcbuffer_radius(Pointer arg0) {
+    public static jnr.ffi.Pointer tcbuffer_radius(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcbuffer_radius requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -189,7 +189,7 @@ public final class MeosOpsTCbuffer {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tcbuffer_trav_area(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer tcbuffer_trav_area(jnr.ffi.Pointer arg0, boolean arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcbuffer_trav_area requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -203,7 +203,7 @@ public final class MeosOpsTCbuffer {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer tcbuffer_from_mfjson(String arg0) {
+    public static jnr.ffi.Pointer tcbuffer_from_mfjson(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcbuffer_from_mfjson requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -217,7 +217,7 @@ public final class MeosOpsTCbuffer {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer tcbuffer_in(String arg0) {
+    public static jnr.ffi.Pointer tcbuffer_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tcbuffer_in requires libmeos — set -Dmobilityflink.meos.enabled=true");

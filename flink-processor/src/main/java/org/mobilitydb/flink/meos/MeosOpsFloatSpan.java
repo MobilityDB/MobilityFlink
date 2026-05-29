@@ -21,7 +21,7 @@ public final class MeosOpsFloatSpan {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: constructor of instant/scalar</p>
      */
-    public static Pointer floatspan_make(double arg0, double arg1, int arg2, int arg3) {
+    public static jnr.ffi.Pointer floatspan_make(double arg0, double arg1, boolean arg2, boolean arg3) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "floatspan_make requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsFloatSpan {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer floatspan_to_intspan(Pointer arg0) {
+    public static jnr.ffi.Pointer floatspan_to_intspan(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "floatspan_to_intspan requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -49,7 +49,7 @@ public final class MeosOpsFloatSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer floatspan_bins(Pointer arg0, double arg1, double arg2, Pointer arg3) {
+    public static jnr.ffi.Pointer floatspan_bins(jnr.ffi.Pointer arg0, double arg1, double arg2, jnr.ffi.Pointer arg3) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "floatspan_bins requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -63,7 +63,7 @@ public final class MeosOpsFloatSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer floatspan_ceil(Pointer arg0) {
+    public static jnr.ffi.Pointer floatspan_ceil(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "floatspan_ceil requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -77,7 +77,7 @@ public final class MeosOpsFloatSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer floatspan_degrees(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer floatspan_degrees(jnr.ffi.Pointer arg0, boolean arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "floatspan_degrees requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -91,7 +91,7 @@ public final class MeosOpsFloatSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer floatspan_expand(Pointer arg0, double arg1) {
+    public static jnr.ffi.Pointer floatspan_expand(jnr.ffi.Pointer arg0, double arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "floatspan_expand requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -105,7 +105,7 @@ public final class MeosOpsFloatSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer floatspan_floor(Pointer arg0) {
+    public static jnr.ffi.Pointer floatspan_floor(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "floatspan_floor requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -119,7 +119,7 @@ public final class MeosOpsFloatSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static double floatspan_lower(Pointer arg0) {
+    public static double floatspan_lower(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "floatspan_lower requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -133,7 +133,7 @@ public final class MeosOpsFloatSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer floatspan_radians(Pointer arg0) {
+    public static jnr.ffi.Pointer floatspan_radians(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "floatspan_radians requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -147,7 +147,7 @@ public final class MeosOpsFloatSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer floatspan_round(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer floatspan_round(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "floatspan_round requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -161,7 +161,7 @@ public final class MeosOpsFloatSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer floatspan_shift_scale(Pointer arg0, double arg1, double arg2, int arg3, int arg4) {
+    public static jnr.ffi.Pointer floatspan_shift_scale(jnr.ffi.Pointer arg0, double arg1, double arg2, boolean arg3, boolean arg4) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "floatspan_shift_scale requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -175,7 +175,7 @@ public final class MeosOpsFloatSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static double floatspan_upper(Pointer arg0) {
+    public static double floatspan_upper(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "floatspan_upper requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -189,7 +189,7 @@ public final class MeosOpsFloatSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static double floatspan_width(Pointer arg0) {
+    public static double floatspan_width(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "floatspan_width requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -203,7 +203,7 @@ public final class MeosOpsFloatSpan {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer floatspan_in(String arg0) {
+    public static jnr.ffi.Pointer floatspan_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "floatspan_in requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -217,7 +217,7 @@ public final class MeosOpsFloatSpan {
      * <p>Object-model role: {@code output}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static String floatspan_out(Pointer arg0, int arg1) {
+    public static java.lang.String floatspan_out(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "floatspan_out requires libmeos — set -Dmobilityflink.meos.enabled=true");
