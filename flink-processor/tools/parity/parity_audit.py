@@ -28,11 +28,13 @@ import argparse, re, os, glob, subprocess, collections
 from datetime import date
 
 PUBLIC_HEADERS = ["meos.h", "meos_geo.h", "meos_cbuffer.h",
-                  "meos_npoint.h", "meos_pose.h", "meos_rgeo.h"]
+                  "meos_npoint.h", "meos_pose.h", "meos_rgeo.h",
+"meos_h3.h"]
 FAMILY = {"meos.h": "core temporal / set / span / spanset / tbox",
           "meos_geo.h": "geo (tgeo / tpoint / stbox)",
           "meos_cbuffer.h": "cbuffer", "meos_npoint.h": "npoint",
-          "meos_pose.h": "pose", "meos_rgeo.h": "rgeo"}
+          "meos_pose.h": "pose", "meos_rgeo.h": "rgeo",
+          "meos_h3.h": "h3 / th3index"}
 
 _DECL = re.compile(r'^\s*extern\s+.+?\b([a-z][A-Za-z0-9_]*)\s*\(', re.M)
 _PUBSTATIC = re.compile(r'public static [A-Za-z0-9_.<>\[\]]+ ([a-z0-9_]+)\(')
