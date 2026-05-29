@@ -31,9 +31,10 @@ import java.util.Map;
  * known pairs and emit {@code (a, b, eventTime, distanceMetres)} for every
  * currently-meeting pair (with {@code a < b} for stable identity).
  *
- * <p>Predicate: {@link MEOSBridge#dwithinMetres} for the near-P filter and
- * for the pairwise meeting predicate — MEOS {@code geog_dwithin} when
- * libmeos is loadable, with {@link Haversine} fallback otherwise.
+ * <p>Predicate: {@link MEOSBridge#dwithinMetres} (MEOS
+ * {@code edwithin_tgeo_geo}) for the near-P filter and
+ * {@link MEOSBridge#distanceMetres} (MEOS {@code geog_distance}) for the
+ * pairwise meeting distance.
  */
 public class Q5ContinuousFunction
         extends KeyedProcessFunction<Integer, BerlinMODTrip, Tuple4<Integer, Integer, Long, Double>> {

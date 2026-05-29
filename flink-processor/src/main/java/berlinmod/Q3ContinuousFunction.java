@@ -16,9 +16,8 @@ import org.slf4j.LoggerFactory;
  * predicate and emit {@code (vehicleId, eventTimeMillis, isNear)} per event.
  * No windowing — output updates per event, watermark-independent.
  *
- * <p>Predicate: {@link MEOSBridge#dwithinMetres} — MEOS' {@code geog_dwithin}
- * over WGS84 geographies when libmeos is loadable, with a pure-Java great-circle
- * fallback ({@link Haversine}) for runtimes without MEOS.
+ * <p>Predicate: {@link MEOSBridge#dwithinMetres} — MEOS
+ * {@code edwithin_tgeo_geo} over WGS84 geographies.
  */
 public class Q3ContinuousFunction extends ProcessFunction<BerlinMODTrip, Tuple3<Integer, Long, Boolean>> {
 
