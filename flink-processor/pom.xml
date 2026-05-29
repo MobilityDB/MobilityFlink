@@ -312,5 +312,24 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>no-h3</id>
+            <activation>
+                <property><name>h3</name><value>false</value></property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <configuration>
+                            <excludes combine.children="append">
+                                <exclude>**/meos/MeosOpsTh3index.java</exclude>
+                                <exclude>**/meos/MeosOpsFreeH3.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>
