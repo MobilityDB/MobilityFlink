@@ -27,10 +27,9 @@ import org.slf4j.LoggerFactory;
  * {@code (T, vehicleId)} if the vehicle is within {@code d} of P at that
  * snapshot.
  *
- * <p>Predicate: {@link MEOSBridge#dwithinMetres} — MEOS {@code geog_dwithin}
- * when libmeos is loadable, with {@link Haversine} fallback otherwise. The
- * snapshot-form output at watermark T is equal to the batch BerlinMOD-Q3
- * result up to T regardless of which path is active.
+ * <p>Predicate: {@link MEOSBridge#dwithinMetres} — MEOS
+ * {@code edwithin_tgeo_geo} over WGS84 geographies. The snapshot-form output
+ * at watermark T is equal to the batch BerlinMOD-Q3 result up to T.
  */
 public class Q3SnapshotFunction
         extends KeyedProcessFunction<Integer, BerlinMODTrip, Tuple2<Long, Integer>> {

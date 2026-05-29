@@ -1,158 +1,133 @@
 package berlinmod;
 
-import functions.functions;
+import functions.GeneratedFunctions;
 import jnr.ffi.Pointer;
-import utils.spatial.PointToSegment;
+import org.mobilitydb.flink.meos.wirings.MeosWiringRuntime;
 
 /**
- * Runtime bridge from MobilityFlink BerlinMOD streaming-form predicates to
- * MEOS via JMEOS.
+ * Thin wiring from the BerlinMOD streaming-form predicates to MEOS via JMEOS.
  *
- * <p>All spatial predicates exercised by the BerlinMOD-9 × 3-form scaffold
- * flow through this class. When the JMEOS native libmeos shared object is
- * present and loadable, each predicate evaluates through MEOS' WGS84
- * geography surface ({@code geom_to_geog} + {@code geog_dwithin}). When
- * libmeos is not available, each predicate falls back to the corresponding
- * pure-Java implementation in {@link Haversine} or {@link SegmentDistance}
- * so the BerlinMOD mini-cluster local tests stay runnable on systems
- * without a MEOS install.
+ * <p>Every spatial predicate exercised by the BerlinMOD-9 × 3-form scaffold
+ * flows through this class, and every predicate evaluates through MEOS. The
+ * within-distance predicate is the canonical temporal operator
+ * {@code edwithin_tgeo_geo} — ever-within between the vehicle's {@code tgeogpoint}
+ * instant and the query geography, in metres on the WGS84 spheroid — the same
+ * MEOS operator the streaming-form parity contract names. Distances are
+ * {@code geog_distance} over WGS84 geographies. This class holds no spatial
+ * mathematics of its own: it constructs the MEOS inputs and delegates the
+ * computation to libmeos.
  *
- * <p>The fallback is gated by the {@link #MEOS_AVAILABLE} static flag, set
- * once at class-load time:
- * <ul>
- *   <li>{@code -Dmobilityflink.meos.enabled=false} forces the pure-Java path
- *       even when libmeos is present (used by {@code BerlinMODQ*LocalTest}).
- *   <li>Otherwise {@code MEOS_AVAILABLE} is {@code true} iff
- *       {@code functions.meos_initialize()} returns without throwing.
- * </ul>
+ * <p>{@link MeosWiringRuntime#ensureInitializedOnThread()} initialises MEOS on
+ * the calling task thread (idempotent per thread) before the first call, since
+ * MEOS keeps its session state per OS thread.
  */
 public final class MEOSBridge {
-
-    /**
-     * {@code true} iff MEOS is available on this runtime and the bridge
-     * routes through it; {@code false} iff the bridge will use the pure-Java
-     * fallbacks.
-     */
-    public static final boolean MEOS_AVAILABLE;
-
-    static {
-        boolean enabled =
-                Boolean.parseBoolean(System.getProperty("mobilityflink.meos.enabled", "true"));
-        boolean ok = false;
-        if (enabled) {
-            try {
-                functions.meos_initialize();
-                ok = true;
-            } catch (Throwable t) {
-                // libmeos shared object not loadable on this runtime — fall back.
-                ok = false;
-            }
-        }
-        MEOS_AVAILABLE = ok;
-    }
 
     private MEOSBridge() {
         // utility
     }
 
     // ----------------------------------------------------------------------
-    // Public bridge surface — same shape as Haversine + SegmentDistance.
+    // Public predicate surface — all evaluation delegated to MEOS.
     // ----------------------------------------------------------------------
 
     /**
-     * @return {@code true} if the great-circle distance from {@code (lon1, lat1)}
-     *         to {@code (lon2, lat2)} on the WGS84 spheroid is at most
-     *         {@code radiusMetres}. MEOS-backed via {@code geog_dwithin} when
-     *         available, else pure-Java {@link Haversine#withinMetres}.
+     * @return {@code true} iff the WGS84 spheroidal distance from
+     *         {@code (lon1, lat1)} to {@code (lon2, lat2)} is at most
+     *         {@code radiusMetres}, via MEOS {@code edwithin_tgeo_geo} between
+     *         the {@code (lon1, lat1)} {@code tgeogpoint} instant and the
+     *         {@code (lon2, lat2)} point geography.
      */
     public static boolean dwithinMetres(double lon1, double lat1,
                                         double lon2, double lat2,
                                         double radiusMetres) {
-        if (!MEOS_AVAILABLE) {
-            return Haversine.withinMetres(lon1, lat1, lon2, lat2, radiusMetres);
-        }
-        Pointer g1 = pointGeog(lon1, lat1);
-        Pointer g2 = pointGeog(lon2, lat2);
-        if (g1 == null || g2 == null) {
-            return Haversine.withinMetres(lon1, lat1, lon2, lat2, radiusMetres);
-        }
-        return functions.geog_dwithin(g1, g2, radiusMetres, true);
+        MeosWiringRuntime.ensureInitializedOnThread();
+        return GeneratedFunctions.edwithin_tgeo_geo(
+                tgeogInst(lon1, lat1), pointGeog(lon2, lat2), radiusMetres) == 1;
     }
 
     /**
-     * @return {@code true} if the spheroidal distance from {@code (pLon, pLat)}
-     *         to the LineString {@code (s1, s2)} is at most {@code radiusMetres}.
-     *         MEOS-backed via {@code geog_dwithin} on geographies built from
-     *         the point and line WKTs, else pure-Java
-     *         {@link SegmentDistance#withinMetres}.
+     * @return {@code true} iff the WGS84 spheroidal distance from
+     *         {@code (pLon, pLat)} to the LineString {@code (s1, s2)} is at most
+     *         {@code radiusMetres}, via MEOS {@code edwithin_tgeo_geo} between
+     *         the point {@code tgeogpoint} instant and the line geography.
      */
     public static boolean dwithinSegmentMetres(double pLon, double pLat,
                                                double s1Lon, double s1Lat,
                                                double s2Lon, double s2Lat,
                                                double radiusMetres) {
-        if (!MEOS_AVAILABLE) {
-            return SegmentDistance.withinMetres(pLon, pLat, s1Lon, s1Lat, s2Lon, s2Lat, radiusMetres);
-        }
-        Pointer pg = pointGeog(pLon, pLat);
-        Pointer lg = lineGeog(s1Lon, s1Lat, s2Lon, s2Lat);
-        if (pg == null || lg == null) {
-            return SegmentDistance.withinMetres(pLon, pLat, s1Lon, s1Lat, s2Lon, s2Lat, radiusMetres);
-        }
-        return functions.geog_dwithin(pg, lg, radiusMetres, true);
+        MeosWiringRuntime.ensureInitializedOnThread();
+        return GeneratedFunctions.edwithin_tgeo_geo(
+                tgeogInst(pLon, pLat),
+                lineGeog(s1Lon, s1Lat, s2Lon, s2Lat), radiusMetres) == 1;
     }
 
     /**
-     * @return the spheroidal distance in metres between two WGS84 points.
-     *         MEOS-backed via {@code utils.spatial.Haversine.distance}
-     *         (which calls MEOS' {@code geog_distance} over two POINT
-     *         geographies) when libmeos is loadable, else pure-Java
-     *         {@link Haversine#distanceMetres}.
+     * @return {@code true} iff {@code (lon, lat)} lies in the axis-aligned box
+     *         {@code [xmin, xmax] × [ymin, ymax]}, via MEOS
+     *         {@code eintersects_tgeo_geo} between the point's {@code tgeompoint}
+     *         instant and the box polygon (planar, SRID 4326).
+     */
+    public static boolean intersectsBox(double lon, double lat,
+                                        double xmin, double ymin,
+                                        double xmax, double ymax) {
+        MeosWiringRuntime.ensureInitializedOnThread();
+        return GeneratedFunctions.eintersects_tgeo_geo(
+                tgeomInst(lon, lat), boxPolygon(xmin, ymin, xmax, ymax)) == 1;
+    }
+
+    /**
+     * @return the WGS84 spheroidal distance in metres between two points, via
+     *         MEOS {@code geog_distance}.
      */
     public static double distanceMetres(double lon1, double lat1,
                                         double lon2, double lat2) {
-        if (!MEOS_AVAILABLE) {
-            return Haversine.distanceMetres(lon1, lat1, lon2, lat2);
-        }
-        return utils.spatial.Haversine.distance(lon1, lat1, lon2, lat2);
+        MeosWiringRuntime.ensureInitializedOnThread();
+        return GeneratedFunctions.geog_distance(pointGeog(lon1, lat1), pointGeog(lon2, lat2));
     }
 
     /**
-     * @return the spheroidal distance in metres from {@code (pLon, pLat)} to
-     *         the LineString {@code (s1, s2)}. MEOS-backed via
-     *         {@code utils.spatial.PointToSegment.distance} when libmeos is
-     *         loadable, else pure-Java
-     *         {@link SegmentDistance#distanceMetres}.
+     * @return the WGS84 spheroidal distance in metres from {@code (pLon, pLat)}
+     *         to the LineString {@code (s1, s2)}, via MEOS {@code geog_distance}.
      */
     public static double distanceSegmentMetres(double pLon, double pLat,
                                                double s1Lon, double s1Lat,
                                                double s2Lon, double s2Lat) {
-        if (!MEOS_AVAILABLE) {
-            return SegmentDistance.distanceMetres(pLon, pLat, s1Lon, s1Lat, s2Lon, s2Lat);
-        }
-        return PointToSegment.distance(pLon, pLat, s1Lon, s1Lat, s2Lon, s2Lat);
+        MeosWiringRuntime.ensureInitializedOnThread();
+        return GeneratedFunctions.geog_distance(
+                pointGeog(pLon, pLat), lineGeog(s1Lon, s1Lat, s2Lon, s2Lat));
     }
 
     // ----------------------------------------------------------------------
-    // Internal helpers — WKT → geometry → geography in one MEOS-side step.
+    // Internal helpers — construct the MEOS temporal / geography inputs.
     // ----------------------------------------------------------------------
 
+    private static Pointer tgeogInst(double lon, double lat) {
+        return GeneratedFunctions.tgeogpoint_in(
+                String.format("SRID=4326;Point(%.7f %.7f)@2000-01-01", lon, lat));
+    }
+
+    private static Pointer tgeomInst(double lon, double lat) {
+        return GeneratedFunctions.tgeompoint_in(
+                String.format("SRID=4326;Point(%.7f %.7f)@2000-01-01", lon, lat));
+    }
+
+    private static Pointer boxPolygon(double xmin, double ymin,
+                                      double xmax, double ymax) {
+        return GeneratedFunctions.geom_in(String.format(
+                "SRID=4326;Polygon((%.7f %.7f, %.7f %.7f, %.7f %.7f, %.7f %.7f, %.7f %.7f))",
+                xmin, ymin, xmax, ymin, xmax, ymax, xmin, ymax, xmin, ymin), -1);
+    }
+
     private static Pointer pointGeog(double lon, double lat) {
-        String wkt = String.format("SRID=4326;Point(%.7f %.7f)", lon, lat);
-        Pointer g = functions.geom_in(wkt, -1);
-        if (g == null) {
-            return null;
-        }
-        return functions.geom_to_geog(g);
+        return GeneratedFunctions.geom_to_geog(
+                GeneratedFunctions.geom_in(String.format("SRID=4326;Point(%.7f %.7f)", lon, lat), -1));
     }
 
     private static Pointer lineGeog(double s1Lon, double s1Lat,
                                     double s2Lon, double s2Lat) {
-        String wkt = String.format("SRID=4326;LineString(%.7f %.7f, %.7f %.7f)",
-                                   s1Lon, s1Lat, s2Lon, s2Lat);
-        Pointer g = functions.geom_in(wkt, -1);
-        if (g == null) {
-            return null;
-        }
-        return functions.geom_to_geog(g);
+        return GeneratedFunctions.geom_to_geog(
+                GeneratedFunctions.geom_in(String.format(
+                        "SRID=4326;LineString(%.7f %.7f, %.7f %.7f)", s1Lon, s1Lat, s2Lon, s2Lat), -1));
     }
 }

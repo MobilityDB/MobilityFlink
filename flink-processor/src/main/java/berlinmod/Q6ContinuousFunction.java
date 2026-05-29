@@ -15,14 +15,12 @@ import org.apache.flink.util.Collector;
  *
  * <p><i>"What is each vehicle's cumulative distance travelled so far?"</i>
  *
- * <p>Keyed by vehicleId. For each event, computes the great-circle distance
- * from the previous-known position (or 0 if first event), adds it to the
- * cumulative total, and emits {@code (vehicleId, t, cumulativeMetres)}.
+ * <p>Keyed by vehicleId. For each event, computes the distance from the
+ * previous-known position (or 0 if first event), adds it to the cumulative
+ * total, and emits {@code (vehicleId, t, cumulativeMetres)}.
  *
- * <p>Predicate today: pure-Java great-circle distance (see {@link Haversine}).
- * Same MEOS-side analogue as Q3 — a future JMEOS bridge would replace the
- * Java accumulator with a MEOS {@code length} call over the per-vehicle
- * trajectory.
+ * <p>Distance: {@link MEOSBridge#distanceMetres} — MEOS {@code geog_distance}
+ * between consecutive WGS84 positions.
  */
 public class Q6ContinuousFunction
         extends KeyedProcessFunction<Integer, BerlinMODTrip, Tuple3<Integer, Long, Double>> {

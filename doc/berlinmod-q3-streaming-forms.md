@@ -89,13 +89,13 @@ The `BerlinMODQ3Main` entry point uses:
 
 ## Predicate implementation
 
-The scaffold today uses a pure-Java great-circle (Haversine) distance check in
-[`Haversine`](../flink-processor/src/main/java/berlinmod/Haversine.java). This
-matches the predicate semantics of the MEOS `edwithin_tgeo_geo` operator (the
-same call used by `MobilityNebula/Queries/Query1.yaml`), so swapping the
-predicate body for a JMEOS-bridged `edwithin_tgeo_geo` call is a one-line
-change once the JMEOS surface for that operator is verified — it is marked
-`TODO(meos)` in each form's class.
+The within-distance predicate evaluates through the MEOS `edwithin_tgeo_geo`
+operator — the same call used by `MobilityNebula/Queries/Query1.yaml`. The
+vehicle position is built as a `tgeogpoint` instant and tested against the
+query geography in metres on the WGS84 spheroid. All spatial predicates route
+through [`MEOSBridge`](../flink-processor/src/main/java/berlinmod/MEOSBridge.java),
+which holds no spatial mathematics of its own: it constructs the MEOS inputs
+(temporal instants and geographies) and delegates the computation to libmeos.
 
 ## Companion producer
 

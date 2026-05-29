@@ -21,9 +21,8 @@ import java.util.Set;
  * for which at least one event satisfies the radius predicate, and emit
  * {@code (windowStart, windowEnd, distinctCount)}.
  *
- * <p>Predicate: {@link MEOSBridge#dwithinMetres} — MEOS {@code geog_dwithin}
- * over WGS84 geographies when libmeos is loadable, with {@link Haversine}
- * fallback otherwise.
+ * <p>Predicate: {@link MEOSBridge#dwithinMetres} — MEOS
+ * {@code edwithin_tgeo_geo} over WGS84 geographies.
  */
 public class Q3WindowedFunction
         extends ProcessAllWindowFunction<BerlinMODTrip, Tuple3<Long, Long, Long>, TimeWindow> {
