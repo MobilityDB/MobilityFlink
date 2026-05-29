@@ -99,7 +99,7 @@ public final class MeosBoundedStateDemoJob {
                             // Subsequent events: union prior with the new event's tbox.
                             Pointer newUnion = (prior == null)
                                     ? eventTbox
-                                    : MeosOpsFreeCore.union_tbox_tbox(prior, eventTbox, /*strict=*/0);
+                                    : MeosOpsFreeCore.union_tbox_tbox(prior, eventTbox, /*strict=*/false);
                             Tuple2<Integer, String> output =
                                     Tuple2.of(evt.f0, MeosOpsTBox.tbox_out(newUnion, 6));
                             return new MeosBoundedStateMap.MeosStep<>(newUnion, output);

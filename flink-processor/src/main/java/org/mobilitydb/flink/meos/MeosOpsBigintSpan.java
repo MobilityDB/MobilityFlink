@@ -21,7 +21,7 @@ public final class MeosOpsBigintSpan {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: constructor of instant/scalar</p>
      */
-    public static Pointer bigintspan_make(int arg0, int arg1, int arg2, int arg3) {
+    public static jnr.ffi.Pointer bigintspan_make(long arg0, long arg1, boolean arg2, boolean arg3) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintspan_make requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsBigintSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer bigintspan_bins(Pointer arg0, int arg1, int arg2, Pointer arg3) {
+    public static jnr.ffi.Pointer bigintspan_bins(jnr.ffi.Pointer arg0, long arg1, long arg2, jnr.ffi.Pointer arg3) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintspan_bins requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -49,7 +49,7 @@ public final class MeosOpsBigintSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer bigintspan_expand(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer bigintspan_expand(jnr.ffi.Pointer arg0, long arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintspan_expand requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -63,7 +63,7 @@ public final class MeosOpsBigintSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int bigintspan_lower(Pointer arg0) {
+    public static long bigintspan_lower(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintspan_lower requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -77,7 +77,7 @@ public final class MeosOpsBigintSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer bigintspan_shift_scale(Pointer arg0, int arg1, int arg2, int arg3, int arg4) {
+    public static jnr.ffi.Pointer bigintspan_shift_scale(jnr.ffi.Pointer arg0, long arg1, long arg2, boolean arg3, boolean arg4) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintspan_shift_scale requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -91,7 +91,7 @@ public final class MeosOpsBigintSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int bigintspan_upper(Pointer arg0) {
+    public static long bigintspan_upper(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintspan_upper requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -105,7 +105,7 @@ public final class MeosOpsBigintSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int bigintspan_width(Pointer arg0) {
+    public static long bigintspan_width(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintspan_width requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -119,7 +119,7 @@ public final class MeosOpsBigintSpan {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer bigintspan_in(String arg0) {
+    public static jnr.ffi.Pointer bigintspan_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintspan_in requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -133,7 +133,7 @@ public final class MeosOpsBigintSpan {
      * <p>Object-model role: {@code output}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static String bigintspan_out(Pointer arg0) {
+    public static java.lang.String bigintspan_out(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "bigintspan_out requires libmeos — set -Dmobilityflink.meos.enabled=true");

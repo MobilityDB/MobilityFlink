@@ -89,7 +89,7 @@ public final class MeosWiringsDemoJob {
         // The query box is the constant WKT operand, parsed inside the predicate;
         // overlaps_tbox_tbox lives on MeosOpsFreeCore (free fn, not OO-classified).
         DataStream<String> overlapping = normalized.filter(
-                MeosStatelessFilter.fromIntPredicate(
+                new MeosStatelessFilter<String>(
                         wkt -> MeosOpsFreeCore.overlaps_tbox_tbox(
                                 MeosOpsTBox.tbox_in(wkt),
                                 MeosOpsTBox.tbox_in(QUERY_TBOX_WKT))));

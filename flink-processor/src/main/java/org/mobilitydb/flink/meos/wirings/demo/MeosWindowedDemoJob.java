@@ -116,7 +116,7 @@ public final class MeosWindowedDemoJob {
                                 Pointer evtTbox = MeosOpsTBox.tbox_in(evt.f1);
                                 agg = (agg == null)
                                         ? evtTbox
-                                        : MeosOpsFreeCore.union_tbox_tbox(agg, evtTbox, /*strict=*/0);
+                                        : MeosOpsFreeCore.union_tbox_tbox(agg, evtTbox, /*strict=*/false);
                                 count++;
                             }
                             String aggWkt = (agg == null) ? "(empty)" : MeosOpsTBox.tbox_out(agg, 6);

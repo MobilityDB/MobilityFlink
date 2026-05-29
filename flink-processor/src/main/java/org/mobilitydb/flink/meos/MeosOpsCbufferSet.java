@@ -21,7 +21,7 @@ public final class MeosOpsCbufferSet {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: constructor of instant/scalar</p>
      */
-    public static Pointer cbufferset_make(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer cbufferset_make(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbufferset_make requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsCbufferSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer cbufferset_end_value(Pointer arg0) {
+    public static jnr.ffi.Pointer cbufferset_end_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbufferset_end_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -49,7 +49,7 @@ public final class MeosOpsCbufferSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer cbufferset_start_value(Pointer arg0) {
+    public static jnr.ffi.Pointer cbufferset_start_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbufferset_start_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -63,12 +63,12 @@ public final class MeosOpsCbufferSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int cbufferset_value_n(Pointer arg0, int arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer cbufferset_value_n(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbufferset_value_n requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.cbufferset_value_n(arg0, arg1, arg2);
+        return GeneratedFunctions.cbufferset_value_n(arg0, arg1);
     }
 
     /**
@@ -77,7 +77,7 @@ public final class MeosOpsCbufferSet {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer cbufferset_values(Pointer arg0) {
+    public static jnr.ffi.Pointer cbufferset_values(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbufferset_values requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -91,7 +91,7 @@ public final class MeosOpsCbufferSet {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer cbufferset_in(String arg0) {
+    public static jnr.ffi.Pointer cbufferset_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbufferset_in requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -105,7 +105,7 @@ public final class MeosOpsCbufferSet {
      * <p>Object-model role: {@code output}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static String cbufferset_out(Pointer arg0, int arg1) {
+    public static java.lang.String cbufferset_out(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "cbufferset_out requires libmeos — set -Dmobilityflink.meos.enabled=true");

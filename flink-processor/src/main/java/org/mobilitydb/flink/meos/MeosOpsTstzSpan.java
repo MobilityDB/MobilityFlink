@@ -21,7 +21,7 @@ public final class MeosOpsTstzSpan {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: constructor of instant/scalar</p>
      */
-    public static Pointer tstzspan_make(int arg0, int arg1, int arg2, int arg3) {
+    public static jnr.ffi.Pointer tstzspan_make(java.time.OffsetDateTime arg0, java.time.OffsetDateTime arg1, boolean arg2, boolean arg3) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tstzspan_make requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsTstzSpan {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer tstzspan_to_datespan(Pointer arg0) {
+    public static jnr.ffi.Pointer tstzspan_to_datespan(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tstzspan_to_datespan requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -49,7 +49,7 @@ public final class MeosOpsTstzSpan {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer tstzspan_to_stbox(Pointer arg0) {
+    public static jnr.ffi.Pointer tstzspan_to_stbox(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tstzspan_to_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -63,7 +63,7 @@ public final class MeosOpsTstzSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tstzspan_bins(Pointer arg0, Pointer arg1, int arg2, Pointer arg3) {
+    public static jnr.ffi.Pointer tstzspan_bins(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, java.time.OffsetDateTime arg2, jnr.ffi.Pointer arg3) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tstzspan_bins requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -77,7 +77,7 @@ public final class MeosOpsTstzSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tstzspan_duration(Pointer arg0) {
+    public static jnr.ffi.Pointer tstzspan_duration(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tstzspan_duration requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -91,7 +91,7 @@ public final class MeosOpsTstzSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tstzspan_expand(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tstzspan_expand(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tstzspan_expand requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -105,7 +105,7 @@ public final class MeosOpsTstzSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int tstzspan_lower(Pointer arg0) {
+    public static java.time.OffsetDateTime tstzspan_lower(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tstzspan_lower requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -119,7 +119,7 @@ public final class MeosOpsTstzSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tstzspan_shift_scale(Pointer arg0, Pointer arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer tstzspan_shift_scale(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tstzspan_shift_scale requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -133,7 +133,7 @@ public final class MeosOpsTstzSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tstzspan_tprecision(Pointer arg0, Pointer arg1, int arg2) {
+    public static jnr.ffi.Pointer tstzspan_tprecision(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, java.time.OffsetDateTime arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tstzspan_tprecision requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -147,7 +147,7 @@ public final class MeosOpsTstzSpan {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int tstzspan_upper(Pointer arg0) {
+    public static java.time.OffsetDateTime tstzspan_upper(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tstzspan_upper requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -161,7 +161,7 @@ public final class MeosOpsTstzSpan {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer tstzspan_tcount_transfn(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tstzspan_tcount_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tstzspan_tcount_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -175,7 +175,7 @@ public final class MeosOpsTstzSpan {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer tstzspan_in(String arg0) {
+    public static jnr.ffi.Pointer tstzspan_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tstzspan_in requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -189,7 +189,7 @@ public final class MeosOpsTstzSpan {
      * <p>Object-model role: {@code output}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static String tstzspan_out(Pointer arg0) {
+    public static java.lang.String tstzspan_out(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tstzspan_out requires libmeos — set -Dmobilityflink.meos.enabled=true");

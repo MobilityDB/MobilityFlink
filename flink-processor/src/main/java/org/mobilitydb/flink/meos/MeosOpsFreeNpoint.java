@@ -22,7 +22,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: topology/position rel on 2 scalars (box/span algebra)</p>
      */
-    public static int contained_npoint_set(Pointer arg0, Pointer arg1) {
+    public static boolean contained_npoint_set(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "contained_npoint_set requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: set/span/box algebra (pure)</p>
      */
-    public static int contains_set_npoint(Pointer arg0, Pointer arg1) {
+    public static boolean contains_set_npoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "contains_set_npoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -48,7 +48,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static Pointer geom_to_nsegment(Pointer arg0) {
+    public static jnr.ffi.Pointer geom_to_nsegment(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "geom_to_nsegment requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -74,7 +74,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: set/span/box algebra (pure)</p>
      */
-    public static Pointer intersection_set_npoint(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer intersection_set_npoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "intersection_set_npoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -87,7 +87,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int npoint_cmp(Pointer arg0, Pointer arg1) {
+    public static int npoint_cmp(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_cmp requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -100,7 +100,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int npoint_eq(Pointer arg0, Pointer arg1) {
+    public static boolean npoint_eq(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_eq requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -113,7 +113,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int npoint_ge(Pointer arg0, Pointer arg1) {
+    public static boolean npoint_ge(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_ge requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -126,7 +126,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int npoint_gt(Pointer arg0, Pointer arg1) {
+    public static boolean npoint_gt(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_gt requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -139,7 +139,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int npoint_hash(Pointer arg0) {
+    public static int npoint_hash(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_hash requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -152,7 +152,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int npoint_hash_extended(Pointer arg0, int arg1) {
+    public static long npoint_hash_extended(jnr.ffi.Pointer arg0, long arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_hash_extended requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -165,7 +165,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int npoint_le(Pointer arg0, Pointer arg1) {
+    public static boolean npoint_le(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_le requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -178,7 +178,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int npoint_lt(Pointer arg0, Pointer arg1) {
+    public static boolean npoint_lt(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_lt requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -191,7 +191,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: make/from_base of instant/scalar</p>
      */
-    public static Pointer npoint_make(int arg0, double arg1) {
+    public static jnr.ffi.Pointer npoint_make(long arg0, double arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_make requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -204,7 +204,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar comparison/hash</p>
      */
-    public static int npoint_ne(Pointer arg0, Pointer arg1) {
+    public static boolean npoint_ne(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_ne requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -217,7 +217,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static double npoint_position(Pointer arg0) {
+    public static double npoint_position(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_position requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -230,7 +230,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: transform/normalize (pure)</p>
      */
-    public static Pointer npoint_round(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer npoint_round(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_round requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -243,7 +243,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static int npoint_route(Pointer arg0) {
+    public static long npoint_route(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_route requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -256,7 +256,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static int npoint_same(Pointer arg0, Pointer arg1) {
+    public static boolean npoint_same(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_same requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -269,7 +269,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static int npoint_srid(Pointer arg0) {
+    public static int npoint_srid(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_srid requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -282,7 +282,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: name pattern is _to_<type></p>
      */
-    public static Pointer npoint_timestamptz_to_stbox(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer npoint_timestamptz_to_stbox(jnr.ffi.Pointer arg0, java.time.OffsetDateTime arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_timestamptz_to_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -295,7 +295,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static Pointer npoint_to_geompoint(Pointer arg0) {
+    public static jnr.ffi.Pointer npoint_to_geompoint(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_to_geompoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -308,7 +308,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static Pointer npoint_to_nsegment(Pointer arg0) {
+    public static jnr.ffi.Pointer npoint_to_nsegment(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_to_nsegment requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -321,7 +321,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: name pattern is _to_<type></p>
      */
-    public static Pointer npoint_to_set(Pointer arg0) {
+    public static jnr.ffi.Pointer npoint_to_set(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_to_set requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -334,7 +334,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: name pattern is _to_<type></p>
      */
-    public static Pointer npoint_to_stbox(Pointer arg0) {
+    public static jnr.ffi.Pointer npoint_to_stbox(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_to_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -347,7 +347,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: name pattern is _to_<type></p>
      */
-    public static Pointer npoint_tstzspan_to_stbox(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer npoint_tstzspan_to_stbox(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_tstzspan_to_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -360,7 +360,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static Pointer npoint_union_transfn(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer npoint_union_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_union_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -373,7 +373,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar in/out (default-stateless catch-all)</p>
      */
-    public static int nsegment_cmp(Pointer arg0, Pointer arg1) {
+    public static int nsegment_cmp(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nsegment_cmp requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -386,7 +386,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar in/out (default-stateless catch-all)</p>
      */
-    public static int nsegment_eq(Pointer arg0, Pointer arg1) {
+    public static boolean nsegment_eq(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nsegment_eq requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -399,7 +399,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar in/out (default-stateless catch-all)</p>
      */
-    public static int nsegment_ge(Pointer arg0, Pointer arg1) {
+    public static boolean nsegment_ge(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nsegment_ge requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -412,7 +412,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar in/out (default-stateless catch-all)</p>
      */
-    public static int nsegment_gt(Pointer arg0, Pointer arg1) {
+    public static boolean nsegment_gt(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nsegment_gt requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -425,7 +425,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar in/out (default-stateless catch-all)</p>
      */
-    public static int nsegment_le(Pointer arg0, Pointer arg1) {
+    public static boolean nsegment_le(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nsegment_le requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -438,7 +438,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar in/out (default-stateless catch-all)</p>
      */
-    public static int nsegment_lt(Pointer arg0, Pointer arg1) {
+    public static boolean nsegment_lt(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nsegment_lt requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -451,7 +451,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: make/from_base of instant/scalar</p>
      */
-    public static Pointer nsegment_make(int arg0, double arg1, double arg2) {
+    public static jnr.ffi.Pointer nsegment_make(long arg0, double arg1, double arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nsegment_make requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -464,7 +464,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar in/out (default-stateless catch-all)</p>
      */
-    public static int nsegment_ne(Pointer arg0, Pointer arg1) {
+    public static boolean nsegment_ne(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nsegment_ne requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -477,7 +477,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: transform/normalize (pure)</p>
      */
-    public static Pointer nsegment_round(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer nsegment_round(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nsegment_round requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -490,7 +490,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar in/out (default-stateless catch-all)</p>
      */
-    public static int nsegment_route(Pointer arg0) {
+    public static long nsegment_route(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nsegment_route requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -503,7 +503,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar in/out (default-stateless catch-all)</p>
      */
-    public static int nsegment_srid(Pointer arg0) {
+    public static int nsegment_srid(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nsegment_srid requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -516,7 +516,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: name pattern is _to_<type></p>
      */
-    public static Pointer nsegment_to_geom(Pointer arg0) {
+    public static jnr.ffi.Pointer nsegment_to_geom(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nsegment_to_geom requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -529,7 +529,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: name pattern is _to_<type></p>
      */
-    public static Pointer nsegment_to_stbox(Pointer arg0) {
+    public static jnr.ffi.Pointer nsegment_to_stbox(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nsegment_to_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -542,7 +542,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: scalar in/out (default-stateless catch-all)</p>
      */
-    public static int route_exists(int arg0) {
+    public static boolean route_exists(long arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "route_exists requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -555,7 +555,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: temporal comparison (per-instant)</p>
      */
-    public static Pointer teq_tnpoint_npoint(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer teq_tnpoint_npoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "teq_tnpoint_npoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -568,7 +568,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: temporal comparison (per-instant)</p>
      */
-    public static Pointer tne_tnpoint_npoint(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tne_tnpoint_npoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tne_tnpoint_npoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -581,7 +581,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: set/span/box algebra (pure)</p>
      */
-    public static Pointer union_set_npoint(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer union_set_npoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "union_set_npoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -594,7 +594,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: restriction name pattern</p>
      */
-    public static Pointer minus_npoint_set(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer minus_npoint_set(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "minus_npoint_set requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -607,7 +607,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: restriction name pattern</p>
      */
-    public static Pointer minus_set_npoint(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer minus_set_npoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "minus_set_npoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -620,7 +620,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static double nad_tnpoint_geo(Pointer arg0, Pointer arg1) {
+    public static double nad_tnpoint_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nad_tnpoint_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -633,7 +633,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static double nad_tnpoint_npoint(Pointer arg0, Pointer arg1) {
+    public static double nad_tnpoint_npoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nad_tnpoint_npoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -646,7 +646,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static double nad_tnpoint_stbox(Pointer arg0, Pointer arg1) {
+    public static double nad_tnpoint_stbox(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nad_tnpoint_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -659,7 +659,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static Pointer nai_tnpoint_geo(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer nai_tnpoint_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nai_tnpoint_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -672,7 +672,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static Pointer nai_tnpoint_npoint(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer nai_tnpoint_npoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nai_tnpoint_npoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -685,7 +685,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static Pointer shortestline_tnpoint_geo(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer shortestline_tnpoint_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "shortestline_tnpoint_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -698,7 +698,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static Pointer shortestline_tnpoint_npoint(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer shortestline_tnpoint_npoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "shortestline_tnpoint_npoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -711,7 +711,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static Pointer tdistance_tnpoint_npoint(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tdistance_tnpoint_npoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tdistance_tnpoint_npoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -724,7 +724,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static Pointer tdistance_tnpoint_point(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tdistance_tnpoint_point(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tdistance_tnpoint_point requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -737,7 +737,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int always_eq_npoint_tnpoint(Pointer arg0, Pointer arg1) {
+    public static int always_eq_npoint_tnpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "always_eq_npoint_tnpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -750,7 +750,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int always_eq_tnpoint_npoint(Pointer arg0, Pointer arg1) {
+    public static int always_eq_tnpoint_npoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "always_eq_tnpoint_npoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -763,7 +763,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int always_ne_npoint_tnpoint(Pointer arg0, Pointer arg1) {
+    public static int always_ne_npoint_tnpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "always_ne_npoint_tnpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -776,7 +776,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int always_ne_tnpoint_npoint(Pointer arg0, Pointer arg1) {
+    public static int always_ne_tnpoint_npoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "always_ne_tnpoint_npoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -789,7 +789,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int ever_eq_npoint_tnpoint(Pointer arg0, Pointer arg1) {
+    public static int ever_eq_npoint_tnpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ever_eq_npoint_tnpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -802,7 +802,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int ever_eq_tnpoint_npoint(Pointer arg0, Pointer arg1) {
+    public static int ever_eq_tnpoint_npoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ever_eq_tnpoint_npoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -815,7 +815,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int ever_ne_npoint_tnpoint(Pointer arg0, Pointer arg1) {
+    public static int ever_ne_npoint_tnpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ever_ne_npoint_tnpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -828,7 +828,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int ever_ne_tnpoint_npoint(Pointer arg0, Pointer arg1) {
+    public static int ever_ne_tnpoint_npoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ever_ne_tnpoint_npoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -841,7 +841,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: sequence-derived metric</p>
      */
-    public static double route_length(int arg0) {
+    public static double route_length(long arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "route_length requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -854,7 +854,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 2 temporals</p>
      */
-    public static int always_eq_tnpoint_tnpoint(Pointer arg0, Pointer arg1) {
+    public static int always_eq_tnpoint_tnpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "always_eq_tnpoint_tnpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -867,7 +867,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 2 temporals</p>
      */
-    public static int always_ne_tnpoint_tnpoint(Pointer arg0, Pointer arg1) {
+    public static int always_ne_tnpoint_tnpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "always_ne_tnpoint_tnpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -880,7 +880,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 2 temporals</p>
      */
-    public static int ever_eq_tnpoint_tnpoint(Pointer arg0, Pointer arg1) {
+    public static int ever_eq_tnpoint_tnpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ever_eq_tnpoint_tnpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -893,7 +893,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 2 temporals</p>
      */
-    public static int ever_ne_tnpoint_tnpoint(Pointer arg0, Pointer arg1) {
+    public static int ever_ne_tnpoint_tnpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "ever_ne_tnpoint_tnpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -906,7 +906,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static double nad_tnpoint_tnpoint(Pointer arg0, Pointer arg1) {
+    public static double nad_tnpoint_tnpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nad_tnpoint_tnpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -919,7 +919,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static Pointer nai_tnpoint_tnpoint(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer nai_tnpoint_tnpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nai_tnpoint_tnpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -932,7 +932,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static Pointer shortestline_tnpoint_tnpoint(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer shortestline_tnpoint_tnpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "shortestline_tnpoint_tnpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -945,7 +945,7 @@ public final class MeosOpsFreeNpoint {
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static Pointer tdistance_tnpoint_tnpoint(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tdistance_tnpoint_tnpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tdistance_tnpoint_tnpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -958,7 +958,7 @@ public final class MeosOpsFreeNpoint {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static String npoint_as_ewkt(Pointer arg0, int arg1) {
+    public static java.lang.String npoint_as_ewkt(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_as_ewkt requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -971,7 +971,7 @@ public final class MeosOpsFreeNpoint {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static String npoint_as_hexwkb(Pointer arg0, byte arg1) {
+    public static java.lang.String npoint_as_hexwkb(jnr.ffi.Pointer arg0, byte arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_as_hexwkb requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -984,7 +984,7 @@ public final class MeosOpsFreeNpoint {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static String npoint_as_text(Pointer arg0, int arg1) {
+    public static java.lang.String npoint_as_text(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_as_text requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -997,7 +997,7 @@ public final class MeosOpsFreeNpoint {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static Pointer npoint_as_wkb(Pointer arg0, byte arg1) {
+    public static jnr.ffi.Pointer npoint_as_wkb(jnr.ffi.Pointer arg0, byte arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_as_wkb requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1010,7 +1010,7 @@ public final class MeosOpsFreeNpoint {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static Pointer npoint_from_hexwkb(String arg0) {
+    public static jnr.ffi.Pointer npoint_from_hexwkb(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_from_hexwkb requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1023,7 +1023,7 @@ public final class MeosOpsFreeNpoint {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static Pointer npoint_from_wkb(Pointer arg0, long arg1) {
+    public static jnr.ffi.Pointer npoint_from_wkb(jnr.ffi.Pointer arg0, long arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_from_wkb requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1036,7 +1036,7 @@ public final class MeosOpsFreeNpoint {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static Pointer npoint_in(String arg0) {
+    public static jnr.ffi.Pointer npoint_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_in requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1049,7 +1049,7 @@ public final class MeosOpsFreeNpoint {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static String npoint_out(Pointer arg0, int arg1) {
+    public static java.lang.String npoint_out(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "npoint_out requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1062,7 +1062,7 @@ public final class MeosOpsFreeNpoint {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static Pointer nsegment_in(String arg0) {
+    public static jnr.ffi.Pointer nsegment_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nsegment_in requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -1075,7 +1075,7 @@ public final class MeosOpsFreeNpoint {
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Free function (not class-classified). Classification rule: IO/serialization</p>
      */
-    public static String nsegment_out(Pointer arg0, int arg1) {
+    public static java.lang.String nsegment_out(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "nsegment_out requires libmeos — set -Dmobilityflink.meos.enabled=true");

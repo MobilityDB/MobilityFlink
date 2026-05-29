@@ -21,7 +21,7 @@ public final class MeosOpsTGeometry {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer tgeometry_to_tcbuffer(Pointer arg0) {
+    public static jnr.ffi.Pointer tgeometry_to_tcbuffer(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeometry_to_tcbuffer requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsTGeometry {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer tgeometry_to_tgeography(Pointer arg0) {
+    public static jnr.ffi.Pointer tgeometry_to_tgeography(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeometry_to_tgeography requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -49,7 +49,7 @@ public final class MeosOpsTGeometry {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer tgeometry_to_tgeompoint(Pointer arg0) {
+    public static jnr.ffi.Pointer tgeometry_to_tgeompoint(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeometry_to_tgeompoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -63,7 +63,7 @@ public final class MeosOpsTGeometry {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer tgeometry_from_mfjson(String arg0) {
+    public static jnr.ffi.Pointer tgeometry_from_mfjson(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeometry_from_mfjson requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -77,7 +77,7 @@ public final class MeosOpsTGeometry {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer tgeometry_in(String arg0) {
+    public static jnr.ffi.Pointer tgeometry_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeometry_in requires libmeos — set -Dmobilityflink.meos.enabled=true");

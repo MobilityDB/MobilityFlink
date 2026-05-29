@@ -21,7 +21,7 @@ public final class MeosOpsTGeomPoint {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer tgeompoint_to_tgeometry(Pointer arg0) {
+    public static jnr.ffi.Pointer tgeompoint_to_tgeometry(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeompoint_to_tgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsTGeomPoint {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer tgeompoint_to_tnpoint(Pointer arg0) {
+    public static jnr.ffi.Pointer tgeompoint_to_tnpoint(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeompoint_to_tnpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -49,7 +49,7 @@ public final class MeosOpsTGeomPoint {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer tgeompoint_from_mfjson(String arg0) {
+    public static jnr.ffi.Pointer tgeompoint_from_mfjson(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeompoint_from_mfjson requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -63,7 +63,7 @@ public final class MeosOpsTGeomPoint {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer tgeompoint_in(String arg0) {
+    public static jnr.ffi.Pointer tgeompoint_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeompoint_in requires libmeos — set -Dmobilityflink.meos.enabled=true");

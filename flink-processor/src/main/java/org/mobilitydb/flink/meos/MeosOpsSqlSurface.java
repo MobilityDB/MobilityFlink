@@ -13,21 +13,21 @@ public final class MeosOpsSqlSurface {
     private MeosOpsSqlSurface() { /* utility */ }
 
     /** MEOS {@code adjacent_span_value} — SQL-surface function (meos_internal). */
-    public static int adjacent_span_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean adjacent_span_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("adjacent_span_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.adjacent_span_value(arg0, arg1);
     }
 
     /** MEOS {@code adjacent_spanset_value} — SQL-surface function (meos_internal). */
-    public static int adjacent_spanset_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean adjacent_spanset_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("adjacent_spanset_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.adjacent_spanset_value(arg0, arg1);
     }
 
     /** MEOS {@code adjacent_value_spanset} — SQL-surface function (meos_internal). */
-    public static int adjacent_value_spanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean adjacent_value_spanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("adjacent_value_spanset requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.adjacent_value_spanset(arg0, arg1);
@@ -118,42 +118,42 @@ public final class MeosOpsSqlSurface {
     }
 
     /** MEOS {@code contained_value_set} — SQL-surface function (meos_internal). */
-    public static int contained_value_set(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean contained_value_set(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("contained_value_set requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.contained_value_set(arg0, arg1);
     }
 
     /** MEOS {@code contained_value_span} — SQL-surface function (meos_internal). */
-    public static int contained_value_span(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean contained_value_span(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("contained_value_span requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.contained_value_span(arg0, arg1);
     }
 
     /** MEOS {@code contained_value_spanset} — SQL-surface function (meos_internal). */
-    public static int contained_value_spanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean contained_value_spanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("contained_value_spanset requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.contained_value_spanset(arg0, arg1);
     }
 
     /** MEOS {@code contains_set_value} — SQL-surface function (meos_internal). */
-    public static int contains_set_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean contains_set_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("contains_set_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.contains_set_value(arg0, arg1);
     }
 
     /** MEOS {@code contains_span_value} — SQL-surface function (meos_internal). */
-    public static int contains_span_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean contains_span_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("contains_span_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.contains_span_value(arg0, arg1);
     }
 
     /** MEOS {@code contains_spanset_value} — SQL-surface function (meos_internal). */
-    public static int contains_spanset_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean contains_spanset_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("contains_spanset_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.contains_spanset_value(arg0, arg1);
@@ -342,42 +342,42 @@ public final class MeosOpsSqlSurface {
     }
 
     /** MEOS {@code left_set_value} — SQL-surface function (meos_internal). */
-    public static int left_set_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean left_set_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("left_set_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.left_set_value(arg0, arg1);
     }
 
     /** MEOS {@code left_span_value} — SQL-surface function (meos_internal). */
-    public static int left_span_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean left_span_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("left_span_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.left_span_value(arg0, arg1);
     }
 
     /** MEOS {@code left_spanset_value} — SQL-surface function (meos_internal). */
-    public static int left_spanset_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean left_spanset_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("left_spanset_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.left_spanset_value(arg0, arg1);
     }
 
     /** MEOS {@code left_value_set} — SQL-surface function (meos_internal). */
-    public static int left_value_set(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean left_value_set(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("left_value_set requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.left_value_set(arg0, arg1);
     }
 
     /** MEOS {@code left_value_span} — SQL-surface function (meos_internal). */
-    public static int left_value_span(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean left_value_span(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("left_value_span requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.left_value_span(arg0, arg1);
     }
 
     /** MEOS {@code left_value_spanset} — SQL-surface function (meos_internal). */
-    public static int left_value_spanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean left_value_spanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("left_value_spanset requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.left_value_spanset(arg0, arg1);
@@ -454,7 +454,7 @@ public final class MeosOpsSqlSurface {
     }
 
     /** MEOS {@code number_timestamptz_to_tbox} — SQL-surface function (meos_internal). */
-    public static jnr.ffi.Pointer number_timestamptz_to_tbox(jnr.ffi.Pointer arg0, int arg1, int arg2) {
+    public static jnr.ffi.Pointer number_timestamptz_to_tbox(jnr.ffi.Pointer arg0, int arg1, java.time.OffsetDateTime arg2) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("number_timestamptz_to_tbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.number_timestamptz_to_tbox(arg0, arg1, arg2);
@@ -468,7 +468,7 @@ public final class MeosOpsSqlSurface {
     }
 
     /** MEOS {@code numset_shift_scale} — SQL-surface function (meos_internal). */
-    public static jnr.ffi.Pointer numset_shift_scale(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2, int arg3, int arg4) {
+    public static jnr.ffi.Pointer numset_shift_scale(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2, boolean arg3, boolean arg4) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("numset_shift_scale requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.numset_shift_scale(arg0, arg1, arg2, arg3, arg4);
@@ -482,7 +482,7 @@ public final class MeosOpsSqlSurface {
     }
 
     /** MEOS {@code numspan_shift_scale} — SQL-surface function (meos_internal). */
-    public static jnr.ffi.Pointer numspan_shift_scale(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2, int arg3, int arg4) {
+    public static jnr.ffi.Pointer numspan_shift_scale(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2, boolean arg3, boolean arg4) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("numspan_shift_scale requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.numspan_shift_scale(arg0, arg1, arg2, arg3, arg4);
@@ -496,140 +496,140 @@ public final class MeosOpsSqlSurface {
     }
 
     /** MEOS {@code numspanset_shift_scale} — SQL-surface function (meos_internal). */
-    public static jnr.ffi.Pointer numspanset_shift_scale(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2, int arg3, int arg4) {
+    public static jnr.ffi.Pointer numspanset_shift_scale(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2, boolean arg3, boolean arg4) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("numspanset_shift_scale requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.numspanset_shift_scale(arg0, arg1, arg2, arg3, arg4);
     }
 
     /** MEOS {@code numspanset_width} — SQL-surface function (meos_internal). */
-    public static int numspanset_width(jnr.ffi.Pointer arg0, int arg1) {
+    public static int numspanset_width(jnr.ffi.Pointer arg0, boolean arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("numspanset_width requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.numspanset_width(arg0, arg1);
     }
 
     /** MEOS {@code overleft_set_value} — SQL-surface function (meos_internal). */
-    public static int overleft_set_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean overleft_set_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("overleft_set_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.overleft_set_value(arg0, arg1);
     }
 
     /** MEOS {@code overleft_span_value} — SQL-surface function (meos_internal). */
-    public static int overleft_span_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean overleft_span_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("overleft_span_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.overleft_span_value(arg0, arg1);
     }
 
     /** MEOS {@code overleft_spanset_value} — SQL-surface function (meos_internal). */
-    public static int overleft_spanset_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean overleft_spanset_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("overleft_spanset_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.overleft_spanset_value(arg0, arg1);
     }
 
     /** MEOS {@code overleft_value_set} — SQL-surface function (meos_internal). */
-    public static int overleft_value_set(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean overleft_value_set(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("overleft_value_set requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.overleft_value_set(arg0, arg1);
     }
 
     /** MEOS {@code overleft_value_span} — SQL-surface function (meos_internal). */
-    public static int overleft_value_span(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean overleft_value_span(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("overleft_value_span requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.overleft_value_span(arg0, arg1);
     }
 
     /** MEOS {@code overleft_value_spanset} — SQL-surface function (meos_internal). */
-    public static int overleft_value_spanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean overleft_value_spanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("overleft_value_spanset requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.overleft_value_spanset(arg0, arg1);
     }
 
     /** MEOS {@code overright_set_value} — SQL-surface function (meos_internal). */
-    public static int overright_set_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean overright_set_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("overright_set_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.overright_set_value(arg0, arg1);
     }
 
     /** MEOS {@code overright_span_value} — SQL-surface function (meos_internal). */
-    public static int overright_span_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean overright_span_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("overright_span_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.overright_span_value(arg0, arg1);
     }
 
     /** MEOS {@code overright_spanset_value} — SQL-surface function (meos_internal). */
-    public static int overright_spanset_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean overright_spanset_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("overright_spanset_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.overright_spanset_value(arg0, arg1);
     }
 
     /** MEOS {@code overright_value_set} — SQL-surface function (meos_internal). */
-    public static int overright_value_set(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean overright_value_set(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("overright_value_set requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.overright_value_set(arg0, arg1);
     }
 
     /** MEOS {@code overright_value_span} — SQL-surface function (meos_internal). */
-    public static int overright_value_span(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean overright_value_span(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("overright_value_span requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.overright_value_span(arg0, arg1);
     }
 
     /** MEOS {@code overright_value_spanset} — SQL-surface function (meos_internal). */
-    public static int overright_value_spanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean overright_value_spanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("overright_value_spanset requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.overright_value_spanset(arg0, arg1);
     }
 
     /** MEOS {@code right_set_value} — SQL-surface function (meos_internal). */
-    public static int right_set_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean right_set_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("right_set_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.right_set_value(arg0, arg1);
     }
 
     /** MEOS {@code right_span_value} — SQL-surface function (meos_internal). */
-    public static int right_span_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean right_span_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("right_span_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.right_span_value(arg0, arg1);
     }
 
     /** MEOS {@code right_spanset_value} — SQL-surface function (meos_internal). */
-    public static int right_spanset_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean right_spanset_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("right_spanset_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.right_spanset_value(arg0, arg1);
     }
 
     /** MEOS {@code right_value_set} — SQL-surface function (meos_internal). */
-    public static int right_value_set(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean right_value_set(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("right_value_set requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.right_value_set(arg0, arg1);
     }
 
     /** MEOS {@code right_value_span} — SQL-surface function (meos_internal). */
-    public static int right_value_span(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean right_value_span(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("right_value_span requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.right_value_span(arg0, arg1);
     }
 
     /** MEOS {@code right_value_spanset} — SQL-surface function (meos_internal). */
-    public static int right_value_spanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static boolean right_value_spanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("right_value_spanset requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.right_value_spanset(arg0, arg1);
@@ -657,10 +657,10 @@ public final class MeosOpsSqlSurface {
     }
 
     /** MEOS {@code set_value_n} — SQL-surface function (meos_internal). */
-    public static int set_value_n(jnr.ffi.Pointer arg0, int arg1, jnr.ffi.Pointer arg2) {
+    public static jnr.ffi.Pointer set_value_n(jnr.ffi.Pointer arg0, int arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("set_value_n requires libmeos — set -Dmobilityflink.meos.enabled=true");
-        return functions.GeneratedFunctions.set_value_n(arg0, arg1, arg2);
+        return functions.GeneratedFunctions.set_value_n(arg0, arg1);
     }
 
     /** MEOS {@code set_values} — SQL-surface function (meos_internal). */
@@ -713,14 +713,14 @@ public final class MeosOpsSqlSurface {
     }
 
     /** MEOS {@code tbox_get_value_time_tile} — SQL-surface function (meos_internal). */
-    public static jnr.ffi.Pointer tbox_get_value_time_tile(jnr.ffi.Pointer arg0, int arg1, jnr.ffi.Pointer arg2, jnr.ffi.Pointer arg3, jnr.ffi.Pointer arg4, int arg5, int arg6, int arg7) {
+    public static jnr.ffi.Pointer tbox_get_value_time_tile(jnr.ffi.Pointer arg0, java.time.OffsetDateTime arg1, jnr.ffi.Pointer arg2, jnr.ffi.Pointer arg3, jnr.ffi.Pointer arg4, java.time.OffsetDateTime arg5, int arg6, int arg7) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("tbox_get_value_time_tile requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.tbox_get_value_time_tile(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
     }
 
     /** MEOS {@code tbox_shift_scale_value} — SQL-surface function (meos_internal). */
-    public static jnr.ffi.Pointer tbox_shift_scale_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2, int arg3, int arg4) {
+    public static jnr.ffi.Pointer tbox_shift_scale_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2, boolean arg3, boolean arg4) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("tbox_shift_scale_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.tbox_shift_scale_value(arg0, arg1, arg2, arg3, arg4);
@@ -755,7 +755,7 @@ public final class MeosOpsSqlSurface {
     }
 
     /** MEOS {@code temporal_mem_size} — SQL-surface function (meos_internal). */
-    public static int temporal_mem_size(jnr.ffi.Pointer arg0) {
+    public static long temporal_mem_size(jnr.ffi.Pointer arg0) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("temporal_mem_size requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.temporal_mem_size(arg0);
@@ -776,17 +776,17 @@ public final class MeosOpsSqlSurface {
     }
 
     /** MEOS {@code temporal_value_at_timestamptz} — SQL-surface function (meos_internal). */
-    public static int temporal_value_at_timestamptz(jnr.ffi.Pointer arg0, int arg1, int arg2, jnr.ffi.Pointer arg3) {
+    public static jnr.ffi.Pointer temporal_value_at_timestamptz(jnr.ffi.Pointer arg0, java.time.OffsetDateTime arg1, boolean arg2) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("temporal_value_at_timestamptz requires libmeos — set -Dmobilityflink.meos.enabled=true");
-        return functions.GeneratedFunctions.temporal_value_at_timestamptz(arg0, arg1, arg2, arg3);
+        return functions.GeneratedFunctions.temporal_value_at_timestamptz(arg0, arg1, arg2);
     }
 
     /** MEOS {@code temporal_value_n} — SQL-surface function (meos_internal). */
-    public static int temporal_value_n(jnr.ffi.Pointer arg0, int arg1, jnr.ffi.Pointer arg2) {
+    public static jnr.ffi.Pointer temporal_value_n(jnr.ffi.Pointer arg0, int arg1) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("temporal_value_n requires libmeos — set -Dmobilityflink.meos.enabled=true");
-        return functions.GeneratedFunctions.temporal_value_n(arg0, arg1, arg2);
+        return functions.GeneratedFunctions.temporal_value_n(arg0, arg1);
     }
 
     /** MEOS {@code tinstant_value} — SQL-surface function (meos_internal). */
@@ -797,7 +797,7 @@ public final class MeosOpsSqlSurface {
     }
 
     /** MEOS {@code tnumber_shift_scale_value} — SQL-surface function (meos_internal). */
-    public static jnr.ffi.Pointer tnumber_shift_scale_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2, int arg3, int arg4) {
+    public static jnr.ffi.Pointer tnumber_shift_scale_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2, boolean arg3, boolean arg4) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("tnumber_shift_scale_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.tnumber_shift_scale_value(arg0, arg1, arg2, arg3, arg4);
@@ -818,14 +818,14 @@ public final class MeosOpsSqlSurface {
     }
 
     /** MEOS {@code tnumber_value_time_boxes} — SQL-surface function (meos_internal). */
-    public static jnr.ffi.Pointer tnumber_value_time_boxes(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2, jnr.ffi.Pointer arg3, int arg4, jnr.ffi.Pointer arg5) {
+    public static jnr.ffi.Pointer tnumber_value_time_boxes(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2, jnr.ffi.Pointer arg3, java.time.OffsetDateTime arg4, jnr.ffi.Pointer arg5) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("tnumber_value_time_boxes requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.tnumber_value_time_boxes(arg0, arg1, arg2, arg3, arg4, arg5);
     }
 
     /** MEOS {@code tnumber_value_time_split} — SQL-surface function (meos_internal). */
-    public static jnr.ffi.Pointer tnumber_value_time_split(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2, jnr.ffi.Pointer arg3, int arg4, jnr.ffi.Pointer arg5, jnr.ffi.Pointer arg6, jnr.ffi.Pointer arg7) {
+    public static jnr.ffi.Pointer tnumber_value_time_split(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2, jnr.ffi.Pointer arg3, java.time.OffsetDateTime arg4, jnr.ffi.Pointer arg5, jnr.ffi.Pointer arg6, jnr.ffi.Pointer arg7) {
         if (!MeosOpsRuntime.MEOS_AVAILABLE)
             throw new UnsupportedOperationException("tnumber_value_time_split requires libmeos — set -Dmobilityflink.meos.enabled=true");
         return functions.GeneratedFunctions.tnumber_value_time_split(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);

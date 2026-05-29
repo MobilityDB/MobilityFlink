@@ -21,7 +21,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: constructor of instant/scalar</p>
      */
-    public static Pointer tgeo_from_base_temp(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tgeo_from_base_temp(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_from_base_temp requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tgeo_affine(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tgeo_affine(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_affine requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -49,7 +49,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tgeo_at_geom(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tgeo_at_geom(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_at_geom requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -63,7 +63,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tgeo_at_stbox(Pointer arg0, Pointer arg1, int arg2) {
+    public static jnr.ffi.Pointer tgeo_at_stbox(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_at_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -77,7 +77,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tgeo_at_value(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tgeo_at_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_at_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -91,7 +91,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tgeo_centroid(Pointer arg0) {
+    public static jnr.ffi.Pointer tgeo_centroid(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_centroid requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -105,7 +105,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tgeo_convex_hull(Pointer arg0) {
+    public static jnr.ffi.Pointer tgeo_convex_hull(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_convex_hull requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -119,7 +119,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tgeo_end_value(Pointer arg0) {
+    public static jnr.ffi.Pointer tgeo_end_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_end_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -133,7 +133,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tgeo_minus_geom(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tgeo_minus_geom(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_minus_geom requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -147,7 +147,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tgeo_minus_stbox(Pointer arg0, Pointer arg1, int arg2) {
+    public static jnr.ffi.Pointer tgeo_minus_stbox(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_minus_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -161,7 +161,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tgeo_minus_value(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tgeo_minus_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_minus_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -175,7 +175,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tgeo_scale(Pointer arg0, Pointer arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer tgeo_scale(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_scale requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -189,7 +189,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tgeo_space_boxes(Pointer arg0, double arg1, double arg2, double arg3, Pointer arg4, int arg5, int arg6, Pointer arg7) {
+    public static jnr.ffi.Pointer tgeo_space_boxes(jnr.ffi.Pointer arg0, double arg1, double arg2, double arg3, jnr.ffi.Pointer arg4, boolean arg5, boolean arg6, jnr.ffi.Pointer arg7) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_space_boxes requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -203,7 +203,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tgeo_space_split(Pointer arg0, double arg1, double arg2, double arg3, Pointer arg4, int arg5, int arg6, Pointer arg7, Pointer arg8) {
+    public static jnr.ffi.Pointer tgeo_space_split(jnr.ffi.Pointer arg0, double arg1, double arg2, double arg3, jnr.ffi.Pointer arg4, boolean arg5, boolean arg6, jnr.ffi.Pointer arg7, jnr.ffi.Pointer arg8) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_space_split requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -217,7 +217,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tgeo_space_time_boxes(Pointer arg0, double arg1, double arg2, double arg3, Pointer arg4, Pointer arg5, int arg6, int arg7, int arg8, Pointer arg9) {
+    public static jnr.ffi.Pointer tgeo_space_time_boxes(jnr.ffi.Pointer arg0, double arg1, double arg2, double arg3, jnr.ffi.Pointer arg4, jnr.ffi.Pointer arg5, java.time.OffsetDateTime arg6, boolean arg7, boolean arg8, jnr.ffi.Pointer arg9) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_space_time_boxes requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -231,7 +231,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tgeo_space_time_split(Pointer arg0, double arg1, double arg2, double arg3, Pointer arg4, Pointer arg5, int arg6, int arg7, int arg8, Pointer arg9, Pointer arg10, Pointer arg11) {
+    public static jnr.ffi.Pointer tgeo_space_time_split(jnr.ffi.Pointer arg0, double arg1, double arg2, double arg3, jnr.ffi.Pointer arg4, jnr.ffi.Pointer arg5, java.time.OffsetDateTime arg6, boolean arg7, boolean arg8, jnr.ffi.Pointer arg9, jnr.ffi.Pointer arg10, jnr.ffi.Pointer arg11) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_space_time_split requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -245,7 +245,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tgeo_split_each_n_stboxes(Pointer arg0, int arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer tgeo_split_each_n_stboxes(jnr.ffi.Pointer arg0, int arg1, jnr.ffi.Pointer arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_split_each_n_stboxes requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -259,7 +259,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tgeo_split_n_stboxes(Pointer arg0, int arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer tgeo_split_n_stboxes(jnr.ffi.Pointer arg0, int arg1, jnr.ffi.Pointer arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_split_n_stboxes requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -273,7 +273,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tgeo_start_value(Pointer arg0) {
+    public static jnr.ffi.Pointer tgeo_start_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_start_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -287,7 +287,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tgeo_stboxes(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tgeo_stboxes(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_stboxes requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -301,7 +301,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tgeo_traversed_area(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer tgeo_traversed_area(jnr.ffi.Pointer arg0, boolean arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_traversed_area requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -315,7 +315,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static int tgeo_value_at_timestamptz(Pointer arg0, int arg1, int arg2, Pointer arg3) {
+    public static boolean tgeo_value_at_timestamptz(jnr.ffi.Pointer arg0, java.time.OffsetDateTime arg1, boolean arg2, jnr.ffi.Pointer arg3) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_value_at_timestamptz requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -329,12 +329,12 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int tgeo_value_n(Pointer arg0, int arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer tgeo_value_n(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_value_n requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.tgeo_value_n(arg0, arg1, arg2);
+        return GeneratedFunctions.tgeo_value_n(arg0, arg1);
     }
 
     /**
@@ -343,7 +343,7 @@ public final class MeosOpsTGeo {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tgeo_values(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tgeo_values(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tgeo_values requires libmeos — set -Dmobilityflink.meos.enabled=true");

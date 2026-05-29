@@ -119,7 +119,7 @@ public final class MeosCrossStreamDemoJob {
                               >((left, right, ctx) -> {
                                   Pointer leftTbox  = MeosOpsTBox.tbox_in(left.f2);
                                   Pointer rightTbox = MeosOpsTBox.tbox_in(right.f2);
-                                  if (MeosOpsFreeCore.overlaps_tbox_tbox(leftTbox, rightTbox) != 0) {
+                                  if (MeosOpsFreeCore.overlaps_tbox_tbox(leftTbox, rightTbox)) {
                                       return Tuple5.of(left.f0, left.f1, right.f1,
                                                        ctx.getLeftTimestamp(), ctx.getRightTimestamp());
                                   }

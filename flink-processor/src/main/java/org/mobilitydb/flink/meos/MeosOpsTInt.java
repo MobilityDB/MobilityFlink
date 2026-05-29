@@ -21,7 +21,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: constructor of instant/scalar</p>
      */
-    public static Pointer tint_from_base_temp(int arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tint_from_base_temp(int arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_from_base_temp requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer tint_to_tfloat(Pointer arg0) {
+    public static jnr.ffi.Pointer tint_to_tfloat(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_to_tfloat requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -49,7 +49,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tint_at_value(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer tint_at_value(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_at_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -63,7 +63,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int tint_end_value(Pointer arg0) {
+    public static int tint_end_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_end_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -77,7 +77,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int tint_max_value(Pointer arg0) {
+    public static int tint_max_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_max_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -91,7 +91,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int tint_min_value(Pointer arg0) {
+    public static int tint_min_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_min_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -105,7 +105,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tint_minus_value(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer tint_minus_value(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_minus_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -119,7 +119,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tint_scale_value(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer tint_scale_value(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_scale_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -133,7 +133,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tint_shift_scale_value(Pointer arg0, int arg1, int arg2) {
+    public static jnr.ffi.Pointer tint_shift_scale_value(jnr.ffi.Pointer arg0, int arg1, int arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_shift_scale_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -147,7 +147,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tint_shift_value(Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer tint_shift_value(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_shift_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -161,7 +161,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int tint_start_value(Pointer arg0) {
+    public static int tint_start_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_start_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -175,7 +175,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tint_time_boxes(Pointer arg0, Pointer arg1, int arg2, Pointer arg3) {
+    public static jnr.ffi.Pointer tint_time_boxes(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, java.time.OffsetDateTime arg2, jnr.ffi.Pointer arg3) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_time_boxes requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -189,7 +189,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static int tint_value_at_timestamptz(Pointer arg0, int arg1, int arg2, Pointer arg3) {
+    public static boolean tint_value_at_timestamptz(jnr.ffi.Pointer arg0, java.time.OffsetDateTime arg1, boolean arg2, jnr.ffi.Pointer arg3) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_value_at_timestamptz requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -203,7 +203,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tint_value_bins(Pointer arg0, int arg1, int arg2, Pointer arg3) {
+    public static jnr.ffi.Pointer tint_value_bins(jnr.ffi.Pointer arg0, int arg1, int arg2, jnr.ffi.Pointer arg3) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_value_bins requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -217,7 +217,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tint_value_boxes(Pointer arg0, int arg1, int arg2, Pointer arg3) {
+    public static jnr.ffi.Pointer tint_value_boxes(jnr.ffi.Pointer arg0, int arg1, int arg2, jnr.ffi.Pointer arg3) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_value_boxes requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -231,12 +231,12 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static int tint_value_n(Pointer arg0, int arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer tint_value_n(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_value_n requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.tint_value_n(arg0, arg1, arg2);
+        return GeneratedFunctions.tint_value_n(arg0, arg1);
     }
 
     /**
@@ -245,7 +245,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tint_value_split(Pointer arg0, int arg1, int arg2, Pointer arg3, Pointer arg4) {
+    public static jnr.ffi.Pointer tint_value_split(jnr.ffi.Pointer arg0, int arg1, int arg2, jnr.ffi.Pointer arg3, jnr.ffi.Pointer arg4) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_value_split requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -259,7 +259,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tint_value_time_boxes(Pointer arg0, int arg1, Pointer arg2, int arg3, int arg4, Pointer arg5) {
+    public static jnr.ffi.Pointer tint_value_time_boxes(jnr.ffi.Pointer arg0, int arg1, jnr.ffi.Pointer arg2, int arg3, java.time.OffsetDateTime arg4, jnr.ffi.Pointer arg5) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_value_time_boxes requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -273,7 +273,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tint_value_time_split(Pointer arg0, long arg1, Pointer arg2, int arg3, int arg4, Pointer arg5, Pointer arg6, Pointer arg7) {
+    public static jnr.ffi.Pointer tint_value_time_split(jnr.ffi.Pointer arg0, long arg1, jnr.ffi.Pointer arg2, int arg3, java.time.OffsetDateTime arg4, jnr.ffi.Pointer arg5, jnr.ffi.Pointer arg6, jnr.ffi.Pointer arg7) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_value_time_split requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -287,7 +287,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tint_values(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tint_values(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_values requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -301,7 +301,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer tint_tmax_transfn(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tint_tmax_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_tmax_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -315,7 +315,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer tint_tmin_transfn(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tint_tmin_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_tmin_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -329,7 +329,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer tint_tsum_transfn(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tint_tsum_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_tsum_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -343,7 +343,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer tint_wmax_transfn(Pointer arg0, Pointer arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer tint_wmax_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_wmax_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -357,7 +357,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer tint_wmin_transfn(Pointer arg0, Pointer arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer tint_wmin_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_wmin_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -371,7 +371,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer tint_wsum_transfn(Pointer arg0, Pointer arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer tint_wsum_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_wsum_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -385,7 +385,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer tint_from_mfjson(String arg0) {
+    public static jnr.ffi.Pointer tint_from_mfjson(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_from_mfjson requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -399,7 +399,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer tint_in(String arg0) {
+    public static jnr.ffi.Pointer tint_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_in requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -413,7 +413,7 @@ public final class MeosOpsTInt {
      * <p>Object-model role: {@code output}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static String tint_out(Pointer arg0) {
+    public static java.lang.String tint_out(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tint_out requires libmeos — set -Dmobilityflink.meos.enabled=true");

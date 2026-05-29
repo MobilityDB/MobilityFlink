@@ -21,7 +21,7 @@ public final class MeosOpsGeogSet {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static Pointer geogset_in(String arg0) {
+    public static jnr.ffi.Pointer geogset_in(java.lang.String arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "geogset_in requires libmeos — set -Dmobilityflink.meos.enabled=true");

@@ -4,7 +4,7 @@ Generated 2026-05-29 by `tools/parity/parity_audit.py`.
 
 The MobilityFlink MEOS facade (`org.mobilitydb.flink.meos.MeosOps*`) exposes MEOS C functions to Flink through JMEOS. This audit measures, per type family, the share of the **MEOS public C API** that the facade exposes and that JMEOS binds.
 
-**Headline.** The facade exposes **2153 of 2153 public MEOS functions (100.0%)**. The MEOS public surface (`meos/include/meos*.h`, excluding internal headers) is 2158 functions; JMEOS binds 2153 of them. 0 bindable functions are not exposed (listed in §3).
+**Headline.** The facade exposes **2158 of 2158 public MEOS functions (100.0%)**. The MEOS public surface (`meos/include/meos*.h`, excluding internal headers) is 2158 functions; JMEOS binds 2158 of them. 0 bindable functions are not exposed (listed in §3).
 
 Coverage is **static**: a function counts as covered when the facade declares a method of the same name and arity that delegates to a JMEOS export.
 
@@ -16,19 +16,19 @@ Per-family runtime behaviour is asserted by `src/test/java/org/mobilitydb/flink/
 
 - **Numerator**: `public static` methods on the generated `MeosOps*` facade whose name is also a `functions.GeneratedFunctions` export in the bundled JMEOS jar.
 
-- **JMEOS jar**: jar/JMEOS.jar exports 2699 static methods.
+- **JMEOS jar**: jar/JMEOS.jar exports 2743 static methods.
 
 ## 2. Per-family coverage of the public MEOS surface
 
 | Family (header) | Public ∩ JMEOS | Exposed | Missing | Coverage |
 |---|---:|---:|---:|---:|
-| core temporal / set / span / spanset / tbox (`meos.h`) | 1274 | 1274 | 0 | 100.0% |
+| core temporal / set / span / spanset / tbox (`meos.h`) | 1279 | 1279 | 0 | 100.0% |
 | geo (tgeo / tpoint / stbox) (`meos_geo.h`) | 419 | 419 | 0 | 100.0% |
 | cbuffer (`meos_cbuffer.h`) | 173 | 173 | 0 | 100.0% |
 | npoint (`meos_npoint.h`) | 118 | 118 | 0 | 100.0% |
 | pose (`meos_pose.h`) | 101 | 101 | 0 | 100.0% |
 | rgeo (`meos_rgeo.h`) | 68 | 68 | 0 | 100.0% |
-| **total** | **2153** | **2153** | **0** | **100.0%** |
+| **total** | **2158** | **2158** | **0** | **100.0%** |
 
 ## 3. Bindable MEOS functions not exposed by the facade
 
@@ -39,7 +39,7 @@ Per-family runtime behaviour is asserted by `src/test/java/org/mobilitydb/flink/
 
 The facade is also matched against the underlying MEOS C symbol of each addressable `CREATE FUNCTION` in `mobilitydb/sql/**/*.in.sql` (PG-only sections and helper symbols bucketed out; 876 out-of-scope, 113 SQL/plpgsql-composed functions with no single C symbol). Functions the SQL layer implements through the internal MEOS headers (`meos_internal*.h`) are exposed via `MeosOpsSqlSurface`.
 
-- Addressable distinct C symbols: **1336**; bound by JMEOS: **1065**; exposed by the facade: **1065** (100.0% of the JMEOS-bindable SQL surface).
+- Addressable distinct C symbols: **1336**; bound by JMEOS: **1066**; exposed by the facade: **1066** (100.0% of the JMEOS-bindable SQL surface).
 
-- The remaining **271** addressable C symbols are not exported by JMEOS under the name the SQL layer's extension wrapper uses; the wrapper names differ from the MEOS function names they call.
+- The remaining **270** addressable C symbols are not exported by JMEOS under the name the SQL layer's extension wrapper uses; the wrapper names differ from the MEOS function names they call.
 

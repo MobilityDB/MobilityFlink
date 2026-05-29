@@ -21,7 +21,7 @@ public final class MeosOpsTIntInst {
      * <p>Object-model role: {@code constructor}.</p>
      * <p>Classification: constructor of instant/scalar</p>
      */
-    public static Pointer tintinst_make(int arg0, int arg1) {
+    public static jnr.ffi.Pointer tintinst_make(int arg0, java.time.OffsetDateTime arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tintinst_make requires libmeos — set -Dmobilityflink.meos.enabled=true");

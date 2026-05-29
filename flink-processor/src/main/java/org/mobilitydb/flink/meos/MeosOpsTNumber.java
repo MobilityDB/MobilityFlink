@@ -21,7 +21,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer tnumber_to_span(Pointer arg0) {
+    public static jnr.ffi.Pointer tnumber_to_span(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_to_span requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -35,7 +35,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static Pointer tnumber_to_tbox(Pointer arg0) {
+    public static jnr.ffi.Pointer tnumber_to_tbox(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_to_tbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -49,7 +49,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tnumber_abs(Pointer arg0) {
+    public static jnr.ffi.Pointer tnumber_abs(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_abs requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -63,7 +63,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tnumber_angular_difference(Pointer arg0) {
+    public static jnr.ffi.Pointer tnumber_angular_difference(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_angular_difference requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -77,7 +77,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tnumber_at_span(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tnumber_at_span(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_at_span requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -91,7 +91,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tnumber_at_spanset(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tnumber_at_spanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_at_spanset requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -105,7 +105,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tnumber_at_tbox(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tnumber_at_tbox(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_at_tbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -119,7 +119,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static double tnumber_avg_value(Pointer arg0) {
+    public static double tnumber_avg_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_avg_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -133,7 +133,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tnumber_delta_value(Pointer arg0) {
+    public static jnr.ffi.Pointer tnumber_delta_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_delta_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -147,7 +147,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static double tnumber_integral(Pointer arg0) {
+    public static double tnumber_integral(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_integral requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -161,7 +161,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tnumber_minus_span(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tnumber_minus_span(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_minus_span requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -175,7 +175,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tnumber_minus_spanset(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tnumber_minus_spanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_minus_spanset requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -189,7 +189,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code restriction}.</p>
      * <p>Classification: role=restriction</p>
      */
-    public static Pointer tnumber_minus_tbox(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tnumber_minus_tbox(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_minus_tbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -203,7 +203,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tnumber_split_each_n_tboxes(Pointer arg0, int arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer tnumber_split_each_n_tboxes(jnr.ffi.Pointer arg0, int arg1, jnr.ffi.Pointer arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_split_each_n_tboxes requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -217,7 +217,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tnumber_split_n_tboxes(Pointer arg0, int arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer tnumber_split_n_tboxes(jnr.ffi.Pointer arg0, int arg1, jnr.ffi.Pointer arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_split_n_tboxes requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -231,7 +231,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tnumber_tboxes(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tnumber_tboxes(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_tboxes requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -245,7 +245,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tnumber_trend(Pointer arg0) {
+    public static jnr.ffi.Pointer tnumber_trend(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_trend requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -259,7 +259,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static double tnumber_twavg(Pointer arg0) {
+    public static double tnumber_twavg(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_twavg requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -273,7 +273,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static Pointer tnumber_valuespans(Pointer arg0) {
+    public static jnr.ffi.Pointer tnumber_valuespans(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_valuespans requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -287,7 +287,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer tnumber_extent_transfn(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tnumber_extent_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_extent_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -301,7 +301,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer tnumber_tavg_finalfn(Pointer arg0) {
+    public static jnr.ffi.Pointer tnumber_tavg_finalfn(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_tavg_finalfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -315,7 +315,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer tnumber_tavg_transfn(Pointer arg0, Pointer arg1) {
+    public static jnr.ffi.Pointer tnumber_tavg_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_tavg_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");
@@ -329,7 +329,7 @@ public final class MeosOpsTNumber {
      * <p>Object-model role: {@code aggregate}.</p>
      * <p>Classification: role=aggregate</p>
      */
-    public static Pointer tnumber_wavg_transfn(Pointer arg0, Pointer arg1, Pointer arg2) {
+    public static jnr.ffi.Pointer tnumber_wavg_transfn(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, jnr.ffi.Pointer arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
                 "tnumber_wavg_transfn requires libmeos — set -Dmobilityflink.meos.enabled=true");

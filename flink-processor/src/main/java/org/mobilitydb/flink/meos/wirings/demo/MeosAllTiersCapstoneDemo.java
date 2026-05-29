@@ -150,7 +150,7 @@ public final class MeosAllTiersCapstoneDemo {
                             Pointer eventTbox = MeosOpsTBox.tbox_in(evt.f2);
                             Pointer newUnion = (prior == null)
                                     ? eventTbox
-                                    : MeosOpsFreeCore.union_tbox_tbox(prior, eventTbox, /*strict=*/0);
+                                    : MeosOpsFreeCore.union_tbox_tbox(prior, eventTbox, /*strict=*/false);
                             Tuple4<Integer, Integer, String, Long> output =
                                     Tuple4.of(evt.f0, evt.f1, MeosOpsTBox.tbox_out(newUnion, 6), evt.f3);
                             return new MeosBoundedStateMap.MeosStep<>(newUnion, output);
@@ -206,7 +206,7 @@ public final class MeosAllTiersCapstoneDemo {
                                      >((vehAgg, query, ctx) -> {
                                          Pointer aggTbox   = MeosOpsTBox.tbox_in(vehAgg.f2);
                                          Pointer queryTbox = MeosOpsTBox.tbox_in(query.f1);
-                                         if (MeosOpsFreeCore.overlaps_tbox_tbox(aggTbox, queryTbox) != 0) {
+                                         if (MeosOpsFreeCore.overlaps_tbox_tbox(aggTbox, queryTbox)) {
                                              return Tuple5.of(vehAgg.f1, vehAgg.f0, vehAgg.f2, query.f1, vehAgg.f3);
                                          }
                                          return null;
