@@ -18,406 +18,406 @@ public final class MeosOpsFreeRgeo {
     private MeosOpsFreeRgeo() { /* utility */ }
 
     /**
-     * MEOS {@code geo_tpose_to_trgeo} — tier <b>stateless</b>.
+     * MEOS {@code geo_tpose_to_trgeometry} — tier <b>stateless</b>.
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: base-type fn, default pure</p>
      */
-    public static jnr.ffi.Pointer geo_tpose_to_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer geo_tpose_to_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "geo_tpose_to_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "geo_tpose_to_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.geo_tpose_to_trgeo(arg0, arg1);
+        return GeneratedFunctions.geo_tpose_to_trgeometry(arg0, arg1);
     }
 
     /**
-     * MEOS {@code teq_geo_trgeo} — tier <b>stateless</b>.
+     * MEOS {@code teq_geo_trgeometry} — tier <b>stateless</b>.
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: temporal comparison (per-instant)</p>
      */
-    public static jnr.ffi.Pointer teq_geo_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer teq_geo_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "teq_geo_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "teq_geo_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.teq_geo_trgeo(arg0, arg1);
+        return GeneratedFunctions.teq_geo_trgeometry(arg0, arg1);
     }
 
     /**
-     * MEOS {@code teq_trgeo_geo} — tier <b>stateless</b>.
+     * MEOS {@code teq_trgeometry_geo} — tier <b>stateless</b>.
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: temporal comparison (per-instant)</p>
      */
-    public static jnr.ffi.Pointer teq_trgeo_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer teq_trgeometry_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "teq_trgeo_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "teq_trgeometry_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.teq_trgeo_geo(arg0, arg1);
+        return GeneratedFunctions.teq_trgeometry_geo(arg0, arg1);
     }
 
     /**
-     * MEOS {@code tne_geo_trgeo} — tier <b>stateless</b>.
+     * MEOS {@code tne_geo_trgeometry} — tier <b>stateless</b>.
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: temporal comparison (per-instant)</p>
      */
-    public static jnr.ffi.Pointer tne_geo_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer tne_geo_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "tne_geo_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "tne_geo_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.tne_geo_trgeo(arg0, arg1);
+        return GeneratedFunctions.tne_geo_trgeometry(arg0, arg1);
     }
 
     /**
-     * MEOS {@code tne_trgeo_geo} — tier <b>stateless</b>.
+     * MEOS {@code tne_trgeometry_geo} — tier <b>stateless</b>.
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Free function (not class-classified). Classification rule: temporal comparison (per-instant)</p>
      */
-    public static jnr.ffi.Pointer tne_trgeo_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer tne_trgeometry_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "tne_trgeo_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "tne_trgeometry_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.tne_trgeo_geo(arg0, arg1);
+        return GeneratedFunctions.tne_trgeometry_geo(arg0, arg1);
     }
 
     /**
-     * MEOS {@code nad_stbox_trgeo} — tier <b>bounded-state</b>.
+     * MEOS {@code nad_stbox_trgeometry} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static double nad_stbox_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static double nad_stbox_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "nad_stbox_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "nad_stbox_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.nad_stbox_trgeo(arg0, arg1);
+        return GeneratedFunctions.nad_stbox_trgeometry(arg0, arg1);
     }
 
     /**
-     * MEOS {@code nad_trgeo_geo} — tier <b>bounded-state</b>.
+     * MEOS {@code nad_trgeometry_geo} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static double nad_trgeo_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static double nad_trgeometry_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "nad_trgeo_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "nad_trgeometry_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.nad_trgeo_geo(arg0, arg1);
+        return GeneratedFunctions.nad_trgeometry_geo(arg0, arg1);
     }
 
     /**
-     * MEOS {@code nad_trgeo_stbox} — tier <b>bounded-state</b>.
+     * MEOS {@code nad_trgeometry_stbox} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static double nad_trgeo_stbox(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static double nad_trgeometry_stbox(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "nad_trgeo_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "nad_trgeometry_stbox requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.nad_trgeo_stbox(arg0, arg1);
+        return GeneratedFunctions.nad_trgeometry_stbox(arg0, arg1);
     }
 
     /**
-     * MEOS {@code nai_trgeo_geo} — tier <b>bounded-state</b>.
+     * MEOS {@code nai_trgeometry_geo} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static jnr.ffi.Pointer nai_trgeo_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer nai_trgeometry_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "nai_trgeo_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "nai_trgeometry_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.nai_trgeo_geo(arg0, arg1);
+        return GeneratedFunctions.nai_trgeometry_geo(arg0, arg1);
     }
 
     /**
-     * MEOS {@code shortestline_trgeo_geo} — tier <b>bounded-state</b>.
+     * MEOS {@code shortestline_trgeometry_geo} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static jnr.ffi.Pointer shortestline_trgeo_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer shortestline_trgeometry_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "shortestline_trgeo_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "shortestline_trgeometry_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.shortestline_trgeo_geo(arg0, arg1);
+        return GeneratedFunctions.shortestline_trgeometry_geo(arg0, arg1);
     }
 
     /**
-     * MEOS {@code tdistance_trgeo_geo} — tier <b>bounded-state</b>.
+     * MEOS {@code tdistance_trgeometry_geo} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Free function (not class-classified). Classification rule: distance op</p>
      */
-    public static jnr.ffi.Pointer tdistance_trgeo_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer tdistance_trgeometry_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "tdistance_trgeo_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "tdistance_trgeometry_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.tdistance_trgeo_geo(arg0, arg1);
+        return GeneratedFunctions.tdistance_trgeometry_geo(arg0, arg1);
     }
 
     /**
-     * MEOS {@code always_eq_geo_trgeo} — tier <b>windowed</b>.
+     * MEOS {@code always_eq_geo_trgeometry} — tier <b>windowed</b>.
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int always_eq_geo_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static int always_eq_geo_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "always_eq_geo_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "always_eq_geo_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.always_eq_geo_trgeo(arg0, arg1);
+        return GeneratedFunctions.always_eq_geo_trgeometry(arg0, arg1);
     }
 
     /**
-     * MEOS {@code always_eq_trgeo_geo} — tier <b>windowed</b>.
+     * MEOS {@code always_eq_trgeometry_geo} — tier <b>windowed</b>.
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int always_eq_trgeo_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static int always_eq_trgeometry_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "always_eq_trgeo_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "always_eq_trgeometry_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.always_eq_trgeo_geo(arg0, arg1);
+        return GeneratedFunctions.always_eq_trgeometry_geo(arg0, arg1);
     }
 
     /**
-     * MEOS {@code always_ne_geo_trgeo} — tier <b>windowed</b>.
+     * MEOS {@code always_ne_geo_trgeometry} — tier <b>windowed</b>.
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int always_ne_geo_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static int always_ne_geo_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "always_ne_geo_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "always_ne_geo_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.always_ne_geo_trgeo(arg0, arg1);
+        return GeneratedFunctions.always_ne_geo_trgeometry(arg0, arg1);
     }
 
     /**
-     * MEOS {@code always_ne_trgeo_geo} — tier <b>windowed</b>.
+     * MEOS {@code always_ne_trgeometry_geo} — tier <b>windowed</b>.
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int always_ne_trgeo_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static int always_ne_trgeometry_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "always_ne_trgeo_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "always_ne_trgeometry_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.always_ne_trgeo_geo(arg0, arg1);
+        return GeneratedFunctions.always_ne_trgeometry_geo(arg0, arg1);
     }
 
     /**
-     * MEOS {@code ever_eq_geo_trgeo} — tier <b>windowed</b>.
+     * MEOS {@code ever_eq_geo_trgeometry} — tier <b>windowed</b>.
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int ever_eq_geo_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static int ever_eq_geo_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "ever_eq_geo_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "ever_eq_geo_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.ever_eq_geo_trgeo(arg0, arg1);
+        return GeneratedFunctions.ever_eq_geo_trgeometry(arg0, arg1);
     }
 
     /**
-     * MEOS {@code ever_eq_trgeo_geo} — tier <b>windowed</b>.
+     * MEOS {@code ever_eq_trgeometry_geo} — tier <b>windowed</b>.
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int ever_eq_trgeo_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static int ever_eq_trgeometry_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "ever_eq_trgeo_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "ever_eq_trgeometry_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.ever_eq_trgeo_geo(arg0, arg1);
+        return GeneratedFunctions.ever_eq_trgeometry_geo(arg0, arg1);
     }
 
     /**
-     * MEOS {@code ever_ne_geo_trgeo} — tier <b>windowed</b>.
+     * MEOS {@code ever_ne_geo_trgeometry} — tier <b>windowed</b>.
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int ever_ne_geo_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static int ever_ne_geo_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "ever_ne_geo_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "ever_ne_geo_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.ever_ne_geo_trgeo(arg0, arg1);
+        return GeneratedFunctions.ever_ne_geo_trgeometry(arg0, arg1);
     }
 
     /**
-     * MEOS {@code ever_ne_trgeo_geo} — tier <b>windowed</b>.
+     * MEOS {@code ever_ne_trgeometry_geo} — tier <b>windowed</b>.
      * <p>Requires window operator — caller wraps in AggregateFunction.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 1 temporal</p>
      */
-    public static int ever_ne_trgeo_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static int ever_ne_trgeometry_geo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "ever_ne_trgeo_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "ever_ne_trgeometry_geo requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.ever_ne_trgeo_geo(arg0, arg1);
+        return GeneratedFunctions.ever_ne_trgeometry_geo(arg0, arg1);
     }
 
     /**
-     * MEOS {@code always_eq_trgeo_trgeo} — tier <b>cross-stream</b>.
+     * MEOS {@code always_eq_trgeometry_trgeometry} — tier <b>cross-stream</b>.
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 2 temporals</p>
      */
-    public static int always_eq_trgeo_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static int always_eq_trgeometry_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "always_eq_trgeo_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "always_eq_trgeometry_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.always_eq_trgeo_trgeo(arg0, arg1);
+        return GeneratedFunctions.always_eq_trgeometry_trgeometry(arg0, arg1);
     }
 
     /**
-     * MEOS {@code always_ne_trgeo_trgeo} — tier <b>cross-stream</b>.
+     * MEOS {@code always_ne_trgeometry_trgeometry} — tier <b>cross-stream</b>.
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 2 temporals</p>
      */
-    public static int always_ne_trgeo_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static int always_ne_trgeometry_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "always_ne_trgeo_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "always_ne_trgeometry_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.always_ne_trgeo_trgeo(arg0, arg1);
+        return GeneratedFunctions.always_ne_trgeometry_trgeometry(arg0, arg1);
     }
 
     /**
-     * MEOS {@code ever_eq_trgeo_trgeo} — tier <b>cross-stream</b>.
+     * MEOS {@code ever_eq_trgeometry_trgeometry} — tier <b>cross-stream</b>.
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 2 temporals</p>
      */
-    public static int ever_eq_trgeo_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static int ever_eq_trgeometry_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "ever_eq_trgeo_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "ever_eq_trgeometry_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.ever_eq_trgeo_trgeo(arg0, arg1);
+        return GeneratedFunctions.ever_eq_trgeometry_trgeometry(arg0, arg1);
     }
 
     /**
-     * MEOS {@code ever_ne_trgeo_trgeo} — tier <b>cross-stream</b>.
+     * MEOS {@code ever_ne_trgeometry_trgeometry} — tier <b>cross-stream</b>.
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: ever/always over 2 temporals</p>
      */
-    public static int ever_ne_trgeo_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static int ever_ne_trgeometry_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "ever_ne_trgeo_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "ever_ne_trgeometry_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.ever_ne_trgeo_trgeo(arg0, arg1);
+        return GeneratedFunctions.ever_ne_trgeometry_trgeometry(arg0, arg1);
     }
 
     /**
-     * MEOS {@code nad_trgeo_tpoint} — tier <b>cross-stream</b>.
+     * MEOS {@code nad_trgeometry_tpoint} — tier <b>cross-stream</b>.
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static double nad_trgeo_tpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static double nad_trgeometry_tpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "nad_trgeo_tpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "nad_trgeometry_tpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.nad_trgeo_tpoint(arg0, arg1);
+        return GeneratedFunctions.nad_trgeometry_tpoint(arg0, arg1);
     }
 
     /**
-     * MEOS {@code nad_trgeo_trgeo} — tier <b>cross-stream</b>.
+     * MEOS {@code nad_trgeometry_trgeometry} — tier <b>cross-stream</b>.
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static double nad_trgeo_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static double nad_trgeometry_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "nad_trgeo_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "nad_trgeometry_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.nad_trgeo_trgeo(arg0, arg1);
+        return GeneratedFunctions.nad_trgeometry_trgeometry(arg0, arg1);
     }
 
     /**
-     * MEOS {@code nai_trgeo_tpoint} — tier <b>cross-stream</b>.
+     * MEOS {@code nai_trgeometry_tpoint} — tier <b>cross-stream</b>.
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static jnr.ffi.Pointer nai_trgeo_tpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer nai_trgeometry_tpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "nai_trgeo_tpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "nai_trgeometry_tpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.nai_trgeo_tpoint(arg0, arg1);
+        return GeneratedFunctions.nai_trgeometry_tpoint(arg0, arg1);
     }
 
     /**
-     * MEOS {@code nai_trgeo_trgeo} — tier <b>cross-stream</b>.
+     * MEOS {@code nai_trgeometry_trgeometry} — tier <b>cross-stream</b>.
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static jnr.ffi.Pointer nai_trgeo_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer nai_trgeometry_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "nai_trgeo_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "nai_trgeometry_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.nai_trgeo_trgeo(arg0, arg1);
+        return GeneratedFunctions.nai_trgeometry_trgeometry(arg0, arg1);
     }
 
     /**
-     * MEOS {@code shortestline_trgeo_tpoint} — tier <b>cross-stream</b>.
+     * MEOS {@code shortestline_trgeometry_tpoint} — tier <b>cross-stream</b>.
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static jnr.ffi.Pointer shortestline_trgeo_tpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer shortestline_trgeometry_tpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "shortestline_trgeo_tpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "shortestline_trgeometry_tpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.shortestline_trgeo_tpoint(arg0, arg1);
+        return GeneratedFunctions.shortestline_trgeometry_tpoint(arg0, arg1);
     }
 
     /**
-     * MEOS {@code shortestline_trgeo_trgeo} — tier <b>cross-stream</b>.
+     * MEOS {@code shortestline_trgeometry_trgeometry} — tier <b>cross-stream</b>.
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static jnr.ffi.Pointer shortestline_trgeo_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer shortestline_trgeometry_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "shortestline_trgeo_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "shortestline_trgeometry_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.shortestline_trgeo_trgeo(arg0, arg1);
+        return GeneratedFunctions.shortestline_trgeometry_trgeometry(arg0, arg1);
     }
 
     /**
-     * MEOS {@code tdistance_trgeo_tpoint} — tier <b>cross-stream</b>.
+     * MEOS {@code tdistance_trgeometry_tpoint} — tier <b>cross-stream</b>.
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static jnr.ffi.Pointer tdistance_trgeo_tpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer tdistance_trgeometry_tpoint(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "tdistance_trgeo_tpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "tdistance_trgeometry_tpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.tdistance_trgeo_tpoint(arg0, arg1);
+        return GeneratedFunctions.tdistance_trgeometry_tpoint(arg0, arg1);
     }
 
     /**
-     * MEOS {@code tdistance_trgeo_trgeo} — tier <b>cross-stream</b>.
+     * MEOS {@code tdistance_trgeometry_trgeometry} — tier <b>cross-stream</b>.
      * <p>Pairwise across streams — caller wraps in a join.</p>
      * <p>Free function (not class-classified). Classification rule: distance on 2 temporals</p>
      */
-    public static jnr.ffi.Pointer tdistance_trgeo_trgeo(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer tdistance_trgeometry_trgeometry(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "tdistance_trgeo_trgeo requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "tdistance_trgeometry_trgeometry requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.tdistance_trgeo_trgeo(arg0, arg1);
+        return GeneratedFunctions.tdistance_trgeometry_trgeometry(arg0, arg1);
     }
 
 }

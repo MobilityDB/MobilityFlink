@@ -16,507 +16,507 @@ public final class MeosOpsTRGeometry {
     private MeosOpsTRGeometry() { /* utility */ }
 
     /**
-     * MEOS {@code trgeo_to_tinstant} — tier <b>stateless</b>.
+     * MEOS {@code trgeometry_to_tinstant} — tier <b>stateless</b>.
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static jnr.ffi.Pointer trgeo_to_tinstant(jnr.ffi.Pointer arg0) {
+    public static jnr.ffi.Pointer trgeometry_to_tinstant(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_to_tinstant requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_to_tinstant requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_to_tinstant(arg0);
+        return GeneratedFunctions.trgeometry_to_tinstant(arg0);
     }
 
     /**
-     * MEOS {@code trgeo_to_tpoint} — tier <b>stateless</b>.
+     * MEOS {@code trgeometry_to_tpoint} — tier <b>stateless</b>.
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static jnr.ffi.Pointer trgeo_to_tpoint(jnr.ffi.Pointer arg0) {
+    public static jnr.ffi.Pointer trgeometry_to_tpoint(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_to_tpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_to_tpoint requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_to_tpoint(arg0);
+        return GeneratedFunctions.trgeometry_to_tpoint(arg0);
     }
 
     /**
-     * MEOS {@code trgeo_to_tpose} — tier <b>stateless</b>.
+     * MEOS {@code trgeometry_to_tpose} — tier <b>stateless</b>.
      * <p>Pure per-event; safe in any Flink scalar position.</p>
      * <p>Object-model role: {@code conversion}.</p>
      * <p>Classification: role=conversion</p>
      */
-    public static jnr.ffi.Pointer trgeo_to_tpose(jnr.ffi.Pointer arg0) {
+    public static jnr.ffi.Pointer trgeometry_to_tpose(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_to_tpose requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_to_tpose requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_to_tpose(arg0);
+        return GeneratedFunctions.trgeometry_to_tpose(arg0);
     }
 
     /**
-     * MEOS {@code trgeo_after_timestamptz} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_after_timestamptz} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_after_timestamptz(jnr.ffi.Pointer arg0, java.time.OffsetDateTime arg1, boolean arg2) {
+    public static jnr.ffi.Pointer trgeometry_after_timestamptz(jnr.ffi.Pointer arg0, java.time.OffsetDateTime arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_after_timestamptz requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_after_timestamptz requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_after_timestamptz(arg0, arg1, arg2);
+        return GeneratedFunctions.trgeometry_after_timestamptz(arg0, arg1, arg2);
     }
 
     /**
-     * MEOS {@code trgeo_append_tinstant} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_append_tinstant} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_append_tinstant(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, int arg2, double arg3, jnr.ffi.Pointer arg4, boolean arg5) {
+    public static jnr.ffi.Pointer trgeometry_append_tinstant(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, int arg2, double arg3, jnr.ffi.Pointer arg4, boolean arg5) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_append_tinstant requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_append_tinstant requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_append_tinstant(arg0, arg1, arg2, arg3, arg4, arg5);
+        return GeneratedFunctions.trgeometry_append_tinstant(arg0, arg1, arg2, arg3, arg4, arg5);
     }
 
     /**
-     * MEOS {@code trgeo_append_tsequence} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_append_tsequence} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_append_tsequence(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
+    public static jnr.ffi.Pointer trgeometry_append_tsequence(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_append_tsequence requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_append_tsequence requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_append_tsequence(arg0, arg1, arg2);
+        return GeneratedFunctions.trgeometry_append_tsequence(arg0, arg1, arg2);
     }
 
     /**
-     * MEOS {@code trgeo_before_timestamptz} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_before_timestamptz} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_before_timestamptz(jnr.ffi.Pointer arg0, java.time.OffsetDateTime arg1, boolean arg2) {
+    public static jnr.ffi.Pointer trgeometry_before_timestamptz(jnr.ffi.Pointer arg0, java.time.OffsetDateTime arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_before_timestamptz requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_before_timestamptz requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_before_timestamptz(arg0, arg1, arg2);
+        return GeneratedFunctions.trgeometry_before_timestamptz(arg0, arg1, arg2);
     }
 
     /**
-     * MEOS {@code trgeo_delete_timestamptz} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_delete_timestamptz} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_delete_timestamptz(jnr.ffi.Pointer arg0, java.time.OffsetDateTime arg1, boolean arg2) {
+    public static jnr.ffi.Pointer trgeometry_delete_timestamptz(jnr.ffi.Pointer arg0, java.time.OffsetDateTime arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_delete_timestamptz requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_delete_timestamptz requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_delete_timestamptz(arg0, arg1, arg2);
+        return GeneratedFunctions.trgeometry_delete_timestamptz(arg0, arg1, arg2);
     }
 
     /**
-     * MEOS {@code trgeo_delete_tstzset} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_delete_tstzset} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_delete_tstzset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
+    public static jnr.ffi.Pointer trgeometry_delete_tstzset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_delete_tstzset requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_delete_tstzset requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_delete_tstzset(arg0, arg1, arg2);
+        return GeneratedFunctions.trgeometry_delete_tstzset(arg0, arg1, arg2);
     }
 
     /**
-     * MEOS {@code trgeo_delete_tstzspan} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_delete_tstzspan} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_delete_tstzspan(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
+    public static jnr.ffi.Pointer trgeometry_delete_tstzspan(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_delete_tstzspan requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_delete_tstzspan requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_delete_tstzspan(arg0, arg1, arg2);
+        return GeneratedFunctions.trgeometry_delete_tstzspan(arg0, arg1, arg2);
     }
 
     /**
-     * MEOS {@code trgeo_delete_tstzspanset} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_delete_tstzspanset} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_delete_tstzspanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
+    public static jnr.ffi.Pointer trgeometry_delete_tstzspanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_delete_tstzspanset requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_delete_tstzspanset requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_delete_tstzspanset(arg0, arg1, arg2);
+        return GeneratedFunctions.trgeometry_delete_tstzspanset(arg0, arg1, arg2);
     }
 
     /**
-     * MEOS {@code trgeo_end_instant} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_end_instant} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_end_instant(jnr.ffi.Pointer arg0) {
+    public static jnr.ffi.Pointer trgeometry_end_instant(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_end_instant requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_end_instant requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_end_instant(arg0);
+        return GeneratedFunctions.trgeometry_end_instant(arg0);
     }
 
     /**
-     * MEOS {@code trgeo_end_sequence} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_end_sequence} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_end_sequence(jnr.ffi.Pointer arg0) {
+    public static jnr.ffi.Pointer trgeometry_end_sequence(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_end_sequence requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_end_sequence requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_end_sequence(arg0);
+        return GeneratedFunctions.trgeometry_end_sequence(arg0);
     }
 
     /**
-     * MEOS {@code trgeo_end_value} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_end_value} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_end_value(jnr.ffi.Pointer arg0) {
+    public static jnr.ffi.Pointer trgeometry_end_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_end_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_end_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_end_value(arg0);
+        return GeneratedFunctions.trgeometry_end_value(arg0);
     }
 
     /**
-     * MEOS {@code trgeo_geom} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_geom} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_geom(jnr.ffi.Pointer arg0) {
+    public static jnr.ffi.Pointer trgeometry_geom(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_geom requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_geom requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_geom(arg0);
+        return GeneratedFunctions.trgeometry_geom(arg0);
     }
 
     /**
-     * MEOS {@code trgeo_instant_n} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_instant_n} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_instant_n(jnr.ffi.Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer trgeometry_instant_n(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_instant_n requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_instant_n requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_instant_n(arg0, arg1);
+        return GeneratedFunctions.trgeometry_instant_n(arg0, arg1);
     }
 
     /**
-     * MEOS {@code trgeo_instants} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_instants} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_instants(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer trgeometry_instants(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_instants requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_instants requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_instants(arg0, arg1);
+        return GeneratedFunctions.trgeometry_instants(arg0, arg1);
     }
 
     /**
-     * MEOS {@code trgeo_points} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_points} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_points(jnr.ffi.Pointer arg0) {
+    public static jnr.ffi.Pointer trgeometry_points(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_points requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_points requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_points(arg0);
+        return GeneratedFunctions.trgeometry_points(arg0);
     }
 
     /**
-     * MEOS {@code trgeo_restrict_timestamptz} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_restrict_timestamptz} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_restrict_timestamptz(jnr.ffi.Pointer arg0, java.time.OffsetDateTime arg1, boolean arg2) {
+    public static jnr.ffi.Pointer trgeometry_restrict_timestamptz(jnr.ffi.Pointer arg0, java.time.OffsetDateTime arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_restrict_timestamptz requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_restrict_timestamptz requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_restrict_timestamptz(arg0, arg1, arg2);
+        return GeneratedFunctions.trgeometry_restrict_timestamptz(arg0, arg1, arg2);
     }
 
     /**
-     * MEOS {@code trgeo_restrict_tstzset} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_restrict_tstzset} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_restrict_tstzset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
+    public static jnr.ffi.Pointer trgeometry_restrict_tstzset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_restrict_tstzset requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_restrict_tstzset requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_restrict_tstzset(arg0, arg1, arg2);
+        return GeneratedFunctions.trgeometry_restrict_tstzset(arg0, arg1, arg2);
     }
 
     /**
-     * MEOS {@code trgeo_restrict_tstzspan} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_restrict_tstzspan} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_restrict_tstzspan(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
+    public static jnr.ffi.Pointer trgeometry_restrict_tstzspan(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_restrict_tstzspan requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_restrict_tstzspan requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_restrict_tstzspan(arg0, arg1, arg2);
+        return GeneratedFunctions.trgeometry_restrict_tstzspan(arg0, arg1, arg2);
     }
 
     /**
-     * MEOS {@code trgeo_restrict_tstzspanset} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_restrict_tstzspanset} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_restrict_tstzspanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
+    public static jnr.ffi.Pointer trgeometry_restrict_tstzspanset(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_restrict_tstzspanset requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_restrict_tstzspanset requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_restrict_tstzspanset(arg0, arg1, arg2);
+        return GeneratedFunctions.trgeometry_restrict_tstzspanset(arg0, arg1, arg2);
     }
 
     /**
-     * MEOS {@code trgeo_restrict_value} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_restrict_value} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_restrict_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
+    public static jnr.ffi.Pointer trgeometry_restrict_value(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_restrict_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_restrict_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_restrict_value(arg0, arg1, arg2);
+        return GeneratedFunctions.trgeometry_restrict_value(arg0, arg1, arg2);
     }
 
     /**
-     * MEOS {@code trgeo_restrict_values} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_restrict_values} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_restrict_values(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
+    public static jnr.ffi.Pointer trgeometry_restrict_values(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1, boolean arg2) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_restrict_values requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_restrict_values requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_restrict_values(arg0, arg1, arg2);
+        return GeneratedFunctions.trgeometry_restrict_values(arg0, arg1, arg2);
     }
 
     /**
-     * MEOS {@code trgeo_rotation} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_rotation} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_rotation(jnr.ffi.Pointer arg0) {
+    public static jnr.ffi.Pointer trgeometry_rotation(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_rotation requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_rotation requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_rotation(arg0);
+        return GeneratedFunctions.trgeometry_rotation(arg0);
     }
 
     /**
-     * MEOS {@code trgeo_round} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_round} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_round(jnr.ffi.Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer trgeometry_round(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_round requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_round requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_round(arg0, arg1);
+        return GeneratedFunctions.trgeometry_round(arg0, arg1);
     }
 
     /**
-     * MEOS {@code trgeo_segments} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_segments} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_segments(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer trgeometry_segments(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_segments requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_segments requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_segments(arg0, arg1);
+        return GeneratedFunctions.trgeometry_segments(arg0, arg1);
     }
 
     /**
-     * MEOS {@code trgeo_sequence_n} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_sequence_n} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_sequence_n(jnr.ffi.Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer trgeometry_sequence_n(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_sequence_n requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_sequence_n requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_sequence_n(arg0, arg1);
+        return GeneratedFunctions.trgeometry_sequence_n(arg0, arg1);
     }
 
     /**
-     * MEOS {@code trgeo_sequences} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_sequences} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_sequences(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
+    public static jnr.ffi.Pointer trgeometry_sequences(jnr.ffi.Pointer arg0, jnr.ffi.Pointer arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_sequences requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_sequences requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_sequences(arg0, arg1);
+        return GeneratedFunctions.trgeometry_sequences(arg0, arg1);
     }
 
     /**
-     * MEOS {@code trgeo_set_interp} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_set_interp} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_set_interp(jnr.ffi.Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer trgeometry_set_interp(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_set_interp requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_set_interp requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_set_interp(arg0, arg1);
+        return GeneratedFunctions.trgeometry_set_interp(arg0, arg1);
     }
 
     /**
-     * MEOS {@code trgeo_start_instant} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_start_instant} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_start_instant(jnr.ffi.Pointer arg0) {
+    public static jnr.ffi.Pointer trgeometry_start_instant(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_start_instant requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_start_instant requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_start_instant(arg0);
+        return GeneratedFunctions.trgeometry_start_instant(arg0);
     }
 
     /**
-     * MEOS {@code trgeo_start_sequence} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_start_sequence} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_start_sequence(jnr.ffi.Pointer arg0) {
+    public static jnr.ffi.Pointer trgeometry_start_sequence(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_start_sequence requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_start_sequence requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_start_sequence(arg0);
+        return GeneratedFunctions.trgeometry_start_sequence(arg0);
     }
 
     /**
-     * MEOS {@code trgeo_start_value} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_start_value} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_start_value(jnr.ffi.Pointer arg0) {
+    public static jnr.ffi.Pointer trgeometry_start_value(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_start_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_start_value requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_start_value(arg0);
+        return GeneratedFunctions.trgeometry_start_value(arg0);
     }
 
     /**
-     * MEOS {@code trgeo_traversed_area} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_traversed_area} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_traversed_area(jnr.ffi.Pointer arg0, boolean arg1) {
+    public static jnr.ffi.Pointer trgeometry_traversed_area(jnr.ffi.Pointer arg0, boolean arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_traversed_area requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_traversed_area requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_traversed_area(arg0, arg1);
+        return GeneratedFunctions.trgeometry_traversed_area(arg0, arg1);
     }
 
     /**
-     * MEOS {@code trgeo_value_n} — tier <b>bounded-state</b>.
+     * MEOS {@code trgeometry_value_n} — tier <b>bounded-state</b>.
      * <p>Per-event with bounded per-key state (MEOS handle).</p>
      * <p>Object-model role: {@code accessor}.</p>
      * <p>Classification: role=accessor</p>
      */
-    public static jnr.ffi.Pointer trgeo_value_n(jnr.ffi.Pointer arg0, int arg1) {
+    public static jnr.ffi.Pointer trgeometry_value_n(jnr.ffi.Pointer arg0, int arg1) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_value_n requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_value_n requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_value_n(arg0, arg1);
+        return GeneratedFunctions.trgeometry_value_n(arg0, arg1);
     }
 
     /**
-     * MEOS {@code trgeo_out} — tier <b>io-meta</b>.
+     * MEOS {@code trgeometry_out} — tier <b>io-meta</b>.
      * <p>I/O / catalog / lifecycle helper.</p>
      * <p>Object-model role: {@code output}.</p>
      * <p>Classification: IO/serialization</p>
      */
-    public static java.lang.String trgeo_out(jnr.ffi.Pointer arg0) {
+    public static java.lang.String trgeometry_out(jnr.ffi.Pointer arg0) {
         if (!MEOS_AVAILABLE) {
             throw new UnsupportedOperationException(
-                "trgeo_out requires libmeos — set -Dmobilityflink.meos.enabled=true");
+                "trgeometry_out requires libmeos — set -Dmobilityflink.meos.enabled=true");
         }
-        return GeneratedFunctions.trgeo_out(arg0);
+        return GeneratedFunctions.trgeometry_out(arg0);
     }
 
 }
