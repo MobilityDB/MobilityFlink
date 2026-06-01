@@ -12,6 +12,34 @@ Run from flink-processor/:
     javap -classpath jar/JMEOS.jar -p functions.GeneratedFunctions > /tmp/gen_sigs.txt
     python3 tools/parity/emit_gap_methods.py /tmp/gen_sigs.txt
 """
+
+# Canonical MobilityDB PostgreSQL-License header, emitted on every generated file.
+MEOS_LICENSE_BANNER = (
+    '/*****************************************************************************\n'
+    ' *\n'
+    ' * This MobilityDB code is provided under The PostgreSQL License.\n'
+    ' * Copyright (c) 2020-2026, Université libre de Bruxelles and MobilityDB\n'
+    ' * contributors\n'
+    ' *\n'
+    ' * Permission to use, copy, modify, and distribute this software and its\n'
+    ' * documentation for any purpose, without fee, and without a written\n'
+    ' * agreement is hereby granted, provided that the above copyright notice and\n'
+    ' * this paragraph and the following two paragraphs appear in all copies.\n'
+    ' *\n'
+    ' * IN NO EVENT SHALL UNIVERSITE LIBRE DE BRUXELLES BE LIABLE TO ANY PARTY FOR\n'
+    ' * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING\n'
+    ' * LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,\n'
+    ' * EVEN IF UNIVERSITE LIBRE DE BRUXELLES HAS BEEN ADVISED OF THE POSSIBILITY\n'
+    ' * OF SUCH DAMAGE.\n'
+    ' *\n'
+    ' * UNIVERSITE LIBRE DE BRUXELLES SPECIFICALLY DISCLAIMS ANY WARRANTIES,\n'
+    ' * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY\n'
+    ' * AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON\n'
+    ' * AN "AS IS" BASIS, AND UNIVERSITE LIBRE DE BRUXELLES HAS NO OBLIGATIONS TO\n'
+    ' * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.\n'
+    ' *\n'
+    ' *****************************************************************************/'
+)
 import re, os, sys, glob
 
 HERE = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -60,7 +88,7 @@ def main():
             sigs.setdefault(name, []).append((ret, args))
     missing = sorted(n for n in (pub & set(sigs)) - facade)
 
-    L = ["package org.mobilitydb.flink.meos;", "",
+    L = [MEOS_LICENSE_BANNER, "", "package org.mobilitydb.flink.meos;", "",
          "/**", " * Forwarding facade methods for MEOS public-surface functions not emitted",
          " * by the tier-aware code generator. Each method delegates to its JMEOS",
          " * {@code functions.GeneratedFunctions} export under the shared",
