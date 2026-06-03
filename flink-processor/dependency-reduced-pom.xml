@@ -54,7 +54,7 @@
               <transformers>
                 <transformer />
                 <transformer>
-                  <mainClass>Main</mainClass>
+                  <mainClass>${queryMainClass}</mainClass>
                 </transformer>
               </transformers>
             </configuration>
@@ -101,6 +101,7 @@
     <junit.jupiter.version>5.8.2</junit.jupiter.version>
     <target.java.version>21</target.java.version>
     <flink.version>1.16.0</flink.version>
+    <queryMainClass>aisdata.Query1_Main</queryMainClass>
     <kafka.version>3.2.0</kafka.version>
   </properties>
 </project>

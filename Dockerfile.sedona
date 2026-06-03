@@ -1,0 +1,20 @@
+FROM eclipse-temurin:21-jre-jammy
+
+# wait-for-it.sh waiting for Kafka to be ready before starting the Flink job
+COPY wait-for-it.sh /wait-for-it.sh
+RUN chmod +x /wait-for-it.sh
+
+# JAR produced by mvn clean package, containing all dependencies
+COPY target/flink-kafka2postgres-1.0-SNAPSHOT.jar /app/app.jar
+
+ENV JAVA_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED \
+               --add-opens java.base/java.util=ALL-UNNAMED \
+               --add-opens java.base/java.io=ALL-UNNAMED"
+
+# Entrypoint : attend Kafka (port 29092), puis lance le job Sedona
+ENTRYPOINT ["/wait-for-it.sh", "kafka:29092", "-t", "60", "--", \
+            "java", \
+            "--add-opens", "java.base/java.lang=ALL-UNNAMED", \
+            "--add-opens", "java.base/java.util=ALL-UNNAMED", \
+            "--add-opens", "java.base/java.io=ALL-UNNAMED", \
+            "-jar", "/app/app.jar"]
