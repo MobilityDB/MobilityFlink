@@ -1,7 +1,7 @@
 # DataStream wirings for the generated MEOS facades
 
 This package supplies thin, generic Flink-DataStream wrappers around
-the generated `org.mobilitydb.flink.meos.MeosOps*` facades, organized
+the generated `org.mobilitydb.meos.MeosOps*` facades, organized
 per **streaming tier** (per
 `tools/codegen/meos-ops-manifest.json` + `tools/codegen/meos-ops-free-manifest.json`):
 
@@ -72,7 +72,7 @@ Run with:
 ```bash
 mvn -q exec:java \
     -Dexec.mainClass=org.mobilitydb.flink.meos.wirings.demo.MeosWiringsDemoJob \
-    -Dmobilityflink.meos.enabled=true
+    -Dmeos.enabled=true
 ```
 
 Output (expected): two `overlapping-tbox-hex` lines (the two input

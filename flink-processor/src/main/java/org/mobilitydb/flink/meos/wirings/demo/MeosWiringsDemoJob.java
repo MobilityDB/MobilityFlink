@@ -28,8 +28,8 @@ package org.mobilitydb.flink.meos.wirings.demo;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.mobilitydb.flink.meos.MeosOpsFreeCore;
-import org.mobilitydb.flink.meos.MeosOpsTBox;
+import org.mobilitydb.meos.MeosOpsFreeCore;
+import org.mobilitydb.meos.MeosOpsTBox;
 import org.mobilitydb.flink.meos.wirings.MeosStatelessFilter;
 import org.mobilitydb.flink.meos.wirings.MeosStatelessMap;
 import org.slf4j.Logger;
@@ -39,7 +39,7 @@ import java.util.Arrays;
 
 /**
  * End-to-end runnable demo showing how the generated
- * {@code org.mobilitydb.flink.meos.MeosOps*} facades wire into a Flink
+ * {@code org.mobilitydb.meos.MeosOps*} facades wire into a Flink
  * {@code DataStream} pipeline through the
  * {@code org.mobilitydb.flink.meos.wirings} helpers.
  *
@@ -62,11 +62,11 @@ import java.util.Arrays;
  * <pre>{@code
  * mvn -q exec:java \
  *     -Dexec.mainClass=org.mobilitydb.flink.meos.wirings.demo.MeosWiringsDemoJob \
- *     -Dmobilityflink.meos.enabled=true   # require libmeos loadable
+ *     -Dmeos.enabled=true   # require libmeos loadable
  * }</pre>
  *
  * <p>If libmeos is not loadable on the runtime (or
- * {@code -Dmobilityflink.meos.enabled=false}), every wrapped MeosOps
+ * {@code -Dmeos.enabled=false}), every wrapped MeosOps
  * call throws {@code UnsupportedOperationException} with a clear
  * message — the demo prints the throw shape and exits non-zero.
  */
@@ -89,7 +89,7 @@ public final class MeosWiringsDemoJob {
         // fires the first time any MeosOps class is touched).
         if (!MeosOpsTBox.MEOS_AVAILABLE) {
             LOG.error("MEOS not available — the demo requires libmeos. "
-                    + "Set -Dmobilityflink.meos.enabled=true and ensure libmeos is loadable.");
+                    + "Set -Dmeos.enabled=true and ensure libmeos is loadable.");
             System.exit(1);
         }
 

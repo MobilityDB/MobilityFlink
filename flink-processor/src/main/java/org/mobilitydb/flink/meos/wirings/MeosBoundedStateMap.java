@@ -37,7 +37,7 @@ import java.io.Serializable;
 
 /**
  * DataStream wiring for the {@code bounded-state} streaming tier of
- * the generated {@code org.mobilitydb.flink.meos.MeosOps*} facades.
+ * the generated {@code org.mobilitydb.meos.MeosOps*} facades.
  *
  * <p>The {@code bounded-state} tier is "per-event with bounded per-key
  * state, the state IS a MEOS handle". The canonical example is a

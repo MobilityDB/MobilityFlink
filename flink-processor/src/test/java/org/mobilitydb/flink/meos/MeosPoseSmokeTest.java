@@ -25,6 +25,8 @@
 
 package org.mobilitydb.flink.meos;
 
+import org.mobilitydb.meos.*;
+
 import functions.GeneratedFunctions;
 import jnr.ffi.Pointer;
 import org.junit.jupiter.api.AfterAll;
@@ -41,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * family ({@code -DPOSE=ON}); the family requires a libmeos built with
  * {@code -DPOSE=ON}.
  */
-@EnabledIfSystemProperty(named = "mobilityflink.meos.enabled", matches = "true")
+@EnabledIfSystemProperty(named = "meos.enabled", matches = "true")
 class MeosPoseSmokeTest {
 
     @BeforeAll

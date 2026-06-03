@@ -25,6 +25,8 @@
 
 package org.mobilitydb.flink.meos;
 
+import org.mobilitydb.meos.*;
+
 import functions.GeneratedFunctions;
 import jnr.ffi.Pointer;
 import org.junit.jupiter.api.AfterAll;
@@ -39,13 +41,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Runtime check that the always-built MEOS facade families (core and geo) call
  * into libmeos and return correct results. Each constructs a value through a
  * {@code MeosOps*} facade method and reads it back. Runs only with
- * {@code -Dmobilityflink.meos.enabled=true} and a libmeos on the load path. The
+ * {@code -Dmeos.enabled=true} and a libmeos on the load path. The
  * optional families have their own gated smoke tests
  * ({@link MeosCbufferSmokeTest}, {@link MeosNpointSmokeTest},
  * {@link MeosPoseSmokeTest}), each compiled only when its build flag includes
  * the family.
  */
-@EnabledIfSystemProperty(named = "mobilityflink.meos.enabled", matches = "true")
+@EnabledIfSystemProperty(named = "meos.enabled", matches = "true")
 class MeosFacadeSmokeTest {
 
     @BeforeAll

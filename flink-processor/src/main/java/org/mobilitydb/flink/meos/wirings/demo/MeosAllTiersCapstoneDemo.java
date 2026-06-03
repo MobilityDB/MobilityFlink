@@ -36,8 +36,8 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
 import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
-import org.mobilitydb.flink.meos.MeosOpsFreeCore;
-import org.mobilitydb.flink.meos.MeosOpsTBox;
+import org.mobilitydb.meos.MeosOpsFreeCore;
+import org.mobilitydb.meos.MeosOpsTBox;
 import org.mobilitydb.flink.meos.wirings.MeosBoundedStateMap;
 import org.mobilitydb.flink.meos.wirings.MeosCrossStreamJoin;
 import org.mobilitydb.flink.meos.wirings.MeosStatelessFilter;
@@ -100,7 +100,7 @@ import java.util.Arrays;
  * <pre>{@code
  * mvn -q exec:java \
  *     -Dexec.mainClass=org.mobilitydb.flink.meos.wirings.demo.MeosAllTiersCapstoneDemo \
- *     -Dmobilityflink.meos.enabled=true
+ *     -Dmeos.enabled=true
  * }</pre>
  */
 public final class MeosAllTiersCapstoneDemo {

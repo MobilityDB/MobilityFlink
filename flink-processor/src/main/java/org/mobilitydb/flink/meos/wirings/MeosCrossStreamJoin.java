@@ -33,7 +33,7 @@ import java.io.Serializable;
 
 /**
  * DataStream wiring for the {@code cross-stream} streaming tier of
- * the generated {@code org.mobilitydb.flink.meos.MeosOps*} facades.
+ * the generated {@code org.mobilitydb.meos.MeosOps*} facades.
  *
  * <p>The {@code cross-stream} tier is "pairwise across two streams,
  * pre-keyed by the same K, time-bounded match window". Canonical

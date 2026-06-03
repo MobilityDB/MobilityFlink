@@ -33,7 +33,7 @@ import java.io.Serializable;
 
 /**
  * DataStream wiring for the {@code stateless} streaming tier of the
- * generated {@code org.mobilitydb.flink.meos.MeosOps*} facades.
+ * generated {@code org.mobilitydb.meos.MeosOps*} facades.
  *
  * <p>Wraps any {@code MeosOps*.f(...)} call whose streaming tier is
  * {@code stateless} (per {@code tools/codegen/meos-ops-manifest.json}

@@ -30,8 +30,8 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.mobilitydb.flink.meos.MeosOpsFreeCore;
-import org.mobilitydb.flink.meos.MeosOpsTBox;
+import org.mobilitydb.meos.MeosOpsFreeCore;
+import org.mobilitydb.meos.MeosOpsTBox;
 import org.mobilitydb.flink.meos.wirings.MeosBoundedStateMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,7 +72,7 @@ import java.util.Arrays;
  * <pre>{@code
  * mvn -q exec:java \
  *     -Dexec.mainClass=org.mobilitydb.flink.meos.wirings.demo.MeosBoundedStateDemoJob \
- *     -Dmobilityflink.meos.enabled=true
+ *     -Dmeos.enabled=true
  * }</pre>
  *
  * <p>Expected output: 6 lines (3 per vehicle), each showing the growing

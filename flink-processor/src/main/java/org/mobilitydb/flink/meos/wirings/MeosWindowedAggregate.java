@@ -34,7 +34,7 @@ import java.io.Serializable;
 
 /**
  * DataStream wiring for the {@code windowed} streaming tier of the
- * generated {@code org.mobilitydb.flink.meos.MeosOps*} facades.
+ * generated {@code org.mobilitydb.meos.MeosOps*} facades.
  *
  * <p>The {@code windowed} tier is "output cardinality changes; needs a
  * window". The canonical examples are
