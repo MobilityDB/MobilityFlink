@@ -1,6 +1,5 @@
 package aisdata;
 
-import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
@@ -10,8 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.apache.flink.configuration.Configuration; // Added import
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +16,8 @@ import functions.*;
 import types.boxes.*;
 import types.basic.tpoint.tgeom.*;
 import types.basic.tpoint.tgeom.TGeomPointSeq;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 public class TrajectoryWindowFunction extends 
 ProcessWindowFunction<Tuple4<Integer, Double, Double, Long>, TGeomPointSeq, Integer, TimeWindow> {
@@ -31,7 +30,8 @@ ProcessWindowFunction<Tuple4<Integer, Double, Double, Long>, TGeomPointSeq, Inte
     public void open(Configuration parameters) throws Exception {
         super.open(parameters);
         errorHandler = new error_handler(); // Initialize error handler here
-        functions.meos_initialize("UTC", errorHandler);
+        functions.meos_initialize_timezone("UTC");
+        functions.meos_initialize_error_handler(errorHandler);
         logger.info("MEOS initialized in TrajectoryWindowFunction.open()");
     }
 
@@ -60,6 +60,18 @@ ProcessWindowFunction<Tuple4<Integer, Double, Double, Long>, TGeomPointSeq, Inte
         if (sortedElements.isEmpty()) {
             return; 
         }
+
+        List<Tuple4<Integer, Double, Double, Long>> dedupedElements = new ArrayList<>();
+        long lastTs = Long.MIN_VALUE;
+        for (Tuple4<Integer, Double, Double, Long> tuple : sortedElements) {
+            if (tuple.f3 != lastTs) {
+                dedupedElements.add(tuple);
+                lastTs = tuple.f3;
+            }
+        }
+        sortedElements = dedupedElements;
+
+        if (sortedElements.isEmpty()) return;
 
         StringBuilder trajbuffer = new StringBuilder();
         boolean firstPoint = true;
@@ -102,8 +114,8 @@ ProcessWindowFunction<Tuple4<Integer, Double, Double, Long>, TGeomPointSeq, Inte
 
     private String convertMillisToTimestamp(long millis) {
         Instant instant = Instant.ofEpochMilli(millis);
-        LocalDateTime dateTime = LocalDateTime.ofInstant(instant, ZoneId.of("UTC"));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        OffsetDateTime dateTime = instant.atOffset(ZoneOffset.UTC);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
         return dateTime.format(formatter);
     }
 }

@@ -13,7 +13,7 @@ RUN apt-get update \
   && apt-get install -y java-21-amazon-corretto-jdk 
 
 # Build MobilityDB with MEOS
-RUN git clone https://github.com/MobilityDB/MobilityDB.git -b stable-1.1 /usr/local/src/MobilityDB
+RUN git clone --depth 1 https://github.com/MobilityDB/MobilityDB.git -b stable-1.3 /usr/local/src/MobilityDB
 RUN mkdir -p /usr/local/src/MobilityDB/build 
 RUN cd /usr/local/src/MobilityDB/build && \
     cmake -DMEOS=ON .. && \
@@ -29,7 +29,7 @@ COPY --from=maven:3.9.6-eclipse-temurin-11 /usr/share/maven/ref/settings-docker.
 RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 
 # Set up MobilityDB-JMEOS
-RUN git clone https://github.com/nmareghn/MobilityDB-JMEOS  /usr/local/jmeos
+RUN git clone --depth 1 --branch fix-tests-using-docker https://github.com/MobilityDB/JMEOS /usr/local/jmeos
 RUN rm /usr/local/jmeos/src/main/resources/lib/libmeos.so
 RUN cp /usr/local/lib/libmeos.so /usr/local/jmeos/src/main/resources/lib/libmeos.so
 RUN rm /usr/local/jmeos/jar/*
@@ -53,4 +53,4 @@ ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 WORKDIR /app
 
 # Set entrypoint with the correct classpath
-ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar:/usr/local/jar/JMEOS.jar", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "aisdata.Main"]
+ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar:/usr/local/jar/JMEOS.jar", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "aisdata.Query9_Main"]

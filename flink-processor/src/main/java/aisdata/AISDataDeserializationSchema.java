@@ -38,7 +38,7 @@ public class AISDataDeserializationSchema implements DeserializationSchema<AISDa
     }
 
     private long parseTimestamp(String timestampStr) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime dateTime = LocalDateTime.parse(timestampStr, formatter);
         return dateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }

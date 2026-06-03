@@ -8,6 +8,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <queryMainClass>aisdata.Query1_Main</queryMainClass>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -52,7 +53,55 @@
             <version>${flink.version}</version>
         </dependency>
 
-        <!-- JTS dependency -->
+        <!-- ======================================================= -->
+        <!-- Flink Table API                                         -->
+        <!-- ======================================================= -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-api-java-bridge</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+
+        <!--
+            Run Locally (IntelliJ / unit tests) :
+               Using "flink-table-planner_2.12" which bundles everything:
+               (Calcite, jsonpath, table-runtime).
+
+            Deploying on a Flink cluster (Docker / server) :
+               Replace it by "flink-table-planner-loader" which delegates
+               to the planner provided by the cluster.
+        -->
+        <!-- Planner for local runs (IntelliJ) -->
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-planner_2.12</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <!-- Planner for FLink cluster
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-planner-loader</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        -->
+
+        <!-- =================================================================================   -->
+        <!-- Apache Sedona: https://sedona.apache.org/latest/setup/maven-coordinates/            -->
+        <!-- =================================================================================   -->
+        <dependency>
+            <groupId>org.apache.sedona</groupId>
+            <artifactId>sedona-flink-shaded_2.12</artifactId>
+            <version>1.8.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.datasyslab</groupId>
+            <artifactId>geotools-wrapper</artifactId>
+            <version>1.8.1-33.1</version>
+        </dependency>
+
+        <!-- ======================================================= -->
+        <!-- JTS: 2D geometries (Point, Polygon, LineString, …)      -->
+        <!-- ======================================================= -->
         <dependency>
             <groupId>org.locationtech.jts</groupId>
             <artifactId>jts-core</artifactId>
@@ -207,7 +256,8 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>Main</mainClass>
+                                    <mainClass>${queryMainClass}</mainClass>
+                                    <!--mainClass>aisdata.Query1_Main</mainClass-->
                                 </transformer>
                             </transformers>
                         </configuration>
