@@ -17,6 +17,11 @@
         <kafka.version>3.2.0</kafka.version>
         <log4j.version>2.17.2</log4j.version>
         <target.java.version>21</target.java.version>
+        <!-- MEOS smoke tests run when libmeos is present; the runner resolves it
+             through the repo lib via LD_LIBRARY_PATH (avoids a stale system
+             /usr/local/lib/libmeos.so shadowing the pinned one). -->
+        <meos.enabled>true</meos.enabled>
+        <meos.lib.dir>${project.basedir}/lib</meos.lib.dir>
     </properties>
 
     <dependencies>
@@ -214,6 +219,23 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Run the MEOS smoke tests against the pinned libmeos: propagate
+                 meos.enabled to the forked JVM and resolve libmeos from the repo
+                 lib dir (LD_LIBRARY_PATH takes precedence over a stale system lib). -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <meos.enabled>${meos.enabled}</meos.enabled>
+                    </systemPropertyVariables>
+                    <environmentVariables>
+                        <LD_LIBRARY_PATH>${meos.lib.dir}</LD_LIBRARY_PATH>
+                    </environmentVariables>
+                    <argLine>--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED</argLine>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -226,29 +248,6 @@
          both). When a family is excluded, its generated MeosOps* facade sources
          and its smoke test are dropped from the build. -->
     <profiles>
-        <profile>
-            <id>cbuffer-exclude-unset</id>
-            <activation>
-                <property><name>!CBUFFER</name></property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <excludes combine.children="append">
-                                <exclude>**/meos/MeosOpsTCbuffer.java</exclude>
-                                <exclude>**/meos/MeosOpsFreeCbuffer.java</exclude>
-                                <exclude>**/meos/MeosOpsCbufferSet.java</exclude>
-                            </excludes>
-                            <testExcludes combine.children="append">
-                                <testExclude>**/MeosCbufferSmokeTest.java</testExclude>
-                            </testExcludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>cbuffer-exclude-off</id>
             <activation>
@@ -289,29 +288,6 @@
                             </excludes>
                             <testExcludes combine.children="append">
                                 <testExclude>**/MeosCbufferSmokeTest.java</testExclude>
-                            </testExcludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>pose-exclude-unset</id>
-            <activation>
-                <property><name>!POSE</name></property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <excludes combine.children="append">
-                                <exclude>**/meos/MeosOpsTPose.java</exclude>
-                                <exclude>**/meos/MeosOpsFreePose.java</exclude>
-                                <exclude>**/meos/MeosOpsPoseSet.java</exclude>
-                            </excludes>
-                            <testExcludes combine.children="append">
-                                <testExclude>**/MeosPoseSmokeTest.java</testExclude>
                             </testExcludes>
                         </configuration>
                     </plugin>
@@ -365,26 +341,6 @@
             </build>
         </profile>
         <profile>
-            <id>rgeo-exclude-unset</id>
-            <activation>
-                <property><name>!RGEO</name></property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <excludes combine.children="append">
-                                <exclude>**/meos/MeosOpsTRGeometry.java</exclude>
-                                <exclude>**/meos/MeosOpsTRGeometryInst.java</exclude>
-                                <exclude>**/meos/MeosOpsFreeRgeo.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
             <id>rgeo-exclude-off</id>
             <activation>
                 <property><name>RGEO</name><value>OFF</value></property>
@@ -418,25 +374,6 @@
                                 <exclude>**/meos/MeosOpsTRGeometry.java</exclude>
                                 <exclude>**/meos/MeosOpsTRGeometryInst.java</exclude>
                                 <exclude>**/meos/MeosOpsFreeRgeo.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-        <profile>
-            <id>h3-exclude-unset</id>
-            <activation>
-                <property><name>!H3</name></property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <configuration>
-                            <excludes combine.children="append">
-                                <exclude>**/meos/MeosOpsTh3index.java</exclude>
-                                <exclude>**/meos/MeosOpsFreeH3.java</exclude>
                             </excludes>
                         </configuration>
                     </plugin>
