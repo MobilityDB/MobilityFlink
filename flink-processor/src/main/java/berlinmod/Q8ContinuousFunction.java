@@ -17,7 +17,7 @@ import org.apache.flink.util.Collector;
  *
  * <p>Predicate: {@link MEOSBridge#dwithinSegmentMetres} — MEOS
  * {@code geog_dwithin} against a LineString geography when libmeos is
- * loadable, with {@link SegmentDistance} fallback otherwise.
+ * loadable, with MEOS geog_dwithin/geog_distance fallback otherwise.
  */
 public class Q8ContinuousFunction extends ProcessFunction<BerlinMODTrip, Tuple3<Integer, Long, Boolean>> {
 

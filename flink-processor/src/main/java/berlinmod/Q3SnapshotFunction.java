@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  * snapshot.
  *
  * <p>Predicate: {@link MEOSBridge#dwithinMetres} — MEOS {@code geog_dwithin}
- * when libmeos is loadable, with {@link Haversine} fallback otherwise. The
+ * when libmeos is loadable, with MEOS geog_dwithin/geog_distance fallback otherwise. The
  * snapshot-form output at watermark T is equal to the batch BerlinMOD-Q3
  * result up to T regardless of which path is active.
  */

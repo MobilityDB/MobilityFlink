@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
  *
  * <p>Predicate: {@link MEOSBridge#dwithinMetres} — MEOS' {@code geog_dwithin}
  * over WGS84 geographies when libmeos is loadable, with a pure-Java great-circle
- * fallback ({@link Haversine}) for runtimes without MEOS.
+ * fallback (MEOS geog_dwithin/geog_distance) for runtimes without MEOS.
  */
 public class Q3ContinuousFunction extends ProcessFunction<BerlinMODTrip, Tuple3<Integer, Long, Boolean>> {
 

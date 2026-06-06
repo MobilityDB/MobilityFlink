@@ -22,7 +22,7 @@ import java.util.Set;
  * {@code (windowStart, windowEnd, distinctCount)}.
  *
  * <p>Predicate: {@link MEOSBridge#dwithinMetres} — MEOS {@code geog_dwithin}
- * over WGS84 geographies when libmeos is loadable, with {@link Haversine}
+ * over WGS84 geographies when libmeos is loadable, with MEOS geog_dwithin/geog_distance
  * fallback otherwise.
  */
 public class Q3WindowedFunction

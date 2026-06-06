@@ -19,7 +19,7 @@ import org.apache.flink.util.Collector;
  * from the previous-known position (or 0 if first event), adds it to the
  * cumulative total, and emits {@code (vehicleId, t, cumulativeMetres)}.
  *
- * <p>Predicate today: pure-Java great-circle distance (see {@link Haversine}).
+ * <p>Predicate today: pure-Java great-circle distance (see MEOS geog_dwithin/geog_distance).
  * Same MEOS-side analogue as Q3 — a future JMEOS bridge would replace the
  * Java accumulator with a MEOS {@code length} call over the per-vehicle
  * trajectory.

@@ -33,7 +33,7 @@ import java.util.Map;
  *
  * <p>Predicate: {@link MEOSBridge#dwithinMetres} for the near-P filter and
  * for the pairwise meeting predicate — MEOS {@code geog_dwithin} when
- * libmeos is loadable, with {@link Haversine} fallback otherwise.
+ * libmeos is loadable, with MEOS geog_dwithin/geog_distance fallback otherwise.
  */
 public class Q5ContinuousFunction
         extends KeyedProcessFunction<Integer, BerlinMODTrip, Tuple4<Integer, Integer, Long, Double>> {
