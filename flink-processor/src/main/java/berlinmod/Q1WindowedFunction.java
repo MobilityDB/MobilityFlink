@@ -23,63 +23,36 @@
  *
  *****************************************************************************/
 
-package aisdata;
+package berlinmod;
 
-public class AISData {
-    private long timestamp;
-    private int mmsi;
-    private double lon;
-    private double lat;
-    private double speed;
-    private double course;
+import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.streaming.api.functions.windowing.ProcessAllWindowFunction;
+import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
+import org.apache.flink.util.Collector;
 
-    // Getters and setters
+import java.util.HashSet;
+import java.util.Set;
 
-    public long getTimestamp() {
-        return timestamp;
-    }
+/**
+ * BerlinMOD-Q1 — <b>windowed form</b>.
+ *
+ * <p><i>"Per N-second tumbling window, how many distinct vehicles appeared
+ * in the window?"</i>
+ *
+ * <p>Emits {@code (windowStart, windowEnd, distinctCount)} per window.
+ */
+public class Q1WindowedFunction
+        extends ProcessAllWindowFunction<BerlinMODTrip, Tuple3<Long, Long, Long>, TimeWindow> {
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public int getMmsi() {
-        return mmsi;
-    }
-
-    public void setMmsi(int mmsi) {
-        this.mmsi = mmsi;
-    }
-
-    public double getLon() {
-        return lon;
-    }
-
-    public void setLon(double lon) {
-        this.lon = lon;
-    }
-
-    public double getLat() {
-        return lat;
-    }
-
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    public double getCourse() {
-        return course;
-    }
-
-    public void setCourse(double course) {
-        this.course = course;
+    @Override
+    public void process(
+            Context ctx,
+            Iterable<BerlinMODTrip> elements,
+            Collector<Tuple3<Long, Long, Long>> out) {
+        Set<Integer> distinct = new HashSet<>();
+        for (BerlinMODTrip trip : elements) {
+            distinct.add(trip.getVehicleId());
+        }
+        out.collect(new Tuple3<>(ctx.window().getStart(), ctx.window().getEnd(), (long) distinct.size()));
     }
 }

@@ -23,17 +23,21 @@
  *
  *****************************************************************************/
 
-package aisdata;
+package berlinmod;
 
-public class AISData {
-    private long timestamp;
-    private int mmsi;
+/**
+ * Plain data class for a single GPS event from a BerlinMOD trip.
+ *
+ * <p>Matches the {@code aisdata.AISData} field set but uses the BerlinMOD vehicle
+ * identifier {@code vehicleId} instead of an AIS {@code mmsi} and drops the
+ * AIS-specific {@code speed}/{@code course} channels (BerlinMOD's generator
+ * does not export those for the streaming form).
+ */
+public class BerlinMODTrip {
+    private long timestamp; // epoch milliseconds (event time)
+    private int vehicleId;
     private double lon;
     private double lat;
-    private double speed;
-    private double course;
-
-    // Getters and setters
 
     public long getTimestamp() {
         return timestamp;
@@ -43,12 +47,12 @@ public class AISData {
         this.timestamp = timestamp;
     }
 
-    public int getMmsi() {
-        return mmsi;
+    public int getVehicleId() {
+        return vehicleId;
     }
 
-    public void setMmsi(int mmsi) {
-        this.mmsi = mmsi;
+    public void setVehicleId(int vehicleId) {
+        this.vehicleId = vehicleId;
     }
 
     public double getLon() {
@@ -65,21 +69,5 @@ public class AISData {
 
     public void setLat(double lat) {
         this.lat = lat;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    public double getCourse() {
-        return course;
-    }
-
-    public void setCourse(double course) {
-        this.course = course;
     }
 }

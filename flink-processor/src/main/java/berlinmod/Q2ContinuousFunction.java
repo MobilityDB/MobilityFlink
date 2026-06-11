@@ -23,63 +23,43 @@
  *
  *****************************************************************************/
 
-package aisdata;
+package berlinmod;
 
-public class AISData {
-    private long timestamp;
-    private int mmsi;
-    private double lon;
-    private double lat;
-    private double speed;
-    private double course;
+import org.apache.flink.streaming.api.functions.ProcessFunction;
+import org.apache.flink.util.Collector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-    // Getters and setters
+/**
+ * BerlinMOD-Q2 — <b>continuous form</b>.
+ *
+ * <p><i>"Where is vehicle X right now?"</i>
+ *
+ * <p>For each incoming GPS event {@link BerlinMODTrip}, emit it unchanged if it
+ * belongs to the queried vehicle, otherwise drop. No windowing, no state —
+ * a per-event filter against {@code targetVehicleId}.
+ */
+public class Q2ContinuousFunction extends ProcessFunction<BerlinMODTrip, BerlinMODTrip> {
 
-    public long getTimestamp() {
-        return timestamp;
+    private static final Logger LOG = LoggerFactory.getLogger(Q2ContinuousFunction.class);
+
+    private final int targetVehicleId;
+
+    public Q2ContinuousFunction(int targetVehicleId) {
+        this.targetVehicleId = targetVehicleId;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public int getMmsi() {
-        return mmsi;
-    }
-
-    public void setMmsi(int mmsi) {
-        this.mmsi = mmsi;
-    }
-
-    public double getLon() {
-        return lon;
-    }
-
-    public void setLon(double lon) {
-        this.lon = lon;
-    }
-
-    public double getLat() {
-        return lat;
-    }
-
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    public double getCourse() {
-        return course;
-    }
-
-    public void setCourse(double course) {
-        this.course = course;
+    @Override
+    public void processElement(
+            BerlinMODTrip trip,
+            Context ctx,
+            Collector<BerlinMODTrip> out) {
+        if (trip.getVehicleId() == targetVehicleId) {
+            out.collect(trip);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("Q2-continuous: vehicle={} t={} ({}, {})",
+                        trip.getVehicleId(), trip.getTimestamp(), trip.getLon(), trip.getLat());
+            }
+        }
     }
 }

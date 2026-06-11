@@ -1,0 +1,99 @@
+/*****************************************************************************
+ *
+ * This MobilityDB code is provided under The PostgreSQL License.
+ * Copyright (c) 2020-2026, Université libre de Bruxelles and MobilityDB
+ * contributors
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for any purpose, without fee, and without a written
+ * agreement is hereby granted, provided that the above copyright notice and
+ * this paragraph and the following two paragraphs appear in all copies.
+ *
+ * IN NO EVENT SHALL UNIVERSITE LIBRE DE BRUXELLES BE LIABLE TO ANY PARTY FOR
+ * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING
+ * LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF UNIVERSITE LIBRE DE BRUXELLES HAS BEEN ADVISED OF THE POSSIBILITY
+ * OF SUCH DAMAGE.
+ *
+ * UNIVERSITE LIBRE DE BRUXELLES SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON
+ * AN "AS IS" BASIS, AND UNIVERSITE LIBRE DE BRUXELLES HAS NO OBLIGATIONS TO
+ * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ *
+ *****************************************************************************/
+
+package berlinmod;
+
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
+import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.api.java.tuple.Tuple3;
+import org.apache.flink.streaming.api.datastream.DataStream;
+import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
+import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
+import org.apache.flink.streaming.api.windowing.time.Time;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Local end-to-end test driver for the BerlinMOD-Q1 three streaming forms.
+ *
+ * <p>Same 21-event synthetic corpus as Q2/Q3 local tests. Q1 has no spatial
+ * predicate and no per-event filter parameter — it simply enumerates vehicles
+ * seen.
+ *
+ * <p>Expected output:
+ * <ul>
+ *   <li><b>Q1-continuous</b>: 3 lines, one per distinct vehicle (firstSeenTime)</li>
+ *   <li><b>Q1-windowed</b>: 2 windows, each with distinctCount=3</li>
+ *   <li><b>Q1-snapshot</b>: 9 lines (3 ticks × 3 vehicles all seen by source-close)</li>
+ * </ul>
+ */
+public class BerlinMODQ1LocalTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BerlinMODQ1LocalTest.class);
+
+    private static final long WINDOW_SIZE_SECONDS = 10L;
+    private static final long SNAPSHOT_TICK_MILLIS = 5_000L;
+    private static final long T0 = 1_735_711_200_000L;
+
+    public static void main(String[] args) throws Exception {
+        LOG.info("BerlinMODQ1LocalTest starting; window={}s tick={}ms",
+                WINDOW_SIZE_SECONDS, SNAPSHOT_TICK_MILLIS);
+
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.setParallelism(1);
+
+        List<BerlinMODTrip> events = BerlinMODCorpus.loadSample();
+        DataStreamSource<BerlinMODTrip> raw = env.fromCollection(events);
+        DataStream<BerlinMODTrip> trips = raw.assignTimestampsAndWatermarks(
+                WatermarkStrategy
+                        .<BerlinMODTrip>forBoundedOutOfOrderness(Duration.ofSeconds(1))
+                        .withTimestampAssigner((e, t) -> e.getTimestamp()));
+
+        DataStream<Tuple2<Integer, Long>> cont = trips
+                .keyBy(BerlinMODTrip::getVehicleId)
+                .process(new Q1ContinuousFunction());
+        cont.print("Q1-continuous");
+
+        DataStream<Tuple3<Long, Long, Long>> win = trips
+                .windowAll(TumblingEventTimeWindows.of(Time.seconds(WINDOW_SIZE_SECONDS)))
+                .process(new Q1WindowedFunction());
+        win.print("Q1-windowed");
+
+        DataStream<Tuple2<Long, Integer>> snap = trips
+                .keyBy(BerlinMODTrip::getVehicleId)
+                .process(new Q1SnapshotFunction(SNAPSHOT_TICK_MILLIS));
+        snap.print("Q1-snapshot");
+
+        env.execute("BerlinMODQ1LocalTest");
+        LOG.info("BerlinMODQ1LocalTest done");
+    }
+
+
+}

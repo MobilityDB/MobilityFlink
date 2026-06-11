@@ -23,63 +23,27 @@
  *
  *****************************************************************************/
 
-package aisdata;
+package berlinmod;
 
-public class AISData {
-    private long timestamp;
-    private int mmsi;
-    private double lon;
-    private double lat;
-    private double speed;
-    private double course;
+import java.io.Serializable;
 
-    // Getters and setters
+/**
+ * Simple point-of-interest record for BerlinMOD-Q7 — a (lon, lat) plus a
+ * proximity radius in metres and an integer id. Serializable for use in
+ * Flink operator state and configuration.
+ */
+public final class PointOfInterest implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-    public long getTimestamp() {
-        return timestamp;
-    }
+    public final int id;
+    public final double lon;
+    public final double lat;
+    public final double radiusMetres;
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public int getMmsi() {
-        return mmsi;
-    }
-
-    public void setMmsi(int mmsi) {
-        this.mmsi = mmsi;
-    }
-
-    public double getLon() {
-        return lon;
-    }
-
-    public void setLon(double lon) {
+    public PointOfInterest(int id, double lon, double lat, double radiusMetres) {
+        this.id = id;
         this.lon = lon;
-    }
-
-    public double getLat() {
-        return lat;
-    }
-
-    public void setLat(double lat) {
         this.lat = lat;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    public double getCourse() {
-        return course;
-    }
-
-    public void setCourse(double course) {
-        this.course = course;
+        this.radiusMetres = radiusMetres;
     }
 }

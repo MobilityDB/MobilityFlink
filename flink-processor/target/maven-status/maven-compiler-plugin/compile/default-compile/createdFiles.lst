@@ -1,9 +1,0 @@
-aisdata/TrajectoryWindowFunction.class
-aisdata/Main$DeserializeAISDataMapFunction.class
-aisdata/Main$AISDataToTuple4MapFunction.class
-aisdata/AISTestSource.class
-aisdata/Main$AISDataTimestampAssigner.class
-aisdata/Main.class
-aisdata/AISData.class
-aisdata/Main$LogKafkaMessagesMapFunction.class
-aisdata/AISDataDeserializationSchema.class

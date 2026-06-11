@@ -23,63 +23,45 @@
  *
  *****************************************************************************/
 
-package aisdata;
+package org.mobilitydb.flink.meos;
 
-public class AISData {
-    private long timestamp;
-    private int mmsi;
-    private double lon;
-    private double lat;
-    private double speed;
-    private double course;
+import org.mobilitydb.meos.*;
 
-    // Getters and setters
+import functions.GeneratedFunctions;
+import jnr.ffi.Pointer;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
-    public long getTimestamp() {
-        return timestamp;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+/**
+ * Runtime check that the pose facade family calls into libmeos and returns
+ * correct results. Compiled and run only when the build includes the pose
+ * family ({@code -DPOSE=ON}); the family requires a libmeos built with
+ * {@code -DPOSE=ON}.
+ */
+@EnabledIfSystemProperty(named = "meos.enabled", matches = "true")
+class MeosPoseSmokeTest {
+
+    @BeforeAll
+    static void init() {
+        GeneratedFunctions.meos_initialize_error_handler((level, code, message) -> { });
+        GeneratedFunctions.meos_initialize();
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    @AfterAll
+    static void finalizeMeos() {
+        GeneratedFunctions.meos_finalize();
     }
 
-    public int getMmsi() {
-        return mmsi;
-    }
-
-    public void setMmsi(int mmsi) {
-        this.mmsi = mmsi;
-    }
-
-    public double getLon() {
-        return lon;
-    }
-
-    public void setLon(double lon) {
-        this.lon = lon;
-    }
-
-    public double getLat() {
-        return lat;
-    }
-
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
-    public double getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    public double getCourse() {
-        return course;
-    }
-
-    public void setCourse(double course) {
-        this.course = course;
+    @Test
+    void pose() {
+        Pointer pose = MeosOpsFreePose.pose_in("Pose(Point(1 1), 0.5)");
+        assertNotNull(pose);
+        assertNotNull(MeosOpsFreePose.pose_out(pose, 6));
+        assertEquals(0.5, MeosOpsFreePose.pose_rotation(pose), 1e-9);
     }
 }

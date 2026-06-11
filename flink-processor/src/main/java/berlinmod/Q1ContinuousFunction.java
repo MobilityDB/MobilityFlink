@@ -23,31 +23,44 @@
  *
  *****************************************************************************/
 
-package aisdata;
+package berlinmod;
 
-import org.apache.flink.streaming.api.functions.source.SourceFunction;
+import org.apache.flink.api.common.state.ValueState;
+import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.java.tuple.Tuple2;
+import org.apache.flink.configuration.Configuration;
+import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
+import org.apache.flink.util.Collector;
 
-public class AISTestSource implements SourceFunction<AISData> {
+/**
+ * BerlinMOD-Q1 — <b>continuous form</b>.
+ *
+ * <p><i>"Which vehicles have appeared in the stream?"</i>
+ *
+ * <p>Emits {@code (vehicleId, firstSeenTimestamp)} the first time each vehicle
+ * is seen; subsequent events for the same vehicle are deduplicated via keyed
+ * state. Keyed by vehicleId.
+ */
+public class Q1ContinuousFunction
+        extends KeyedProcessFunction<Integer, BerlinMODTrip, Tuple2<Integer, Long>> {
 
-    private volatile boolean isRunning = true;
+    private transient ValueState<Boolean> seen;
 
     @Override
-    public void run(SourceContext<AISData> ctx) throws Exception {
-        while (isRunning) {
-            AISData data = new AISData();
-            data.setTimestamp(System.currentTimeMillis());
-            data.setMmsi(123456789);
-            data.setLon(10.0);
-            data.setLat(20.0);
-            data.setSpeed(15.0);
-            data.setCourse(90.0);
-            ctx.collect(data);
-            Thread.sleep(1000);
-        }
+    public void open(Configuration parameters) {
+        seen = getRuntimeContext().getState(
+                new ValueStateDescriptor<>("q1SeenVehicle", Boolean.class));
     }
 
     @Override
-    public void cancel() {
-        isRunning = false;
+    public void processElement(
+            BerlinMODTrip trip,
+            Context ctx,
+            Collector<Tuple2<Integer, Long>> out) throws Exception {
+        Boolean s = seen.value();
+        if (s == null || !s) {
+            out.collect(new Tuple2<>(trip.getVehicleId(), trip.getTimestamp()));
+            seen.update(true);
+        }
     }
 }
