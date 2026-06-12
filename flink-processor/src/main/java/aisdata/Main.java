@@ -61,6 +61,7 @@ import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 
 import functions.*;
+import functions.GeneratedFunctions;
 import types.boxes.*;
 import types.basic.tpoint.tgeom.*;
 import types.basic.tpoint.TPoint.*;
@@ -82,8 +83,8 @@ public class Main {
         try {
             logger.info("Initializing MEOS library");
             // JMEOS 1.4 split: no-arg meos_initialize() + separate tz + error-handler entry points
-            functions.meos_initialize();
-            functions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize();
+            GeneratedFunctions.meos_initialize_timezone("UTC");
             
             final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
             
@@ -135,7 +136,7 @@ public class Main {
             // Always ensure MEOS is finalized
             try {
                 logger.info("Finalizing MEOS library");
-                functions.meos_finalize();
+                GeneratedFunctions.meos_finalize();
             } catch (Exception e) {
                 logger.error("Error during MEOS finalization: {}", e.getMessage(), e);
             }
