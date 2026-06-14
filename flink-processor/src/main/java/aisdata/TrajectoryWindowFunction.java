@@ -41,6 +41,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import functions.*;
+import functions.GeneratedFunctions;
 import types.boxes.*;
 import types.basic.tpoint.tgeom.*;
 import types.basic.tpoint.tgeom.TGeomPointSeq;
@@ -57,14 +58,14 @@ ProcessWindowFunction<Tuple4<Integer, Double, Double, Long>, TGeomPointSeq, Inte
         super.open(parameters);
         errorHandler = new error_handler(); // Initialize error handler here
         // JMEOS 1.4 split: no-arg meos_initialize() + separate tz + error-handler entry points
-        functions.meos_initialize();
-        functions.meos_initialize_timezone("UTC");
+        GeneratedFunctions.meos_initialize();
+        GeneratedFunctions.meos_initialize_timezone("UTC");
         logger.info("MEOS initialized in TrajectoryWindowFunction.open()");
     }
 
     // @Override
     // public void close() throws Exception {
-    //     functions.meos_finalize();
+    //     GeneratedFunctions.meos_finalize();
     //     logger.info("MEOS finalized in TrajectoryWindowFunction.close()");
     //     super.close();
     // }
