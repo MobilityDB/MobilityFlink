@@ -1,3 +1,28 @@
+/*****************************************************************************
+ *
+ * This MobilityDB code is provided under The PostgreSQL License.
+ * Copyright (c) 2020-2026, Université libre de Bruxelles and MobilityDB
+ * contributors
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for any purpose, without fee, and without a written
+ * agreement is hereby granted, provided that the above copyright notice and
+ * this paragraph and the following two paragraphs appear in all copies.
+ *
+ * IN NO EVENT SHALL UNIVERSITE LIBRE DE BRUXELLES BE LIABLE TO ANY PARTY FOR
+ * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING
+ * LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF UNIVERSITE LIBRE DE BRUXELLES HAS BEEN ADVISED OF THE POSSIBILITY
+ * OF SUCH DAMAGE.
+ *
+ * UNIVERSITE LIBRE DE BRUXELLES SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON
+ * AN "AS IS" BASIS, AND UNIVERSITE LIBRE DE BRUXELLES HAS NO OBLIGATIONS TO
+ * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ *
+ *****************************************************************************/
+
 package berlinmod;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -33,9 +58,9 @@ import java.util.List;
  * approximately:
  *
  * <ul>
- *   <li>v100: 6 × 100 m = 600 m</li>
- *   <li>v200: 6 × 50 m = 300 m</li>
- *   <li>v300: 6 × 200 m = 1200 m</li>
+ *   <li>vehicle 1: 6 × 100 m = 600 m</li>
+ *   <li>vehicle 2: 6 × 50 m = 300 m</li>
+ *   <li>vehicle 3: 6 × 200 m = 1200 m</li>
  * </ul>
  *
  * <p>Expected output:
@@ -66,7 +91,7 @@ public class BerlinMODQ6LocalTest {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        List<BerlinMODTrip> events = buildEvents();
+        List<BerlinMODTrip> events = BerlinMODCorpus.loadSample();
         DataStreamSource<BerlinMODTrip> raw = env.fromCollection(events);
         DataStream<BerlinMODTrip> trips = raw.assignTimestampsAndWatermarks(
                 WatermarkStrategy
@@ -93,29 +118,4 @@ public class BerlinMODQ6LocalTest {
         LOG.info("BerlinMODQ6LocalTest done");
     }
 
-    private static List<BerlinMODTrip> buildEvents() {
-        List<BerlinMODTrip> events = new ArrayList<>();
-        int step = 0;
-        for (int i = 0; i <= 12; i += 2, step++) {
-            events.add(make(100, T0 + i * 1000L, 4.3517 + step * V100_DLON, 50.8503));
-        }
-        step = 0;
-        for (int i = 1; i <= 13; i += 2, step++) {
-            events.add(make(200, T0 + i * 1000L, 4.3060, 50.8270 + step * V200_DLAT));
-        }
-        step = 0;
-        for (int i = 0; i <= 12; i += 2, step++) {
-            events.add(make(300, T0 + i * 1000L, 4.2000 + step * V300_DLON, 50.7500));
-        }
-        return events;
-    }
-
-    private static BerlinMODTrip make(int vid, long t, double lon, double lat) {
-        BerlinMODTrip trip = new BerlinMODTrip();
-        trip.setVehicleId(vid);
-        trip.setTimestamp(t);
-        trip.setLon(lon);
-        trip.setLat(lat);
-        return trip;
-    }
 }

@@ -1,3 +1,28 @@
+/*****************************************************************************
+ *
+ * This MobilityDB code is provided under The PostgreSQL License.
+ * Copyright (c) 2020-2026, Université libre de Bruxelles and MobilityDB
+ * contributors
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for any purpose, without fee, and without a written
+ * agreement is hereby granted, provided that the above copyright notice and
+ * this paragraph and the following two paragraphs appear in all copies.
+ *
+ * IN NO EVENT SHALL UNIVERSITE LIBRE DE BRUXELLES BE LIABLE TO ANY PARTY FOR
+ * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING
+ * LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF UNIVERSITE LIBRE DE BRUXELLES HAS BEEN ADVISED OF THE POSSIBILITY
+ * OF SUCH DAMAGE.
+ *
+ * UNIVERSITE LIBRE DE BRUXELLES SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON
+ * AN "AS IS" BASIS, AND UNIVERSITE LIBRE DE BRUXELLES HAS NO OBLIGATIONS TO
+ * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ *
+ *****************************************************************************/
+
 package berlinmod;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -23,14 +48,14 @@ import java.util.List;
  * centre region. With a {@code d = 5 km} proximity threshold:
  *
  * <ul>
- *   <li><b>v100</b> at (4.3517, 50.8503) — ~1.1 km from segment → <b>near</b></li>
- *   <li><b>v200</b> at (4.3060, 50.8270) — ~0.5 km from segment → <b>near</b></li>
- *   <li><b>v300</b> at (4.2000, 50.7500) — ~13 km from segment → <b>not near</b></li>
+ *   <li><b>vehicle 1</b> at (canonical vehicle 1) — ~1.1 km from segment → <b>near</b></li>
+ *   <li><b>vehicle 2</b> at (canonical vehicle 2) — ~0.5 km from segment → <b>near</b></li>
+ *   <li><b>vehicle 3</b> at (canonical vehicle 3) — ~13 km from segment → <b>not near</b></li>
  * </ul>
  *
  * <p>Expected output shape:
  * <ul>
- *   <li><b>Q8-continuous</b>: 21 events (14 near=true for v100/v200, 7 near=false for v300)</li>
+ *   <li><b>Q8-continuous</b>: 21 events (14 near=true for vehicle 1/vehicle 2, 7 near=false for vehicle 3)</li>
  *   <li><b>Q8-windowed</b>: 2 windows, each with {@code distinctCount=2} (vehicles 100 and 200)</li>
  *   <li><b>Q8-snapshot</b>: 3 ticks × 2 near vehicles = 6 emissions</li>
  * </ul>
@@ -43,8 +68,8 @@ public class BerlinMODQ8LocalTest {
     private static final Logger LOG = LoggerFactory.getLogger(BerlinMODQ8LocalTest.class);
 
     // Road segment endpoints
-    private static final double S1_LON = 4.30, S1_LAT = 50.83;
-    private static final double S2_LON = 4.36, S2_LAT = 50.87;
+    private static final double S1_LON = 4.3321, S1_LAT = 50.7696;  // vehicle 2
+    private static final double S2_LON = 4.3063, S2_LAT = 50.8825;  // vehicle 4
     private static final double RADIUS_METRES = 5_000.0;
     private static final long WINDOW_SIZE_SECONDS = 10L;
     private static final long SNAPSHOT_TICK_MILLIS = 5_000L;
@@ -57,7 +82,7 @@ public class BerlinMODQ8LocalTest {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        List<BerlinMODTrip> events = buildEvents();
+        List<BerlinMODTrip> events = BerlinMODCorpus.loadSample();
         DataStreamSource<BerlinMODTrip> raw = env.fromCollection(events);
         DataStream<BerlinMODTrip> trips = raw.assignTimestampsAndWatermarks(
                 WatermarkStrategy
@@ -82,26 +107,4 @@ public class BerlinMODQ8LocalTest {
         LOG.info("BerlinMODQ8LocalTest done");
     }
 
-    private static List<BerlinMODTrip> buildEvents() {
-        List<BerlinMODTrip> events = new ArrayList<>();
-        for (int i = 0; i <= 12; i += 2) {
-            events.add(make(100, T0 + i * 1000L, 4.3517, 50.8503));
-        }
-        for (int i = 1; i <= 13; i += 2) {
-            events.add(make(200, T0 + i * 1000L, 4.3060, 50.8270));
-        }
-        for (int i = 0; i <= 12; i += 2) {
-            events.add(make(300, T0 + i * 1000L, 4.2000, 50.7500));
-        }
-        return events;
-    }
-
-    private static BerlinMODTrip make(int vid, long t, double lon, double lat) {
-        BerlinMODTrip trip = new BerlinMODTrip();
-        trip.setVehicleId(vid);
-        trip.setTimestamp(t);
-        trip.setLon(lon);
-        trip.setLat(lat);
-        return trip;
-    }
 }

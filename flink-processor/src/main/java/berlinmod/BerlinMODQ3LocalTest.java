@@ -1,3 +1,28 @@
+/*****************************************************************************
+ *
+ * This MobilityDB code is provided under The PostgreSQL License.
+ * Copyright (c) 2020-2026, Université libre de Bruxelles and MobilityDB
+ * contributors
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for any purpose, without fee, and without a written
+ * agreement is hereby granted, provided that the above copyright notice and
+ * this paragraph and the following two paragraphs appear in all copies.
+ *
+ * IN NO EVENT SHALL UNIVERSITE LIBRE DE BRUXELLES BE LIABLE TO ANY PARTY FOR
+ * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING
+ * LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF UNIVERSITE LIBRE DE BRUXELLES HAS BEEN ADVISED OF THE POSSIBILITY
+ * OF SUCH DAMAGE.
+ *
+ * UNIVERSITE LIBRE DE BRUXELLES SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON
+ * AN "AS IS" BASIS, AND UNIVERSITE LIBRE DE BRUXELLES HAS NO OBLIGATIONS TO
+ * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ *
+ *****************************************************************************/
+
 package berlinmod;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -26,7 +51,7 @@ import java.util.List;
  *
  * <p>Synthetic corpus: 3 vehicles, 21 events over 14 simulated seconds —
  * <ul>
- *   <li><b>Vehicle 100</b> — sits on Brussels city centre {@code P}, distance 0 m, <b>near</b></li>
+ *   <li><b>Vehicle 100</b> — sits on the canonical sample area {@code P}, distance 0 m, <b>near</b></li>
  *   <li><b>Vehicle 200</b> — Anderlecht, ~4.1 km from {@code P}, <b>near</b> (within the 5 km radius)</li>
  *   <li><b>Vehicle 300</b> — Forest, ~15.4 km from {@code P}, <b>not near</b> (outside the 5 km radius)</li>
  * </ul>
@@ -47,8 +72,8 @@ public class BerlinMODQ3LocalTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(BerlinMODQ3LocalTest.class);
 
-    private static final double P_LON = 4.3517;
-    private static final double P_LAT = 50.8503;
+    private static final double P_LON = 4.4322;   // near vehicle 1
+    private static final double P_LAT = 50.7670;
     private static final double RADIUS_METRES = 5_000.0;
     private static final long WINDOW_SIZE_SECONDS = 10L;
     private static final long SNAPSHOT_TICK_MILLIS = 5_000L;
@@ -61,7 +86,7 @@ public class BerlinMODQ3LocalTest {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1); // deterministic output ordering for the test
 
-        List<BerlinMODTrip> events = buildEvents();
+        List<BerlinMODTrip> events = BerlinMODCorpus.loadSample();
         DataStreamSource<BerlinMODTrip> raw = env.fromCollection(events);
         DataStream<BerlinMODTrip> trips = raw.assignTimestampsAndWatermarks(
                 WatermarkStrategy
@@ -86,29 +111,4 @@ public class BerlinMODQ3LocalTest {
         LOG.info("BerlinMODQ3LocalTest done");
     }
 
-    private static List<BerlinMODTrip> buildEvents() {
-        List<BerlinMODTrip> events = new ArrayList<>();
-        // Vehicle 100 — Brussels city centre (= P), 7 events at t0, t0+2s, …, t0+12s
-        for (int i = 0; i <= 12; i += 2) {
-            events.add(make(100, T0 + i * 1000L, 4.3517, 50.8503));
-        }
-        // Vehicle 200 — Anderlecht ~4.1 km from P, 7 events at t0+1s, t0+3s, …, t0+13s
-        for (int i = 1; i <= 13; i += 2) {
-            events.add(make(200, T0 + i * 1000L, 4.3060, 50.8270));
-        }
-        // Vehicle 300 — Forest ~15.4 km from P, 7 events at t0, t0+2s, …, t0+12s
-        for (int i = 0; i <= 12; i += 2) {
-            events.add(make(300, T0 + i * 1000L, 4.2000, 50.7500));
-        }
-        return events;
-    }
-
-    private static BerlinMODTrip make(int vid, long t, double lon, double lat) {
-        BerlinMODTrip trip = new BerlinMODTrip();
-        trip.setVehicleId(vid);
-        trip.setTimestamp(t);
-        trip.setLon(lon);
-        trip.setLat(lat);
-        return trip;
-    }
 }

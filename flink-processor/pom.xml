@@ -18,6 +18,11 @@
         <kafka.version>3.2.0</kafka.version>
         <log4j.version>2.17.2</log4j.version>
         <target.java.version>21</target.java.version>
+        <!-- MEOS smoke tests run when libmeos is present; the runner resolves it
+             through the repo lib via LD_LIBRARY_PATH (avoids a stale system
+             /usr/local/lib/libmeos.so shadowing the pinned one). -->
+        <meos.enabled>true</meos.enabled>
+        <meos.lib.dir>${project.basedir}/lib</meos.lib.dir>
     </properties>
 
     <dependencies>
@@ -264,6 +269,33 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Run the MEOS smoke tests against the pinned libmeos: propagate
+                 meos.enabled to the forked JVM and resolve libmeos from the repo
+                 lib dir (LD_LIBRARY_PATH takes precedence over a stale system lib). -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <reuseForks>false</reuseForks>
+                    <systemPropertyVariables>
+                        <meos.enabled>${meos.enabled}</meos.enabled>
+                    </systemPropertyVariables>
+                    <environmentVariables>
+                        <LD_LIBRARY_PATH>${meos.lib.dir}</LD_LIBRARY_PATH>
+                    </environmentVariables>
+                    <argLine>--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED</argLine>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <!-- Optional extended temporal-type families, mirroring the MobilityDB/MEOS
+         CMake build flags. Family inclusion is selected at build time with the
+         same uppercase flag names and ON|OFF (also 1|0) values as MEOS:
+           -DCBUFFER=ON -DNPOINT=OFF -DPOSE=ON -DRGEO=ON -DH3=ON
+         Defaults match MEOS: NPOINT is included by default; CBUFFER, POSE, RGEO,
+         and H3 are excluded unless their flag is ON|1. RGEO requires POSE (enable
+         both). When a family is excluded, its generated MeosOps* facade sources
+         and its smoke test are dropped from the build. -->
 </project>

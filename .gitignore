@@ -3,4 +3,8 @@ target/
 **/target/
 *.class
 .idea/
-.vscode/
+.vscode
+*.jar
+
+# Maven build output
+flink-processor/target/

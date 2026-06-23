@@ -1,3 +1,28 @@
+/*****************************************************************************
+ *
+ * This MobilityDB code is provided under The PostgreSQL License.
+ * Copyright (c) 2020-2026, Université libre de Bruxelles and MobilityDB
+ * contributors
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for any purpose, without fee, and without a written
+ * agreement is hereby granted, provided that the above copyright notice and
+ * this paragraph and the following two paragraphs appear in all copies.
+ *
+ * IN NO EVENT SHALL UNIVERSITE LIBRE DE BRUXELLES BE LIABLE TO ANY PARTY FOR
+ * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING
+ * LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF UNIVERSITE LIBRE DE BRUXELLES HAS BEEN ADVISED OF THE POSSIBILITY
+ * OF SUCH DAMAGE.
+ *
+ * UNIVERSITE LIBRE DE BRUXELLES SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON
+ * AN "AS IS" BASIS, AND UNIVERSITE LIBRE DE BRUXELLES HAS NO OBLIGATIONS TO
+ * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ *
+ *****************************************************************************/
+
 package berlinmod;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -22,22 +47,22 @@ import java.util.List;
  *
  * <p>Same stationary-vehicle corpus as Q1/Q2/Q3/Q5/Q9. POI list:
  * <ul>
- *   <li>POI 1 = Brussels city centre (4.3517, 50.8503), radius 2000 m</li>
- *   <li>POI 2 = Anderlecht (4.3060, 50.8270), radius 1000 m</li>
- *   <li>POI 3 = south of Brussels (4.2100, 50.7600), radius 2000 m</li>
+ *   <li>POI 1 = the canonical sample area (canonical vehicle 1), radius 2000 m</li>
+ *   <li>POI 2 = Anderlecht (canonical vehicle 2), radius 1000 m</li>
+ *   <li>POI 3 = south of Brussels (canonical vehicle 3), radius 2000 m</li>
  * </ul>
  *
  * <p>Per (vehicle, POI) match-up:
  * <ul>
- *   <li>v100 is inside POI 1 (0 m), outside POI 2 (~4.1 km) and POI 3 (~13 km)</li>
- *   <li>v200 is inside POI 2 (0 m), outside POI 1 and POI 3</li>
- *   <li>v300 is inside POI 3 (~1.3 km), outside POI 1 and POI 2</li>
+ *   <li>vehicle 1 is inside POI 1 (0 m), outside POI 2 (~4.1 km) and POI 3 (~13 km)</li>
+ *   <li>vehicle 2 is inside POI 2 (0 m), outside POI 1 and POI 3</li>
+ *   <li>vehicle 3 is inside POI 3 (~1.3 km), outside POI 1 and POI 2</li>
  * </ul>
  *
  * <p>Expected output:
  * <ul>
  *   <li><b>Q7-continuous</b>: 3 emissions — first-passages on each vehicle's
- *       very first event (v100 t=0 → POI 1; v200 t=1 → POI 2; v300 t=0 →
+ *       very first event (vehicle 1 t=0 → POI 1; vehicle 2 t=1 → POI 2; vehicle 3 t=0 →
  *       POI 3)</li>
  *   <li><b>Q7-windowed</b>: per-window intra-window first-passages —
  *       window [0, 10 s) sees all 3 first-passages; window [10, 20 s) sees
@@ -54,9 +79,9 @@ public class BerlinMODQ7LocalTest {
     private static final long T0 = 1_735_711_200_000L;
 
     private static final List<PointOfInterest> POIS = Arrays.asList(
-            new PointOfInterest(1, 4.3517, 50.8503, 2_000.0),
-            new PointOfInterest(2, 4.3060, 50.8270, 1_000.0),
-            new PointOfInterest(3, 4.2100, 50.7600, 2_000.0));
+            new PointOfInterest(1, 4.3321, 50.7696, 2_000.0),   // near vehicle 2
+            new PointOfInterest(2, 4.4571, 50.8515, 2_000.0),   // near vehicle 3
+            new PointOfInterest(3, 4.4252, 50.9190, 2_000.0));  // near vehicle 5
 
     public static void main(String[] args) throws Exception {
         LOG.info("BerlinMODQ7LocalTest starting; #POIs={} window={}s tick={}ms",
@@ -65,7 +90,7 @@ public class BerlinMODQ7LocalTest {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        List<BerlinMODTrip> events = buildEvents();
+        List<BerlinMODTrip> events = BerlinMODCorpus.loadSample();
         DataStreamSource<BerlinMODTrip> raw = env.fromCollection(events);
         DataStream<BerlinMODTrip> trips = raw.assignTimestampsAndWatermarks(
                 WatermarkStrategy
@@ -91,26 +116,4 @@ public class BerlinMODQ7LocalTest {
         LOG.info("BerlinMODQ7LocalTest done");
     }
 
-    private static List<BerlinMODTrip> buildEvents() {
-        List<BerlinMODTrip> events = new ArrayList<>();
-        for (int i = 0; i <= 12; i += 2) {
-            events.add(make(100, T0 + i * 1000L, 4.3517, 50.8503));
-        }
-        for (int i = 1; i <= 13; i += 2) {
-            events.add(make(200, T0 + i * 1000L, 4.3060, 50.8270));
-        }
-        for (int i = 0; i <= 12; i += 2) {
-            events.add(make(300, T0 + i * 1000L, 4.2000, 50.7500));
-        }
-        return events;
-    }
-
-    private static BerlinMODTrip make(int vid, long t, double lon, double lat) {
-        BerlinMODTrip trip = new BerlinMODTrip();
-        trip.setVehicleId(vid);
-        trip.setTimestamp(t);
-        trip.setLon(lon);
-        trip.setLat(lat);
-        return trip;
-    }
 }

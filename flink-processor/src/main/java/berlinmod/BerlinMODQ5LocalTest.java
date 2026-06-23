@@ -1,3 +1,28 @@
+/*****************************************************************************
+ *
+ * This MobilityDB code is provided under The PostgreSQL License.
+ * Copyright (c) 2020-2026, Université libre de Bruxelles and MobilityDB
+ * contributors
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for any purpose, without fee, and without a written
+ * agreement is hereby granted, provided that the above copyright notice and
+ * this paragraph and the following two paragraphs appear in all copies.
+ *
+ * IN NO EVENT SHALL UNIVERSITE LIBRE DE BRUXELLES BE LIABLE TO ANY PARTY FOR
+ * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING
+ * LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF UNIVERSITE LIBRE DE BRUXELLES HAS BEEN ADVISED OF THE POSSIBILITY
+ * OF SUCH DAMAGE.
+ *
+ * UNIVERSITE LIBRE DE BRUXELLES SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON
+ * AN "AS IS" BASIS, AND UNIVERSITE LIBRE DE BRUXELLES HAS NO OBLIGATIONS TO
+ * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ *
+ *****************************************************************************/
+
 package berlinmod;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -19,23 +44,23 @@ import java.util.List;
  * Local end-to-end test driver for the BerlinMOD-Q5 three streaming forms.
  *
  * <p>Same stationary-vehicle corpus as Q1/Q2/Q3/Q9. Reference point P =
- * Brussels city centre (4.3517, 50.8503); {@code dP = 5 km} (vehicle near P);
+ * the canonical sample area (canonical vehicle 1); {@code dP = 5 km} (vehicle near P);
  * {@code dMeet = 5 km} (pair-meeting threshold).
  *
  * <p>Pairs:
  * <ul>
  *   <li><b>(100, 200)</b> — both near P; distance 4.1 km ≤ dMeet → <b>MEET</b></li>
- *   <li>(100, 300) — v300 not near P → don't qualify</li>
- *   <li>(200, 300) — v300 not near P → don't qualify</li>
+ *   <li>(100, 300) — vehicle 3 not near P → don't qualify</li>
+ *   <li>(200, 300) — vehicle 3 not near P → don't qualify</li>
  * </ul>
  *
  * <p>Expected output (only the (100, 200) pair qualifies):
  * <ul>
  *   <li><b>Q5-continuous</b>: pair (100, 200) emits on every event from t=1
- *       onward (the first t=0 events of v100 and v300 happen before v200 is
+ *       onward (the first t=0 events of vehicle 1 and vehicle 3 happen before vehicle 2 is
  *       known, so no pair exists yet). 21 - 2 = 19 emissions.</li>
  *   <li><b>Q5-windowed</b>: each of the two 10-second windows contains
- *       events for v100 and v200 — both qualify, the pair meets. 2 emissions.</li>
+ *       events for vehicle 1 and vehicle 2 — both qualify, the pair meets. 2 emissions.</li>
  *   <li><b>Q5-snapshot</b>: 3 ticks × 1 meeting pair = 3 emissions.</li>
  * </ul>
  */
@@ -43,10 +68,10 @@ public class BerlinMODQ5LocalTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(BerlinMODQ5LocalTest.class);
 
-    private static final double P_LON = 4.3517;
-    private static final double P_LAT = 50.8503;
+    private static final double P_LON = 4.3822;   // midpoint of vehicles 1 and 2
+    private static final double P_LAT = 50.7683;
     private static final double D_P_METRES = 5_000.0;
-    private static final double D_MEET_METRES = 5_000.0;
+    private static final double D_MEET_METRES = 8_000.0;
     private static final long WINDOW_SIZE_SECONDS = 10L;
     private static final long SNAPSHOT_TICK_MILLIS = 5_000L;
     private static final long T0 = 1_735_711_200_000L;
@@ -58,7 +83,7 @@ public class BerlinMODQ5LocalTest {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        List<BerlinMODTrip> events = buildEvents();
+        List<BerlinMODTrip> events = BerlinMODCorpus.loadSample();
         DataStreamSource<BerlinMODTrip> raw = env.fromCollection(events);
         DataStream<BerlinMODTrip> trips = raw.assignTimestampsAndWatermarks(
                 WatermarkStrategy
@@ -84,26 +109,4 @@ public class BerlinMODQ5LocalTest {
         LOG.info("BerlinMODQ5LocalTest done");
     }
 
-    private static List<BerlinMODTrip> buildEvents() {
-        List<BerlinMODTrip> events = new ArrayList<>();
-        for (int i = 0; i <= 12; i += 2) {
-            events.add(make(100, T0 + i * 1000L, 4.3517, 50.8503));
-        }
-        for (int i = 1; i <= 13; i += 2) {
-            events.add(make(200, T0 + i * 1000L, 4.3060, 50.8270));
-        }
-        for (int i = 0; i <= 12; i += 2) {
-            events.add(make(300, T0 + i * 1000L, 4.2000, 50.7500));
-        }
-        return events;
-    }
-
-    private static BerlinMODTrip make(int vid, long t, double lon, double lat) {
-        BerlinMODTrip trip = new BerlinMODTrip();
-        trip.setVehicleId(vid);
-        trip.setTimestamp(t);
-        trip.setLon(lon);
-        trip.setLat(lat);
-        return trip;
-    }
 }
