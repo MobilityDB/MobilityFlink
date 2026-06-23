@@ -1,3 +1,28 @@
+/*****************************************************************************
+ *
+ * This MobilityDB code is provided under The PostgreSQL License.
+ * Copyright (c) 2020-2026, Université libre de Bruxelles and MobilityDB
+ * contributors
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for any purpose, without fee, and without a written
+ * agreement is hereby granted, provided that the above copyright notice and
+ * this paragraph and the following two paragraphs appear in all copies.
+ *
+ * IN NO EVENT SHALL UNIVERSITE LIBRE DE BRUXELLES BE LIABLE TO ANY PARTY FOR
+ * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING
+ * LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF UNIVERSITE LIBRE DE BRUXELLES HAS BEEN ADVISED OF THE POSSIBILITY
+ * OF SUCH DAMAGE.
+ *
+ * UNIVERSITE LIBRE DE BRUXELLES SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON
+ * AN "AS IS" BASIS, AND UNIVERSITE LIBRE DE BRUXELLES HAS NO OBLIGATIONS TO
+ * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ *
+ *****************************************************************************/
+
 package berlinmod;
 
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
@@ -38,10 +63,10 @@ public class BerlinMODQ3Main {
 
     private static final Logger LOG = LoggerFactory.getLogger(BerlinMODQ3Main.class);
 
-    // Default Q3 parameters — Brussels city centre, 5 km radius, 10 s windows,
+    // Default Q3 parameters — the canonical sample area, 5 km radius, 10 s windows,
     // 5 s snapshot tick. Matches the defaults in the spec doc.
-    private static final double P_LON = 4.3517;
-    private static final double P_LAT = 50.8503;
+    private static final double P_LON = 4.4322;   // near canonical vehicle 1
+    private static final double P_LAT = 50.7670;
     private static final double RADIUS_METRES = 5_000.0;
     private static final long WINDOW_SIZE_SECONDS = 10L;
     private static final long SNAPSHOT_TICK_MILLIS = 5_000L;

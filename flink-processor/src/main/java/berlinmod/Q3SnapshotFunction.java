@@ -1,3 +1,28 @@
+/*****************************************************************************
+ *
+ * This MobilityDB code is provided under The PostgreSQL License.
+ * Copyright (c) 2020-2026, Université libre de Bruxelles and MobilityDB
+ * contributors
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for any purpose, without fee, and without a written
+ * agreement is hereby granted, provided that the above copyright notice and
+ * this paragraph and the following two paragraphs appear in all copies.
+ *
+ * IN NO EVENT SHALL UNIVERSITE LIBRE DE BRUXELLES BE LIABLE TO ANY PARTY FOR
+ * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING
+ * LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF UNIVERSITE LIBRE DE BRUXELLES HAS BEEN ADVISED OF THE POSSIBILITY
+ * OF SUCH DAMAGE.
+ *
+ * UNIVERSITE LIBRE DE BRUXELLES SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON
+ * AN "AS IS" BASIS, AND UNIVERSITE LIBRE DE BRUXELLES HAS NO OBLIGATIONS TO
+ * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ *
+ *****************************************************************************/
+
 package berlinmod;
 
 import org.apache.flink.api.common.state.ValueState;
@@ -27,10 +52,9 @@ import org.slf4j.LoggerFactory;
  * {@code (T, vehicleId)} if the vehicle is within {@code d} of P at that
  * snapshot.
  *
- * <p>Predicate today: pure-Java great-circle distance (see {@link Haversine}).
- * TODO(meos): replace with the MEOS {@code edwithin_tgeo_geo} operator via
- * JMEOS for native streaming-snapshot semantics that match the batch
- * BerlinMOD-Q3 byte-for-byte.
+ * <p>Predicate: {@link MEOSBridge#dwithinMetres} — MEOS
+ * {@code edwithin_tgeo_geo} over WGS84 geographies. The snapshot-form output
+ * at watermark T is equal to the batch BerlinMOD-Q3 result up to T.
  */
 public class Q3SnapshotFunction
         extends KeyedProcessFunction<Integer, BerlinMODTrip, Tuple2<Long, Integer>> {
@@ -80,7 +104,7 @@ public class Q3SnapshotFunction
         if (p == null) {
             return;
         }
-        if (Haversine.withinMetres(p.f0, p.f1, pLon, pLat, radiusMetres)) {
+        if (MEOSBridge.dwithinMetres(p.f0, p.f1, pLon, pLat, radiusMetres)) {
             Integer vehicleId = ctx.getCurrentKey();
             out.collect(new Tuple2<>(timestamp, vehicleId));
             if (LOG.isDebugEnabled()) {

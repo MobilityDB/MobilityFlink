@@ -1,3 +1,28 @@
+/*****************************************************************************
+ *
+ * This MobilityDB code is provided under The PostgreSQL License.
+ * Copyright (c) 2020-2026, Université libre de Bruxelles and MobilityDB
+ * contributors
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for any purpose, without fee, and without a written
+ * agreement is hereby granted, provided that the above copyright notice and
+ * this paragraph and the following two paragraphs appear in all copies.
+ *
+ * IN NO EVENT SHALL UNIVERSITE LIBRE DE BRUXELLES BE LIABLE TO ANY PARTY FOR
+ * DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING
+ * LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION,
+ * EVEN IF UNIVERSITE LIBRE DE BRUXELLES HAS BEEN ADVISED OF THE POSSIBILITY
+ * OF SUCH DAMAGE.
+ *
+ * UNIVERSITE LIBRE DE BRUXELLES SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+ * AND FITNESS FOR A PARTICULAR PURPOSE. THE SOFTWARE PROVIDED HEREUNDER IS ON
+ * AN "AS IS" BASIS, AND UNIVERSITE LIBRE DE BRUXELLES HAS NO OBLIGATIONS TO
+ * PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+ *
+ *****************************************************************************/
+
 package berlinmod;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -20,7 +45,7 @@ import java.util.List;
  * Local end-to-end test driver for the BerlinMOD-Q4 three streaming forms.
  *
  * <p>Region R = bounding box {@code (4.30, 50.84, 4.36, 50.86)} — a rectangle
- * around Brussels city centre. The synthetic corpus is designed to produce
+ * around the canonical sample area. The synthetic corpus is designed to produce
  * <i>multiple</i> outside → inside transitions so the entry-detection logic
  * is exercised non-trivially:
  *
@@ -34,14 +59,14 @@ import java.util.List;
  *
  * <p>Expected output:
  * <ul>
- *   <li><b>Q4-continuous</b>: 3 entries (v200's three outside → inside transitions)</li>
+ *   <li><b>Q4-continuous</b>: 3 entries (vehicle 2's three outside → inside transitions)</li>
  *   <li><b>Q4-windowed</b>: per the intra-window scoping convention — window
- *       [0, 10 s) contains v100's first-seen-inside event AND v200's two entries
- *       (t=3, t=7); window [10, 20 s) contains v100's first-event-in-window
- *       AND v200's third entry (t=11). 5 emissions total.</li>
+ *       [0, 10 s) contains vehicle 1's first-seen-inside event AND vehicle 2's two entries
+ *       (t=3, t=7); window [10, 20 s) contains vehicle 1's first-event-in-window
+ *       AND vehicle 2's third entry (t=11). 5 emissions total.</li>
  *   <li><b>Q4-snapshot</b>: cumulative entries up to each tick. Tick 5: 1
- *       (v200 t=3). Tick 10: 2 (v200 t=3, t=7). Tick 15: 3 (v200 t=3, t=7,
- *       t=11). v100 contributes 0 (always inside, no transition). v300
+ *       (vehicle 2 t=3). Tick 10: 2 (vehicle 2 t=3, t=7). Tick 15: 3 (vehicle 2 t=3, t=7,
+ *       t=11). vehicle 1 contributes 0 (always inside, no transition). vehicle 3
  *       contributes 0. 6 emissions total (1+2+3).</li>
  * </ul>
  */
@@ -50,9 +75,9 @@ public class BerlinMODQ4LocalTest {
     private static final Logger LOG = LoggerFactory.getLogger(BerlinMODQ4LocalTest.class);
 
     // Region R — Brussels centre rectangle
-    private static final double XMIN = 4.30;
-    private static final double YMIN = 50.84;
-    private static final double XMAX = 4.36;
+    private static final double XMIN = 4.40;
+    private static final double YMIN = 50.74;
+    private static final double XMAX = 4.47;
     private static final double YMAX = 50.86;
 
     private static final long WINDOW_SIZE_SECONDS = 10L;
@@ -66,7 +91,7 @@ public class BerlinMODQ4LocalTest {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        List<BerlinMODTrip> events = buildEvents();
+        List<BerlinMODTrip> events = BerlinMODCorpus.loadSample();
         DataStreamSource<BerlinMODTrip> raw = env.fromCollection(events);
         DataStream<BerlinMODTrip> trips = raw.assignTimestampsAndWatermarks(
                 WatermarkStrategy
@@ -92,39 +117,4 @@ public class BerlinMODQ4LocalTest {
         LOG.info("BerlinMODQ4LocalTest done");
     }
 
-    private static List<BerlinMODTrip> buildEvents() {
-        List<BerlinMODTrip> events = new ArrayList<>();
-        // v100 always inside R
-        for (int i = 0; i <= 12; i += 2) {
-            events.add(make(100, T0 + i * 1000L, 4.3517, 50.8503));
-        }
-        // v200 oscillates in/out: out, IN, out, IN, out, IN, out
-        double[][] v200Path = {
-                {4.3060, 50.8270}, // t=1  out (lat<50.84)
-                {4.3060, 50.8500}, // t=3  IN
-                {4.3060, 50.8300}, // t=5  out
-                {4.3060, 50.8500}, // t=7  IN
-                {4.3060, 50.8100}, // t=9  out
-                {4.3060, 50.8500}, // t=11 IN
-                {4.3060, 50.8300}, // t=13 out
-        };
-        int idx = 0;
-        for (int i = 1; i <= 13; i += 2, idx++) {
-            events.add(make(200, T0 + i * 1000L, v200Path[idx][0], v200Path[idx][1]));
-        }
-        // v300 always outside R
-        for (int i = 0; i <= 12; i += 2) {
-            events.add(make(300, T0 + i * 1000L, 4.2000, 50.7500));
-        }
-        return events;
-    }
-
-    private static BerlinMODTrip make(int vid, long t, double lon, double lat) {
-        BerlinMODTrip trip = new BerlinMODTrip();
-        trip.setVehicleId(vid);
-        trip.setTimestamp(t);
-        trip.setLon(lon);
-        trip.setLat(lat);
-        return trip;
-    }
 }
