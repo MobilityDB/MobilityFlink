@@ -27,10 +27,9 @@ package berlinmod;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.java.tuple.Tuple3;
-import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
+import org.apache.flink.util.CloseableIterator;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -113,12 +112,16 @@ public final class BerlinMODParity {
         STREAMED.clear();
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
-        DataStream<BerlinMODTrip> trips = env.fromCollection(corpus)
+        DataStream<BerlinMODTrip> trips = env.fromData(corpus)
                 .assignTimestampsAndWatermarks(WatermarkStrategy
                         .<BerlinMODTrip>forBoundedOutOfOrderness(Duration.ofSeconds(1))
                         .withTimestampAssigner((e, ts) -> e.getTimestamp()));
-        wiring.apply(trips).addSink(new CollectSink());
-        env.execute("parity-" + query);
+        try (CloseableIterator<Tuple3<Integer, Long, Boolean>> it =
+                     wiring.apply(trips).executeAndCollect("parity-" + query)) {
+            while (it.hasNext()) {
+                STREAMED.add(it.next().f2);
+            }
+        }
 
         Boolean[] streamed = STREAMED.toArray(new Boolean[0]);
         long streamingTrue = 0, batchTrue = 0, mismatches = 0;
@@ -143,13 +146,5 @@ public final class BerlinMODParity {
 
     private static void MeosWiringInit() {
         org.mobilitydb.flink.meos.wirings.MeosWiringRuntime.ensureInitializedOnThread();
-    }
-
-    /** Records each continuous-form output's {@code near} flag in arrival order. */
-    private static final class CollectSink extends RichSinkFunction<Tuple3<Integer, Long, Boolean>> {
-        @Override public void open(Configuration cfg) { }
-        @Override public void invoke(Tuple3<Integer, Long, Boolean> v, Context context) {
-            STREAMED.add(v.f2);
-        }
     }
 }

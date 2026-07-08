@@ -14,13 +14,12 @@ import java.util.Properties;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.RichCoGroupFunction;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.Collector;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -69,7 +68,7 @@ import functions.error_handler;
  *       (all events routed to the same partition), which delivers all left and right events
  *       in the window to a single function call. The {@code mmsi1 &lt; mmsi2} filter is then
  *       applied manually inside {@link ClosestPairsCoGroupFunction}.</li>
- *   <li><b>Line 3 (10-second tumbling window)</b>: {@code TumblingEventTimeWindows.of(Time.seconds(10))},
+ *   <li><b>Line 3 (10-second tumbling window)</b>: {@code TumblingEventTimeWindows.of(Duration.ofSeconds(10))},
  *       same as Queries 1 and 6.</li>
  *   <li><b>Line 4 (nearest_approach_distance)</b>: Same as Query 6:
  *       {@code geog_distance(temporal_end_value(p1), temporal_end_value(p2))} gives the
@@ -172,7 +171,7 @@ public class Query7_Main {
             gps.coGroup(gps2)
                     .where(e -> 1)      // constant key: all events go to the same partition
                     .equalTo(e -> 1)    // same constant on right side
-                    .window(TumblingEventTimeWindows.of(Time.seconds(10)))
+                    .window(TumblingEventTimeWindows.of(Duration.ofSeconds(10)))
                     .apply(new ClosestPairsCoGroupFunction(TOP_K))
                     .print();
 
@@ -230,7 +229,7 @@ public class Query7_Main {
         private transient error_handler errorHandler;
 
         @Override
-        public void open(Configuration parameters) throws Exception {
+        public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
             functions.meos_initialize_timezone("UTC");

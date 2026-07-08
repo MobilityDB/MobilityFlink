@@ -12,13 +12,12 @@ import java.util.Map;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.RichCoGroupFunction;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.Collector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,7 +94,7 @@ public class Query9_Main {
             gps.coGroup(gps2)
                     .where(e -> 1)
                     .equalTo(e -> 1)
-                    .window(TumblingEventTimeWindows.of(Time.seconds(10)))
+                    .window(TumblingEventTimeWindows.of(Duration.ofSeconds(10)))
                     .apply(new KnnCoGroupFunction(K))
                     .print();
 
@@ -126,7 +125,7 @@ public class Query9_Main {
         public KnnCoGroupFunction(int k) { this.k = k; }
 
         @Override
-        public void open(Configuration parameters) throws Exception {
+        public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
             functions.meos_initialize_timezone("UTC");

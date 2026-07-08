@@ -97,7 +97,7 @@ public final class MeosWiringsDemoJob {
                 StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataStream<String> tboxWkts = env.fromCollection(Arrays.asList(INPUT_TBOX_WKTS));
+        DataStream<String> tboxWkts = env.fromData(Arrays.asList(INPUT_TBOX_WKTS));
 
         // The records crossing operator boundaries are serialized MEOS values
         // (WKT text) — never raw native pointers, which are process-local and

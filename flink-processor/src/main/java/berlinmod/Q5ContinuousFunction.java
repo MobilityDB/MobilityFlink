@@ -31,7 +31,7 @@ import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple4;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.util.Collector;
 
@@ -75,7 +75,7 @@ public class Q5ContinuousFunction
     }
 
     @Override
-    public void open(Configuration parameters) {
+    public void open(OpenContext parameters) {
         TypeInformation<Tuple2<Double, Double>> vInfo =
                 TypeInformation.of(new TypeHint<Tuple2<Double, Double>>() {});
         lastPos = getRuntimeContext().getMapState(

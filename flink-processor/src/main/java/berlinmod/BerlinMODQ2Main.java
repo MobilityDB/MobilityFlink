@@ -36,7 +36,6 @@ import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsIni
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,7 +101,7 @@ public class BerlinMODQ2Main {
 
         // Windowed form — last-known (lon, lat) per tumbling window
         DataStream<Tuple5<Long, Long, Integer, Double, Double>> windowed = trips
-                .windowAll(TumblingEventTimeWindows.of(Time.seconds(WINDOW_SIZE_SECONDS)))
+                .windowAll(TumblingEventTimeWindows.of(Duration.ofSeconds(WINDOW_SIZE_SECONDS)))
                 .process(new Q2WindowedFunction(TARGET_VEHICLE_ID));
         windowed.print("Q2-windowed");
 

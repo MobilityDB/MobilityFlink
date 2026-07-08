@@ -12,14 +12,13 @@ import jnr.ffi.Pointer;
 import jnr.ffi.Runtime;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.slf4j.Logger;
@@ -89,7 +88,7 @@ public class Query3_Main {
 
             source
                     .keyBy(SNCBData::getDeviceId)
-                    .window(SlidingEventTimeWindows.of(Time.seconds(10), Time.milliseconds(10)))
+                    .window(SlidingEventTimeWindows.of(Duration.ofSeconds(10), Duration.ofMillis(10)))
                     // Switch here to compare implementations:
                     .process(new TrajectoryCreationV1_WKT())
                     //.process(new TrajectoryCreationV2_Expand())
@@ -123,7 +122,7 @@ public class Query3_Main {
         private transient error_handler_fn errorHandler;
 
         @Override
-        public void open(Configuration parameters) throws Exception {
+        public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
             functions.meos_initialize_timezone("UTC");
@@ -182,7 +181,7 @@ public class Query3_Main {
         private transient error_handler_fn errorHandler;
 
         @Override
-        public void open(Configuration parameters) throws Exception {
+        public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
             functions.meos_initialize_timezone("UTC");

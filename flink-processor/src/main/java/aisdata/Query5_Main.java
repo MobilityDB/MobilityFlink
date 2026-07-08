@@ -10,14 +10,13 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -68,7 +67,7 @@ import functions.error_handler_fn;
  *       of the polygon pass the filter.</li>
  *   <li><b>Line 3 (groupBy device_id)</b>: Implemented with {@code keyBy(getMmsi)}.</li>
  *   <li><b>Line 4 (sliding window 45s / 5s)</b>: Implemented with
- *       {@code SlidingEventTimeWindows.of(Time.seconds(45), Time.seconds(5))}. This is
+ *       {@code SlidingEventTimeWindows.of(Duration.ofSeconds(45), Duration.ofSeconds(5))}. This is
  *       larger than Queries 3–4 (10s/10ms): a new window opens every 5 seconds, producing
  *       9 overlapping windows simultaneously (45s / 5s = 9).</li>
  *   <li><b>Line 5 (temporal_sequence + avg + min)</b>: All three aggregations are computed
@@ -216,7 +215,7 @@ public class Query5_Main {
             //   print()                   → outputs trajectory + speed stats as alert string.
             source
                     .keyBy(AISData::getMmsi)
-                    .window(SlidingEventTimeWindows.of(Time.seconds(45), Time.seconds(5)))
+                    .window(SlidingEventTimeWindows.of(Duration.ofSeconds(45), Duration.ofSeconds(5)))
                     .process(new HighSpeedAlertWindowFunction(
                             GEOFENCE_WKT,
                             GEOFENCE_DISTANCE_METERS,
@@ -297,7 +296,7 @@ public class Query5_Main {
          * Same optimisation as Query 4's STBox: avoids re-parsing on every invocation.
          */
         @Override
-        public void open(Configuration parameters) throws Exception {
+        public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
             functions.meos_initialize_timezone("UTC");

@@ -31,7 +31,7 @@ import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.tuple.Tuple4;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.util.Collector;
 import org.slf4j.Logger;
@@ -69,7 +69,7 @@ public class Q2SnapshotFunction
     }
 
     @Override
-    public void open(Configuration parameters) {
+    public void open(OpenContext parameters) {
         TypeInformation<Tuple3<Double, Double, Long>> tInfo =
                 TypeInformation.of(new TypeHint<Tuple3<Double, Double, Long>>() {});
         ValueStateDescriptor<Tuple3<Double, Double, Long>> desc =

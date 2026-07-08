@@ -29,7 +29,7 @@ import jnr.ffi.Pointer;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.common.typeinfo.PrimitiveArrayTypeInfo;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.util.Collector;
 
@@ -155,7 +155,7 @@ public final class MeosBoundedStateMap<K, IN, OUT>
     }
 
     @Override
-    public void open(Configuration parameters) throws Exception {
+    public void open(OpenContext parameters) throws Exception {
         super.open(parameters);
         MeosWiringRuntime.ensureInitializedOnThread();
         ValueStateDescriptor<byte[]> descriptor = new ValueStateDescriptor<>(

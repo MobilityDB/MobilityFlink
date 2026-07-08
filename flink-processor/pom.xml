@@ -12,7 +12,14 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <flink.version>1.16.0</flink.version>
+        <flink.version>2.0.0</flink.version>
+        <!-- The Kafka connector is externalized (own release line) since Flink 1.17;
+             it no longer follows ${flink.version}. This is its Flink-2.0 build. -->
+        <flink.kafka.version>4.0.1-2.0</flink.kafka.version>
+        <!-- Apache Sedona has no Flink-2.0 build (latest targets Flink 1.19), so the
+             sedona/** comparison queries are excluded by default and re-enabled with
+             the "sedona" profile once an upstream Sedona/Flink-2.0 release exists. -->
+        <sedona.source.excludes>**/sedona/**</sedona.source.excludes>
         <jackson.version>2.13.4</jackson.version>
         <junit.jupiter.version>5.8.2</junit.jupiter.version>
         <kafka.version>3.2.0</kafka.version>
@@ -44,18 +51,8 @@
         </dependency>
         <dependency>
             <groupId>org.apache.flink</groupId>
-            <artifactId>flink-java</artifactId>
-            <version>${flink.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.flink</groupId>
             <artifactId>flink-connector-kafka</artifactId>
-            <version>${flink.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.flink</groupId>
-            <artifactId>flink-connector-jdbc</artifactId>
-            <version>${flink.version}</version>
+            <version>${flink.kafka.version}</version>
         </dependency>
 
         <!-- ======================================================= -->
@@ -90,19 +87,10 @@
         </dependency>
         -->
 
-        <!-- =================================================================================   -->
-        <!-- Apache Sedona: https://sedona.apache.org/latest/setup/maven-coordinates/            -->
-        <!-- =================================================================================   -->
-        <dependency>
-            <groupId>org.apache.sedona</groupId>
-            <artifactId>sedona-flink-shaded_2.12</artifactId>
-            <version>1.8.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.datasyslab</groupId>
-            <artifactId>geotools-wrapper</artifactId>
-            <version>1.8.1-33.1</version>
-        </dependency>
+        <!-- Apache Sedona (sedona-flink-shaded + geotools-wrapper) and the sedona/**
+             comparison queries live in the "sedona" profile — see the bottom of this
+             POM. They are omitted from the default build because Sedona has no Flink-2.0
+             release yet. -->
 
         <!-- ======================================================= -->
         <!-- JTS: 2D geometries (Point, Polygon, LineString, …)      -->
@@ -225,6 +213,12 @@
                 <version>3.12.1</version>
                 <configuration>
                     <release>${target.java.version}</release>
+                    <excludes>
+                        <exclude>${sedona.source.excludes}</exclude>
+                    </excludes>
+                    <testExcludes>
+                        <testExclude>${sedona.source.excludes}</testExclude>
+                    </testExcludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -289,6 +283,31 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- Apache Sedona comparison queries (sedona/**). Sedona has no Flink-2.0
+             release yet (latest targets Flink 1.19), so these are excluded from the
+             default build. Enable with -Psedona once an upstream Sedona/Flink-2.0
+             artifact exists; this profile re-adds the sources and the dependencies. -->
+        <profile>
+            <id>sedona</id>
+            <properties>
+                <sedona.source.excludes>nothing-excluded/**</sedona.source.excludes>
+            </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.sedona</groupId>
+                    <artifactId>sedona-flink-shaded_2.12</artifactId>
+                    <version>1.9.0</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.datasyslab</groupId>
+                    <artifactId>geotools-wrapper</artifactId>
+                    <version>1.8.1-33.1</version>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
 
     <!-- Optional extended temporal-type families, mirroring the MobilityDB/MEOS
          CMake build flags. Family inclusion is selected at build time with the

@@ -9,7 +9,6 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.Table;
@@ -273,7 +272,7 @@ public class SedonaQuery5_Main {
         // keyBy(mmsi) + SlidingWindow(45s, 5s) - paper Lines 3, 4, 5, 6
         filteredStream
                 .keyBy(new MmsiKeySelector())
-                .window(SlidingEventTimeWindows.of(Time.seconds(45), Time.seconds(5)))
+                .window(SlidingEventTimeWindows.of(Duration.ofSeconds(45), Duration.ofSeconds(5)))
                 .process(new HighSpeedAlertWindowFunction())
                 .print();
 

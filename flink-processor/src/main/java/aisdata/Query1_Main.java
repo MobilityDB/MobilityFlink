@@ -8,14 +8,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.Properties;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -61,7 +60,7 @@ import functions.error_handler_fn;
  *       threshold is set to 500 m for the AIS dataset (the paper uses 20 m for SNCB trains,
  *       see {@link #ALERT_DISTANCE_METERS}).</li>
  *   <li><b>Line 3 (10-second tumbling window)</b>: Implemented with
- *       {@code TumblingEventTimeWindows.of(Time.seconds(10))}, using the AIS message timestamp
+ *       {@code TumblingEventTimeWindows.of(Duration.ofSeconds(10))}, using the AIS message timestamp
  *       as event time.</li>
  *   <li><b>Line 4 (print sink)</b>: Alerts are emitted via {@code .print()} and also logged
  *       at WARN level by {@link HighRiskZoneWindowFunction}.</li>
@@ -218,7 +217,7 @@ public class Query1_Main {
             //   print()                 → paper Line 4: equivalent to PrintSinkDescriptor.
             source
                     .keyBy(AISData::getMmsi)
-                    .window(TumblingEventTimeWindows.of(Time.seconds(10)))
+                    .window(TumblingEventTimeWindows.of(Duration.ofSeconds(10)))
                     .process(new HighRiskZoneWindowFunction(
                             HIGH_RISK_ZONES_WKT, ALERT_DISTANCE_METERS))
                     .print();
@@ -273,7 +272,7 @@ public class Query1_Main {
 
         /** Initialises the MEOS library and the hazard zones for this operator instance. */
         @Override
-        public void open(Configuration parameters) throws Exception {
+        public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
             functions.meos_initialize_timezone("UTC");

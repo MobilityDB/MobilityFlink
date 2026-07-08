@@ -10,14 +10,13 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -54,7 +53,7 @@ import functions.error_handler_fn;
  * <p><b>Mapping to this implementation:</b>
  * <ul>
  *   <li><b>Line 2 (sliding window 10s / 10ms)</b>: Implemented with
- *       {@code SlidingEventTimeWindows.of(Time.seconds(10), Time.milliseconds(10))},
+ *       {@code SlidingEventTimeWindows.of(Duration.ofSeconds(10), Duration.ofMillis(10))},
  *       identical to Query 2. Each window collects up to 10 seconds of GPS points for one
  *       vessel, and a new window opens every 10 milliseconds, producing overlapping snapshots
  *       of the vessel's recent trajectory.</li>
@@ -143,7 +142,7 @@ public class Query3_Main {
             //   print()                   → outputs each trajectory as a human-readable EWKT string.
             source
                     .keyBy(AISData::getMmsi)
-                    .window(SlidingEventTimeWindows.of(Time.seconds(10), Time.milliseconds(10)))
+                    .window(SlidingEventTimeWindows.of(Duration.ofSeconds(10), Duration.ofMillis(10)))
                     .process(new TrajectoryCreationWindowFunction())
                     .print();
 
@@ -188,7 +187,7 @@ public class Query3_Main {
 
         /** Initialises the MEOS library for this operator instance. */
         @Override
-        public void open(Configuration parameters) throws Exception {
+        public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
             functions.meos_initialize_timezone("UTC");

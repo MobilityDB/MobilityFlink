@@ -26,12 +26,12 @@
 package berlinmod;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.connector.sink2.Sink;
+import org.apache.flink.api.connector.sink2.SinkWriter;
+import org.apache.flink.api.connector.sink2.WriterInitContext;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.functions.sink.RichSinkFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -158,13 +158,13 @@ public final class BerlinMODBenchmark {
         COUNTS.put(name, new LongAdder());
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
-        DataStream<BerlinMODTrip> trips = env.fromCollection(corpus)
+        DataStream<BerlinMODTrip> trips = env.fromData(corpus)
                 .assignTimestampsAndWatermarks(WatermarkStrategy
                         .<BerlinMODTrip>forBoundedOutOfOrderness(Duration.ofSeconds(1))
                         .withTimestampAssigner((e, ts) -> e.getTimestamp()));
         @SuppressWarnings("unchecked")
         DataStream<Object> out = (DataStream<Object>) wiring.apply(trips);
-        out.addSink(new CountingSink(name));
+        out.sinkTo(new CountingSink(name));
         long t0 = System.nanoTime();
         env.execute(name);
         long wall = (System.nanoTime() - t0) / 1_000_000L;
@@ -172,16 +172,21 @@ public final class BerlinMODBenchmark {
     }
 
     private static TumblingEventTimeWindows tumble(BerlinMODCorpus.Params p) {
-        return TumblingEventTimeWindows.of(Time.seconds(p.windowSeconds));
+        return TumblingEventTimeWindows.of(Duration.ofSeconds(p.windowSeconds));
     }
 
     /** Counts records into the shared per-cell {@link LongAdder}. */
-    private static final class CountingSink extends RichSinkFunction<Object> {
+    private static final class CountingSink implements Sink<Object> {
         private final String cell;
         CountingSink(String cell) { this.cell = cell; }
-        @Override public void open(Configuration cfg) { }
-        @Override public void invoke(Object value, Context context) {
-            COUNTS.get(cell).increment();
+        @Override public SinkWriter<Object> createWriter(WriterInitContext context) {
+            return new SinkWriter<Object>() {
+                @Override public void write(Object element, Context context) {
+                    COUNTS.get(cell).increment();
+                }
+                @Override public void flush(boolean endOfInput) { }
+                @Override public void close() { }
+            };
         }
     }
 }

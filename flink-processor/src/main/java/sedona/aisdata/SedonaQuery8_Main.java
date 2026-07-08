@@ -17,7 +17,6 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.locationtech.jts.geom.CoordinateXYM;
@@ -279,7 +278,7 @@ public class SedonaQuery8_Main {
 
         source
                 .keyBy(new MmsiKeySelector())
-                .window(TumblingEventTimeWindows.of(Time.seconds(10)))
+                .window(TumblingEventTimeWindows.of(Duration.ofSeconds(10)))
                 .process(new EKFWindowFunction(GATE, Q, VARIANCE, DROP_OUTLIERS))
                 .print();
 

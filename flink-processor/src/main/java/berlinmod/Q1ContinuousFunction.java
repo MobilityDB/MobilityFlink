@@ -28,7 +28,7 @@ package berlinmod;
 import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.util.Collector;
 
@@ -47,7 +47,7 @@ public class Q1ContinuousFunction
     private transient ValueState<Boolean> seen;
 
     @Override
-    public void open(Configuration parameters) {
+    public void open(OpenContext parameters) {
         seen = getRuntimeContext().getState(
                 new ValueStateDescriptor<>("q1SeenVehicle", Boolean.class));
     }
