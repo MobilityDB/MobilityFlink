@@ -55,8 +55,7 @@ import java.time.Duration;
  * </ul>
  *
  * <p>The queried vehicle id and other defaults match
- * {@code doc/berlinmod-q3-streaming-forms.md}. The companion local test driver
- * is {@link BerlinMODQ2LocalTest}.
+ * {@code doc/berlinmod-q3-streaming-forms.md}.
  */
 public class BerlinMODQ2Main {
 

@@ -51,16 +51,14 @@ import java.util.function.Function;
  * a counting sink; the harness records input events, output rows, wall-clock,
  * and throughput (events per second), then prints a Markdown results table.
  *
- * <p>The corpus is either the real BerlinMOD instants ({@code --csv <path>}) or a
- * deterministic synthetic corpus ({@code --vehicles}/{@code --events}); the
- * per-query parameters and the window/tick granularity are derived from the
+ * <p>The corpus is the real BerlinMOD instants CSV ({@code --csv <path>}, required);
+ * the per-query parameters and the window/tick granularity are derived from the
  * corpus by {@link BerlinMODCorpus}.
  *
  * <p>Usage (from {@code flink-processor/}, with an extended libmeos on the
  * loader path and the Flink-on-Java-21 {@code --add-opens} flags):
  * <pre>
  *   java … berlinmod.BerlinMODBenchmark --csv &lt;berlinmod_instants.csv&gt; [--max N] [--only Q3]
- *   java … berlinmod.BerlinMODBenchmark --vehicles 50 --events 600 [--only continuous]
  * </pre>
  */
 public final class BerlinMODBenchmark {
@@ -89,8 +87,7 @@ public final class BerlinMODBenchmark {
         List<BerlinMODTrip> corpus = BerlinMODCorpus.fromInstantsCsv(csv, maxRows);
         int n = corpus.size();
         BerlinMODCorpus.Params p = BerlinMODCorpus.derive(corpus);
-        System.out.printf("Corpus: %s, %d events; window=%ds tick=%dms; P=(%.5f,%.5f) targets=%d/%d/%d%n",
-                csv != null ? "real BerlinMOD instants" : "synthetic",
+        System.out.printf("Corpus: real BerlinMOD instants, %d events; window=%ds tick=%dms; P=(%.5f,%.5f) targets=%d/%d/%d%n",
                 n, p.windowSeconds, p.snapshotTickMillis, p.pLon, p.pLat, p.targetId, p.xId, p.yId);
 
         Map<String, Function<DataStream<BerlinMODTrip>, DataStream<?>>> cells = new LinkedHashMap<>();
@@ -106,6 +103,8 @@ public final class BerlinMODBenchmark {
         cells.put("Q4-continuous", t -> t.keyBy(BerlinMODTrip::getVehicleId).process(new Q4ContinuousFunction(p.xmin, p.ymin, p.xmax, p.ymax)));
         cells.put("Q4-windowed", t -> t.windowAll(tumble(p)).process(new Q4WindowedFunction(p.xmin, p.ymin, p.xmax, p.ymax)));
         cells.put("Q4-snapshot", t -> t.keyBy(BerlinMODTrip::getVehicleId).process(new Q4SnapshotFunction(p.xmin, p.ymin, p.xmax, p.ymax, p.snapshotTickMillis)));
+        // Q5 (pairwise meet) and Q9 (all-pairs) need every event co-located, so keyBy(x -> 0)
+        // routes the whole stream to a single subtask on purpose — a global, non-parallel view.
         cells.put("Q5-continuous", t -> t.keyBy(x -> 0).process(new Q5ContinuousFunction(p.pLon, p.pLat, p.radiusMetres, p.dMeetMetres)));
         cells.put("Q5-windowed", t -> t.windowAll(tumble(p)).process(new Q5WindowedFunction(p.pLon, p.pLat, p.radiusMetres, p.dMeetMetres)));
         cells.put("Q5-snapshot", t -> t.keyBy(x -> 0).process(new Q5SnapshotFunction(p.pLon, p.pLat, p.radiusMetres, p.dMeetMetres, p.snapshotTickMillis)));
@@ -127,12 +126,19 @@ public final class BerlinMODBenchmark {
             if (only != null && !cell.getKey().contains(only)) {
                 continue;
             }
-            long[] r = runCell(cell.getKey(), cell.getValue(), corpus);
-            double secs = r[1] / 1000.0;
-            double tput = secs > 0 ? n / secs : 0;
-            rows.add(new String[]{cell.getKey(), String.valueOf(n), String.valueOf(r[0]),
-                    String.valueOf(r[1]), String.format("%,.0f", tput)});
-            System.out.printf("  %-14s out=%-8d %6d ms  %,.0f ev/s%n", cell.getKey(), r[0], r[1], tput);
+            try {
+                long[] r = runCell(cell.getKey(), cell.getValue(), corpus);
+                double secs = r[1] / 1000.0;
+                double tput = secs > 0 ? n / secs : 0;
+                rows.add(new String[]{cell.getKey(), String.valueOf(n), String.valueOf(r[0]),
+                        String.valueOf(r[1]), String.format("%,.0f", tput)});
+                System.out.printf("  %-14s out=%-8d %6d ms  %,.0f ev/s%n", cell.getKey(), r[0], r[1], tput);
+            } catch (Exception e) {
+                // One failing cell (e.g. its Flink job) must not abort the whole matrix:
+                // record the failure and continue with the next cell.
+                rows.add(new String[]{cell.getKey(), String.valueOf(n), "ERROR", "-", "-"});
+                System.err.printf("  %-14s FAILED: %s%n", cell.getKey(), e.getMessage());
+            }
         }
 
         System.out.println();
@@ -143,10 +149,12 @@ public final class BerlinMODBenchmark {
         }
     }
 
-    /** @return {outputRows, wallMillis} for one cell. */
-    private static long[] runCell(String name,
-                                  Function<DataStream<BerlinMODTrip>, DataStream<?>> wiring,
-                                  List<BerlinMODTrip> corpus) throws Exception {
+    /** Runs one benchmark cell as its own Flink job. Package-private so the test suite
+     *  can exercise the cell-run path on a small corpus.
+     *  @return {outputRows, wallMillis} for one cell. */
+    static long[] runCell(String name,
+                          Function<DataStream<BerlinMODTrip>, DataStream<?>> wiring,
+                          List<BerlinMODTrip> corpus) throws Exception {
         COUNTS.put(name, new LongAdder());
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
