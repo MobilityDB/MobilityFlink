@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import functions.functions;
+import functions.GeneratedFunctions;
 import functions.error_handler;
 import functions.error_handler_fn;
 import types.temporal.TInterpolation;
@@ -194,7 +195,7 @@ public class Query8_V2_Main {
             }
 
             // 5. Apply MEOS native Extended Kalman Filter.
-            Pointer cleanedSeq = functions.temporal_ext_kalman_filter(rawSeq, gate, q, r, dropOutliers);
+            Pointer cleanedSeq = GeneratedFunctions.temporal_ext_kalman_filter(rawSeq, gate, q, r, dropOutliers);
             if (cleanedSeq == null) {
                 log.warn("[EKF-V2] temporal_ext_kalman_filter returned null for MMSI={} "
                         + "(window too small?). Falling back to raw.", mmsi);
