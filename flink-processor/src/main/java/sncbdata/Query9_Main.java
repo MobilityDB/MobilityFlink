@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
-import functions.functions;
+import functions.GeneratedFunctions;
 import functions.error_handler;
 
 /**
@@ -60,8 +60,8 @@ public class Query9_Main {
         logger.info("Java library path: {}", System.getProperty("java.library.path"));
 
         try {
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new error_handler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -104,7 +104,7 @@ public class Query9_Main {
             logger.error("Error during execution: {}", e.getMessage(), e);
             throw e;
         } finally {
-            try { functions.meos_finalize(); }
+            try { GeneratedFunctions.meos_finalize(); }
             catch (Exception e) { logger.error("Error during MEOS finalization: {}", e.getMessage(), e); }
         }
     }
@@ -128,8 +128,8 @@ public class Query9_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
         }
 
         @Override
@@ -148,18 +148,18 @@ public class Query9_Main {
             List<Pointer> geoLefts = new ArrayList<>(lefts.size());
             for (SNCBData left : lefts) {
                 String ts = millisToTimestamp(left.getTimestamp());
-                Pointer tp  = functions.tgeogpoint_in(
+                Pointer tp  = GeneratedFunctions.tgeogpoint_in(
                         String.format("POINT(%f %f)@%s", left.getLon(), left.getLat(), ts));
-                Pointer geo = (tp != null) ? functions.tgeo_end_value(tp) : null;
+                Pointer geo = (tp != null) ? GeneratedFunctions.tgeo_end_value(tp) : null;
                 geoLefts.add(geo);
             }
 
             List<Pointer> geoRights = new ArrayList<>(rights.size());
             for (SNCBData right : rights) {
                 String ts = millisToTimestamp(right.getTimestamp());
-                Pointer tp  = functions.tgeogpoint_in(
+                Pointer tp  = GeneratedFunctions.tgeogpoint_in(
                         String.format("POINT(%f %f)@%s", right.getLon(), right.getLat(), ts));
-                Pointer geo = (tp != null) ? functions.tgeo_end_value(tp) : null;
+                Pointer geo = (tp != null) ? GeneratedFunctions.tgeo_end_value(tp) : null;
                 geoRights.add(geo);
             }
 
@@ -183,7 +183,7 @@ public class Query9_Main {
                     // Paper Line 2: device_id != device_id2
                     if (left.getDeviceId() == right.getDeviceId()) continue;
 
-                    double dist = functions.geog_distance(geoLeft, geoRight);
+                    double dist = GeneratedFunctions.geog_distance(geoLeft, geoRight);
                     String key = left.getDeviceId() + "->" + right.getDeviceId();
                     if (!minDistMap.containsKey(key) || dist < minDistMap.get(key)[2]) {
                         minDistMap.put(key, new double[]{

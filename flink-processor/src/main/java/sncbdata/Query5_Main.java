@@ -24,7 +24,7 @@ import org.apache.flink.util.Collector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import functions.functions;
+import functions.GeneratedFunctions;
 import functions.error_handler;
 import functions.error_handler_fn;
 import types.temporal.TInterpolation;
@@ -84,8 +84,8 @@ public class Query5_Main {
         logger.info("Java library path: {}", System.getProperty("java.library.path"));
 
         try {
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new error_handler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -124,7 +124,7 @@ public class Query5_Main {
             logger.error("Error during execution: {}", e.getMessage(), e);
             throw e;
         } finally {
-            try { functions.meos_finalize(); }
+            try { GeneratedFunctions.meos_finalize(); }
             catch (Exception e) { logger.error("Error during MEOS finalization: {}", e.getMessage(), e); }
         }
     }
@@ -164,9 +164,9 @@ public class Query5_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
-            geofence = functions.geog_in(geofenceWkt, -1);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
+            geofence = GeneratedFunctions.geog_in(geofenceWkt, -1);
             if (geofence == null) log.error("[V1] geog_in returned null for geofence: {}", geofenceWkt);
         }
 
@@ -183,9 +183,9 @@ public class Query5_Main {
             for (SNCBData event : elements) {
                 String wkt    = String.format("POINT(%f %f)@%s",
                         event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
-                Pointer tpoint = functions.tgeogpoint_in(wkt);
+                Pointer tpoint = GeneratedFunctions.tgeogpoint_in(wkt);
                 if (tpoint == null) continue;
-                if (functions.edwithin_tgeo_geo(tpoint, geofence, geofenceDistMeters) != 1) continue;
+                if (GeneratedFunctions.edwithin_tgeo_geo(tpoint, geofence, geofenceDistMeters) != 1) continue;
                 surviving.add(event);
             }
 
@@ -213,9 +213,9 @@ public class Query5_Main {
             // Line 6: (avg_speed > 50) || (min_speed > 20) in m/s
             if (avgSpeedMs <= avgSpeedThresholdMs && minSpeedMs <= minSpeedThresholdMs) return;
 
-            Pointer trajectory = functions.tgeogpoint_in(seq.toString());
+            Pointer trajectory = GeneratedFunctions.tgeogpoint_in(seq.toString());
             String trajectoryEwkt = (trajectory != null)
-                    ? functions.tspatial_as_ewkt(trajectory, 6) : seq.toString();
+                    ? GeneratedFunctions.tspatial_as_ewkt(trajectory, 6) : seq.toString();
 
             emit(out, log, "V1", deviceId, survivingListSize, avgSpeedMs, minSpeedMs,
                     avgSpeedThresholdMs, minSpeedThresholdMs, windowStart, windowEnd, trajectoryEwkt);
@@ -261,9 +261,9 @@ public class Query5_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
-            geofence = functions.geog_in(geofenceWkt, -1);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
+            geofence = GeneratedFunctions.geog_in(geofenceWkt, -1);
             if (geofence == null) log.error("[V2] geog_in returned null for geofence: {}", geofenceWkt);
         }
 
@@ -291,14 +291,14 @@ public class Query5_Main {
             for (SNCBData event : sorted) {
                 String wkt    = String.format("POINT(%f %f)@%s",
                         event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
-                Pointer inst = functions.tgeogpoint_in(wkt);
+                Pointer inst = GeneratedFunctions.tgeogpoint_in(wkt);
                 if (inst == null) {
                     log.error("[V2] tgeogpoint_in returned null for DeviceID={} wkt={}", deviceId, wkt);
                     continue;
                 }
 
                 // Geofence filter: reuse the already-parsed instant pointer.
-                if (functions.edwithin_tgeo_geo(inst, geofence, geofenceDistMeters) != 1) continue;
+                if (GeneratedFunctions.edwithin_tgeo_geo(inst, geofence, geofenceDistMeters) != 1) continue;
 
                 double speedMs = event.getGpsSpeed() * KMH_TO_MS;
                 speedSumMs += speedMs;
@@ -307,14 +307,14 @@ public class Query5_Main {
                 if (trajectory == null) {
                     Pointer seedArray = Memory.allocate(runtime, Long.BYTES);
                     seedArray.putPointer(0, inst);
-                    trajectory = functions.tsequence_make(
+                    trajectory = GeneratedFunctions.tsequence_make(
                             seedArray, 1, true, true, TInterpolation.LINEAR.getValue(), true);
                     if (trajectory == null) {
                         log.error("[V2] tsequence_make (seed) returned null for DeviceID={}", deviceId);
                         return;
                     }
                 } else {
-                    Pointer expanded = functions.temporal_append_tinstant(
+                    Pointer expanded = GeneratedFunctions.temporal_append_tinstant(
                             trajectory, inst, TInterpolation.LINEAR.getValue(), 0.0, null, true);
                     if (expanded == null) {
                         log.error("[V2] temporal_append_tinstant returned null for DeviceID={} wkt={}", deviceId, wkt);
@@ -330,7 +330,7 @@ public class Query5_Main {
             double avgSpeedMs = speedSumMs / count;
             if (avgSpeedMs <= avgSpeedThresholdMs && minSpeedMs <= minSpeedThresholdMs) return;
 
-            String trajectoryEwkt = functions.tspatial_as_ewkt(trajectory, 6);
+            String trajectoryEwkt = GeneratedFunctions.tspatial_as_ewkt(trajectory, 6);
             emit(out, log, "V2", deviceId, count, avgSpeedMs, minSpeedMs,
                     avgSpeedThresholdMs, minSpeedThresholdMs, windowStart, windowEnd, trajectoryEwkt);
         }

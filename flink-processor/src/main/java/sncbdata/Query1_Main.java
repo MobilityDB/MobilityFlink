@@ -16,7 +16,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import functions.functions;
+import functions.GeneratedFunctions;
 import functions.MeosErrorHandler;
 import functions.error_handler_fn;
 
@@ -70,8 +70,8 @@ public class Query1_Main {
 
         try {
             logger.info("Initializing MEOS library");
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new MeosErrorHandler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new MeosErrorHandler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -115,7 +115,7 @@ public class Query1_Main {
         } finally {
             try {
                 logger.info("Finalizing MEOS library");
-                functions.meos_finalize();
+                GeneratedFunctions.meos_finalize();
             } catch (Exception e) {
                 logger.error("Error during MEOS finalization: {}", e.getMessage());
             }
@@ -146,12 +146,12 @@ public class Query1_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             error_handler = new MeosErrorHandler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(error_handler);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(error_handler);
             // Parse INPolygons once per worker: not per window call.
             this.hazardZones = new Pointer[zoneWkt.length];
             for (int i = 0; i < zoneWkt.length; i++) {
-                hazardZones[i] = functions.geog_in(zoneWkt[i], -1);
+                hazardZones[i] = GeneratedFunctions.geog_in(zoneWkt[i], -1);
                 if (hazardZones[i] == null) {
                     logger.error("geog_in returned null for ZONE {}", i + 1);
                 }
@@ -167,14 +167,14 @@ public class Query1_Main {
                 String ts = millisToTimestamp(event.getTimestamp());
                 String tpointWkt = String.format("POINT(%f %f)@%s", event.getLon(), event.getLat(), ts);
 
-                Pointer tpoint = functions.tgeogpoint_in(tpointWkt);
+                Pointer tpoint = GeneratedFunctions.tgeogpoint_in(tpointWkt);
                 if (tpoint == null) { log.error("tgeogpoint_in returned null for WKT: {}", tpointWkt); continue; }
 
                 for (int i = 0; i < hazardZones.length; i++) {
                     if (hazardZones[i] == null) continue;
                     // Paper Line 2: edwithin_tgeo_geo returns 1 if tpoint is within
                     // distanceMeters of the zone polygon at any instant.
-                    if (functions.edwithin_tgeo_geo(tpoint, hazardZones[i], distanceMeters) == 1) {
+                    if (GeneratedFunctions.edwithin_tgeo_geo(tpoint, hazardZones[i], distanceMeters) == 1) {
                         String alert = String.format(
                                 "[ALERT][Q1] DeviceID=%-6d | lon=%10.5f lat=%9.5f"
                                         + " | ts=%s | within %.0f m of ZONE %d | window [%s - %s]",

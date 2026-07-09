@@ -25,7 +25,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
-import functions.functions;
+import functions.GeneratedFunctions;
 import functions.error_handler;
 import functions.error_handler_fn;
 
@@ -149,8 +149,8 @@ public class Query4_Main {
 
         try {
             logger.info("Initializing MEOS library");
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new error_handler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -206,7 +206,7 @@ public class Query4_Main {
         } finally {
             try {
                 logger.info("Finalizing MEOS library");
-                functions.meos_finalize();
+                GeneratedFunctions.meos_finalize();
             } catch (Exception e) {
                 logger.error("Error during MEOS finalization: {}", e.getMessage(), e);
             }
@@ -268,8 +268,8 @@ public class Query4_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
 
            // stbox_make parameters:
             //   hasx=true   → include spatial (XY) dimensions
@@ -279,12 +279,12 @@ public class Query4_Main {
             //   xmin/xmax/ymin/ymax → spatial bounds (lon/lat in degrees)
             //   zmin/zmax=0 → unused (hasz=false)
             //   s           → temporal span pointer (tstzspan)
-            Pointer tspan = functions.tstzspan_in(tspanLiteral);
+            Pointer tspan = GeneratedFunctions.tstzspan_in(tspanLiteral);
             if (tspan == null) {
                 log.error("tstzspan_in returned null for: {}", tspanLiteral);
                 return;
             }
-            stbox = functions.stbox_make(true, false, true, 4326,
+            stbox = GeneratedFunctions.stbox_make(true, false, true, 4326,
                     xmin, xmax, ymin, ymax, 0, 0, tspan);
             if (stbox == null) {
                 log.error("stbox_make returned null");
@@ -340,7 +340,7 @@ public class Query4_Main {
                 String tpointWkt = String.format(
                         "POINT(%f %f)@%s", event.getLon(), event.getLat(), ts);
 
-                Pointer tpoint = functions.tgeogpoint_in(tpointWkt);
+                Pointer tpoint = GeneratedFunctions.tgeogpoint_in(tpointWkt);
                 if (tpoint == null) {
                     log.error("tgeogpoint_in returned null for WKT: {}", tpointWkt);
                     continue;
@@ -351,7 +351,7 @@ public class Query4_Main {
                 // Returns non-null → point is inside the STBox → keep.
                 // border_inc=true means the box boundaries are inclusive ([xmin,xmax],
                 // [ymin,ymax], [tsmin,tsmax]), matching the paper's closed-interval notation.
-                Pointer restricted = functions.tgeo_at_stbox(tpoint, stbox, true);
+                Pointer restricted = GeneratedFunctions.tgeo_at_stbox(tpoint, stbox, true);
                 if (restricted == null) {
                     log.debug("MMSI={} skipped: point outside STBox at ts={}", mmsi, ts);
                     continue;
@@ -375,13 +375,13 @@ public class Query4_Main {
             }
             seq.append("}");
 
-            Pointer trajectory = functions.tgeogpoint_in(seq.toString());
+            Pointer trajectory = GeneratedFunctions.tgeogpoint_in(seq.toString());
             if (trajectory == null) {
                 log.error("tgeogpoint_in returned null for sequence: {}", seq);
                 return;
             }
 
-            String trajectoryEwkt = functions.tspatial_as_ewkt(trajectory, 6);
+            String trajectoryEwkt = GeneratedFunctions.tspatial_as_ewkt(trajectory, 6);
 
             String output = String.format(
                     "[TRAJ][Q4] MMSI=%-12d | points=%3d | window [%s - %s]%n           trajectory: %s",

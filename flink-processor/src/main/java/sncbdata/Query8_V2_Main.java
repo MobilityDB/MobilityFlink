@@ -57,7 +57,7 @@ import types.temporal.TInterpolation;
  *
  * <h2>Build requirement</h2>
  * <p>Requires {@code libmeos.so} compiled from the {@code marianaGarcez/MobilityDB}
- * fork (branch {@code master}) and {@code functions.java} patched to expose
+ * fork (branch {@code master}) and {@code GeneratedFunctions.java} patched to expose
  * {@code temporal_ext_kalman_filter}, both handled by {@code Dockerfile.q8v2}.
  *
  * <p><b>HOW TO RUN:</b>
@@ -81,8 +81,8 @@ public class Query8_V2_Main {
         logger.info("Java library path: {}", System.getProperty("java.library.path"));
 
         try {
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new error_handler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -115,7 +115,7 @@ public class Query8_V2_Main {
             logger.error("Error during execution: {}", e.getMessage(), e);
             throw e;
         } finally {
-            try { functions.meos_finalize(); }
+            try { GeneratedFunctions.meos_finalize(); }
             catch (Exception e) { logger.error("Error during MEOS finalization: {}", e.getMessage(), e); }
         }
     }
@@ -147,8 +147,8 @@ public class Query8_V2_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
         }
 
         @Override
@@ -169,15 +169,15 @@ public class Query8_V2_Main {
                 SNCBData event = sorted.get(0);
                 String wkt   = String.format("POINT(%f %f)@%s",
                         event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
-                Pointer inst = functions.tgeompoint_in(wkt);
+                Pointer inst = GeneratedFunctions.tgeompoint_in(wkt);
                 if (inst == null) return;
                 Runtime runtime = Runtime.getSystemRuntime();
                 Pointer seedArray = Memory.allocate(runtime, Long.BYTES);
                 seedArray.putPointer(0, inst);
-                Pointer singleSeq = functions.tsequence_make(
+                Pointer singleSeq = GeneratedFunctions.tsequence_make(
                         seedArray, 1, true, true, TInterpolation.LINEAR.getValue(), true);
                 if (singleSeq == null) return;
-                String ewkt = functions.tspatial_as_ewkt(singleSeq, 6);
+                String ewkt = GeneratedFunctions.tspatial_as_ewkt(singleSeq, 6);
                 String result = String.format(
                         "[EKF-V2][Q8] DeviceID=%-6d | points=1 | EKF skipped (single point)"
                                 + " | window [%s - %s]%n"
@@ -195,7 +195,7 @@ public class Query8_V2_Main {
             for (SNCBData event : sorted) {
                 String wkt   = String.format("POINT(%f %f)@%s",
                         event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
-                Pointer inst = functions.tgeompoint_in(wkt);
+                Pointer inst = GeneratedFunctions.tgeompoint_in(wkt);
                 if (inst == null) {
                     log.error("[EKF-V2] tgeompoint_in returned null for DeviceID={} wkt={}", deviceId, wkt);
                     continue;
@@ -209,7 +209,7 @@ public class Query8_V2_Main {
             for (int i = 0; i < instants.size(); i++) {
                 ptrArray.putPointer((long) i * Long.BYTES, instants.get(i));
             }
-            Pointer rawSeq = functions.tsequence_make(
+            Pointer rawSeq = GeneratedFunctions.tsequence_make(
                     ptrArray, instants.size(), true, true, TInterpolation.LINEAR.getValue(), true);
             if (rawSeq == null) {
                 log.error("[EKF-V2] tsequence_make returned null for DeviceID={}", deviceId);
@@ -230,8 +230,8 @@ public class Query8_V2_Main {
             }
 
             // 5. Format output: raw and cleaned EWKT side-by-side.
-            String rawEwkt     = functions.tspatial_as_ewkt(rawSeq, 6);
-            String cleanedEwkt = functions.tspatial_as_ewkt(cleanedSeq, 6);
+            String rawEwkt     = GeneratedFunctions.tspatial_as_ewkt(rawSeq, 6);
+            String cleanedEwkt = GeneratedFunctions.tspatial_as_ewkt(cleanedSeq, 6);
 
             String result = String.format(
                     "[EKF-V2][Q8] DeviceID=%-6d | points=%2d | gate=%.1f q=%.2e r=%.2e drop=%b"

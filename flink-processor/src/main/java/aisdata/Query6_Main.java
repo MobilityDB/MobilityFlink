@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
-import functions.functions;
+import functions.GeneratedFunctions;
 import functions.error_handler;
 
 /**
@@ -108,8 +108,8 @@ public class Query6_Main {
 
         try {
             logger.info("Initializing MEOS library");
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new error_handler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -176,7 +176,7 @@ public class Query6_Main {
         } finally {
             try {
                 logger.info("Finalizing MEOS library");
-                functions.meos_finalize();
+                GeneratedFunctions.meos_finalize();
             } catch (Exception e) {
                 logger.error("Error during MEOS finalization: {}", e.getMessage(), e);
             }
@@ -211,8 +211,8 @@ public class Query6_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
         }
 
         @Override
@@ -222,9 +222,9 @@ public class Query6_Main {
             String tsRight = millisToTimestamp(right.getTimestamp());
 
             // Build tgeogpoint instants for both sides of the pair.
-            Pointer tpointLeft = functions.tgeogpoint_in(
+            Pointer tpointLeft = GeneratedFunctions.tgeogpoint_in(
                     String.format("POINT(%f %f)@%s", left.getLon(),  left.getLat(),  tsLeft));
-            Pointer tpointRight = functions.tgeogpoint_in(
+            Pointer tpointRight = GeneratedFunctions.tgeogpoint_in(
                     String.format("POINT(%f %f)@%s", right.getLon(), right.getLat(), tsRight));
 
             if (tpointLeft == null || tpointRight == null) {
@@ -252,15 +252,15 @@ public class Query6_Main {
             // WGS-84) between the two positions regardless of their timestamps. This is
             // equivalent to nad_tgeo_tgeo only when ts_left == ts_right. For ts_left !=
             // ts_right it is a spatial-only distance.
-            Pointer geoLeft  = functions.tgeo_end_value(tpointLeft);
-            Pointer geoRight = functions.tgeo_end_value(tpointRight);
+            Pointer geoLeft  = GeneratedFunctions.tgeo_end_value(tpointLeft);
+            Pointer geoRight = GeneratedFunctions.tgeo_end_value(tpointRight);
 
             if (geoLeft == null || geoRight == null) {
                 log.error("temporal_end_value returned null for MMSI={}", left.getMmsi());
                 return null;
             }
 
-            double mindist = functions.geog_distance(geoLeft, geoRight);
+            double mindist = GeneratedFunctions.geog_distance(geoLeft, geoRight);
 
             // Paper Line 5: filter(lat > 0.0): keep only pairs where left-side lat is positive.
             // All AIS positions in this dataset are in the Northern Hemisphere (~55–58°N),

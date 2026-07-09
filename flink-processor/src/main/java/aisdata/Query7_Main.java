@@ -27,7 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
-import functions.functions;
+import functions.GeneratedFunctions;
 import functions.error_handler;
 
 /**
@@ -118,8 +118,8 @@ public class Query7_Main {
 
         try {
             logger.info("Initializing MEOS library");
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new error_handler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -184,7 +184,7 @@ public class Query7_Main {
         } finally {
             try {
                 logger.info("Finalizing MEOS library");
-                functions.meos_finalize();
+                GeneratedFunctions.meos_finalize();
             } catch (Exception e) {
                 logger.error("Error during MEOS finalization: {}", e.getMessage(), e);
             }
@@ -232,8 +232,8 @@ public class Query7_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
         }
 
         /**
@@ -267,18 +267,18 @@ public class Query7_Main {
             List<Pointer> geoLefts  = new ArrayList<>(lefts.size());
             for (AISData left : lefts) {
                 String ts = millisToTimestamp(left.getTimestamp());
-                Pointer tp  = functions.tgeogpoint_in(
+                Pointer tp  = GeneratedFunctions.tgeogpoint_in(
                         String.format("POINT(%f %f)@%s", left.getLon(), left.getLat(), ts));
-                Pointer geo = (tp != null) ? functions.tgeo_end_value(tp) : null;
+                Pointer geo = (tp != null) ? GeneratedFunctions.tgeo_end_value(tp) : null;
                 geoLefts.add(geo); // null if tgeogpoint_in or temporal_end_value failed
             }
 
             List<Pointer> geoRights = new ArrayList<>(rights.size());
             for (AISData right : rights) {
                 String ts = millisToTimestamp(right.getTimestamp());
-                Pointer tp  = functions.tgeogpoint_in(
+                Pointer tp  = GeneratedFunctions.tgeogpoint_in(
                         String.format("POINT(%f %f)@%s", right.getLon(), right.getLat(), ts));
-                Pointer geo = (tp != null) ? functions.tgeo_end_value(tp) : null;
+                Pointer geo = (tp != null) ? GeneratedFunctions.tgeo_end_value(tp) : null;
                 geoRights.add(geo);
             }
 
@@ -303,7 +303,7 @@ public class Query7_Main {
                     // Paper Line 2: device_id < device_id2
                     if (left.getMmsi() >= right.getMmsi()) continue;
 
-                    double dist = functions.geog_distance(geoLeft, geoRight);
+                    double dist = GeneratedFunctions.geog_distance(geoLeft, geoRight);
 
                     // Keep only the minimum distance per unique (mmsi1, mmsi2) pair.
                     String key = left.getMmsi() + ":" + right.getMmsi();

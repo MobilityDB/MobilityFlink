@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import functions.GeneratedFunctions;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.connector.kafka.source.KafkaSource;
@@ -25,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
-import functions.functions;
+import functions.GeneratedFunctions;
 import functions.error_handler;
 import functions.error_handler_fn;
 
@@ -97,8 +98,8 @@ public class Query3_Main {
 
         try {
             logger.info("Initializing MEOS library");
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new error_handler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -155,7 +156,7 @@ public class Query3_Main {
         } finally {
             try {
                 logger.info("Finalizing MEOS library");
-                functions.meos_finalize();
+                GeneratedFunctions.meos_finalize();
             } catch (Exception e) {
                 logger.error("Error during MEOS finalization: {}", e.getMessage(), e);
             }
@@ -190,8 +191,8 @@ public class Query3_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
             log.info("MEOS initialized in TrajectoryCreationWindowFunction.open()");
         }
 
@@ -249,7 +250,7 @@ public class Query3_Main {
             // Step 4: parse the sequence into a native MEOS tgeogpoint pointer.
             // tgeogpoint_in accepts both single instants ("POINT(lon lat)@ts") and sequences
             // ("{POINT(...)@ts,...}"). Here we always pass a sequence.
-            Pointer trajectory = functions.tgeogpoint_in(seq.toString());
+            Pointer trajectory = GeneratedFunctions.tgeogpoint_in(seq.toString());
             if (trajectory == null) {
                 log.error("tgeogpoint_in returned null for sequence: {}", seq);
                 return;
@@ -259,7 +260,7 @@ public class Query3_Main {
             // tspatial_as_ewkt(pointer, maxdd) converts any temporal spatial type to EWKT
             // (WKT with SRID prefix), producing human-readable "POINT(lon lat)@ts" output.
             // maxdd=6 gives 6 decimal places.
-            String trajectoryWkt = functions.tspatial_as_ewkt(trajectory, 6);
+            String trajectoryWkt = GeneratedFunctions.tspatial_as_ewkt(trajectory, 6);
 
             /*
                 // We have this trajectory

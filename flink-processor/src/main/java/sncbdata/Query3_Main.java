@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import functions.GeneratedFunctions;
 import jnr.ffi.Memory;
 import jnr.ffi.Pointer;
 import jnr.ffi.Runtime;
@@ -24,7 +25,7 @@ import org.apache.flink.util.Collector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import functions.functions;
+import functions.GeneratedFunctions;
 import functions.error_handler;
 import functions.error_handler_fn;
 import types.temporal.TInterpolation;
@@ -64,8 +65,8 @@ public class Query3_Main {
         logger.info("Java library path: {}", System.getProperty("java.library.path"));
 
         try {
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new error_handler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -100,7 +101,7 @@ public class Query3_Main {
             logger.error("Error during execution: {}", e.getMessage(), e);
             throw e;
         } finally {
-            try { functions.meos_finalize(); }
+            try { GeneratedFunctions.meos_finalize(); }
             catch (Exception e) { logger.error("Error during MEOS finalization: {}", e.getMessage(), e); }
         }
     }
@@ -125,8 +126,8 @@ public class Query3_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
         }
 
         @Override
@@ -150,7 +151,7 @@ public class Query3_Main {
             }
             seq.append("}");
 
-            Pointer trajectory = functions.tgeogpoint_in(seq.toString());
+            Pointer trajectory = GeneratedFunctions.tgeogpoint_in(seq.toString());
             if (trajectory == null) {
                 log.error("[V1] tgeogpoint_in returned null for sequence: {}", seq);
                 return;
@@ -184,8 +185,8 @@ public class Query3_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
         }
 
         @Override
@@ -207,7 +208,7 @@ public class Query3_Main {
             for (SNCBData event : sorted) {
                 String wkt   = String.format("POINT(%f %f)@%s",
                         event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
-                Pointer inst = functions.tgeogpoint_in(wkt);
+                Pointer inst = GeneratedFunctions.tgeogpoint_in(wkt);
                 if (inst == null) {
                     log.error("[V2] tgeogpoint_in returned null for DeviceID={} wkt={}", deviceId, wkt);
                     continue;
@@ -217,7 +218,7 @@ public class Query3_Main {
                     // Seed the expandable sequence with the first instant.
                     Pointer seedArray = Memory.allocate(runtime, Long.BYTES);
                     seedArray.putPointer(0, inst);
-                    trajectory = functions.tsequence_make(
+                    trajectory = GeneratedFunctions.tsequence_make(
                             seedArray, 1, true, true, TInterpolation.LINEAR.getValue(), true);
                     if (trajectory == null) {
                         log.error("[V2] tsequence_make (seed) returned null for DeviceID={}", deviceId);
@@ -225,7 +226,7 @@ public class Query3_Main {
                     }
                 } else {
                     // Append: MEOS expands capacity as needed.
-                    Pointer expanded = functions.temporal_append_tinstant(
+                    Pointer expanded = GeneratedFunctions.temporal_append_tinstant(
                             trajectory, inst, TInterpolation.LINEAR.getValue(), 0.0, null, true);
                     if (expanded == null) {
                         log.error("[V2] temporal_append_tinstant returned null for DeviceID={} wkt={}", deviceId, wkt);
@@ -253,7 +254,7 @@ public class Query3_Main {
                              int deviceId, int points,
                              String windowStart, String windowEnd,
                              Pointer trajectory) {
-        String trajectoryWkt = functions.tspatial_as_ewkt(trajectory, 6);
+        String trajectoryWkt = GeneratedFunctions.tspatial_as_ewkt(trajectory, 6);
         String output = String.format(
                 "[TRAJ][Q3][%s] DeviceID=%-6d | points=%3d | window [%s - %s]%n"
                         + "              trajectory: %s",
