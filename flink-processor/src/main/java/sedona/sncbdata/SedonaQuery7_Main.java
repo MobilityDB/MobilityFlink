@@ -2,13 +2,12 @@ package sedona.sncbdata;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.RichCoGroupFunction;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.util.Collector;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -52,7 +51,7 @@ public class SedonaQuery7_Main {
         public ClosestPairsCoGroupFunction(int topK) { this.topK = topK; }
 
         @Override
-        public void open(Configuration parameters) throws Exception {
+        public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             factory = new GeometryFactory();
         }
@@ -172,7 +171,7 @@ public class SedonaQuery7_Main {
         gps.coGroup(gps2)
                 .where(e -> 1)
                 .equalTo(e -> 1)
-                .window(TumblingEventTimeWindows.of(Time.seconds(10)))
+                .window(TumblingEventTimeWindows.of(Duration.ofSeconds(10)))
                 .apply(new ClosestPairsCoGroupFunction(TOP_K))
                 .print();
 

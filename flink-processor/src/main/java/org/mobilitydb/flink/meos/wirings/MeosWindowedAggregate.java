@@ -25,7 +25,7 @@
 
 package org.mobilitydb.flink.meos.wirings;
 
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.util.Collector;
@@ -69,7 +69,7 @@ import java.io.Serializable;
  * DataStream<VehicleLength> lengths = events
  *     .assignTimestampsAndWatermarks(...)
  *     .keyBy(VehiclePoint::vehicleId)
- *     .window(TumblingEventTimeWindows.of(Time.minutes(10)))
+ *     .window(TumblingEventTimeWindows.of(Duration.ofMinutes(10)))
  *     .process(new MeosWindowedAggregate<Integer, VehiclePoint, VehicleLength, TimeWindow>(
  *         (window, events, ctx) -> {
  *             Pointer trajectory = buildTrajectoryFromPoints(events);  // adopter helper
@@ -125,7 +125,7 @@ public final class MeosWindowedAggregate<K, IN, OUT, W extends Window>
     }
 
     @Override
-    public void open(Configuration parameters) throws Exception {
+    public void open(OpenContext parameters) throws Exception {
         super.open(parameters);
         MeosWiringRuntime.ensureInitializedOnThread();
     }

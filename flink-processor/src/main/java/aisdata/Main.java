@@ -42,7 +42,6 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 
 import functions.*;
 import functions.GeneratedFunctions;
@@ -104,8 +103,8 @@ public class Main {
             DataStream<TGeomPointSeq> trajectories = source
                 .map(new AISDataToTuple4MapFunction())
                 .keyBy(tuple -> tuple.f0) 
-                .window(TumblingEventTimeWindows.of(Time.seconds(10)))
-                //.allowedLateness(Time.seconds(0))
+                .window(TumblingEventTimeWindows.of(Duration.ofSeconds(10)))
+                //.allowedLateness(Duration.ofSeconds(0))
                 .process(new TrajectoryWindowFunction());
 
             //trajectories.print();

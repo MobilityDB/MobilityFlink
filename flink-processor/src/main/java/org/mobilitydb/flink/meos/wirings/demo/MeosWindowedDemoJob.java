@@ -32,7 +32,6 @@ import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.mobilitydb.meos.MeosOpsFreeCore;
 import org.mobilitydb.meos.MeosOpsTBox;
@@ -120,7 +119,7 @@ public final class MeosWindowedDemoJob {
         env.setParallelism(1);
 
         DataStream<Tuple3<Integer, String, Long>> events =
-                env.fromCollection(Arrays.asList(EVENTS))
+                env.fromData(Arrays.asList(EVENTS))
                    .assignTimestampsAndWatermarks(
                            WatermarkStrategy
                                    .<Tuple3<Integer, String, Long>>forBoundedOutOfOrderness(Duration.ofSeconds(1))
@@ -128,7 +127,7 @@ public final class MeosWindowedDemoJob {
 
         DataStream<Tuple4<Integer, Long, Integer, String>> aggregates = events
                 .keyBy(t -> t.f0)
-                .window(TumblingEventTimeWindows.of(Time.seconds(30)))
+                .window(TumblingEventTimeWindows.of(Duration.ofSeconds(30)))
                 .process(new MeosWindowedAggregate<
                         Integer,                                        // K
                         Tuple3<Integer, String, Long>,                  // IN

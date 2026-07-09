@@ -27,7 +27,7 @@ package org.mobilitydb.flink.meos.wirings;
 
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.RichFilterFunction;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 
 import java.io.Serializable;
 
@@ -96,7 +96,7 @@ public final class MeosStatelessFilter<IN> extends RichFilterFunction<IN> {
     }
 
     @Override
-    public void open(Configuration parameters) throws Exception {
+    public void open(OpenContext parameters) throws Exception {
         super.open(parameters);
         MeosWiringRuntime.ensureInitializedOnThread();
     }

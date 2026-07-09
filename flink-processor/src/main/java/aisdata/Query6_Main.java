@@ -10,13 +10,12 @@ import java.util.Properties;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.RichJoinFunction;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
@@ -59,7 +58,7 @@ import functions.error_handler;
  *       Flink's windowed {@code join().where(mmsi).equalTo(mmsi)} groups pairs of events
  *       from the two views by MMSI within each window, equivalent to the
  *       {@code device_id == device_id2} join predicate.</li>
- *   <li><b>Line 3 (10-second tumbling window)</b>: {@code TumblingEventTimeWindows.of(Time.seconds(10))},
+ *   <li><b>Line 3 (10-second tumbling window)</b>: {@code TumblingEventTimeWindows.of(Duration.ofSeconds(10))},
  *       same as Query 1.</li>
  *   <li><b>Line 4 (nearest_approach_distance)</b>: For each pair {@code (left, right)},
  *       two {@code tgeogpoint} instants are constructed and passed to {@code nad_tgeo_tgeo},
@@ -164,7 +163,7 @@ public class Query6_Main {
             gps.join(gps2)
                     .where(AISData::getMmsi)
                     .equalTo(AISData::getMmsi)
-                    .window(TumblingEventTimeWindows.of(Time.seconds(10)))
+                    .window(TumblingEventTimeWindows.of(Duration.ofSeconds(10)))
                     .apply(new NearestApproachJoinFunction())
                     .print();
 
@@ -209,7 +208,7 @@ public class Query6_Main {
         private transient error_handler errorHandler;
 
         @Override
-        public void open(Configuration parameters) throws Exception {
+        public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
             functions.meos_initialize_timezone("UTC");

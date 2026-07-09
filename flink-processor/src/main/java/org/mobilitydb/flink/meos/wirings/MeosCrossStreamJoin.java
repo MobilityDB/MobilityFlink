@@ -25,7 +25,7 @@
 
 package org.mobilitydb.flink.meos.wirings;
 
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.streaming.api.functions.co.ProcessJoinFunction;
 import org.apache.flink.util.Collector;
 
@@ -59,7 +59,7 @@ import java.io.Serializable;
  *
  * DataStream<MeetingEvent> meetings = a
  *     .intervalJoin(b)
- *         .between(Time.minutes(-5), Time.minutes(5))
+ *         .between(Duration.ofMinutes(-5), Duration.ofMinutes(5))
  *         .process(new MeosCrossStreamJoin<VehiclePosition, VehiclePosition, MeetingEvent>(
  *             (left, right, ctx) -> {
  *                 Pointer leftT  = left.toTGeoPointer();
@@ -119,7 +119,7 @@ public final class MeosCrossStreamJoin<L, R, OUT>
     }
 
     @Override
-    public void open(Configuration parameters) throws Exception {
+    public void open(OpenContext parameters) throws Exception {
         super.open(parameters);
         MeosWiringRuntime.ensureInitializedOnThread();
     }

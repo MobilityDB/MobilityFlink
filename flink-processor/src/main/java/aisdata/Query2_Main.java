@@ -10,14 +10,13 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -69,7 +68,7 @@ import functions.error_handler_fn;
  *       skipped. This is the inverse of Query 1's {@code edwithin_tgeo_geo}: here we exclude
  *       points that are inside a zone rather than alerting on proximity.</li>
  *   <li><b>Line 3 (sliding window 10s / 10ms)</b>: Implemented with
- *       {@code SlidingEventTimeWindows.of(Time.seconds(10), Time.milliseconds(10))}. A 10ms
+ *       {@code SlidingEventTimeWindows.of(Duration.ofSeconds(10), Duration.ofMillis(10))}. A 10ms
  *       step produces approximately 1000 overlapping windows per second.</li>
  *   <li><b>Line 4 (variation(FA), variation(FF))</b>: The {@code variation} operator computes
  *       statistical variance (E[X²] − E[X]²) over the window. MEOS does not expose a
@@ -214,7 +213,7 @@ public class Query2_Main {
             //   print()                   → output brake anomaly alerts.
             source
                     .keyBy(AISData::getMmsi)
-                    .window(SlidingEventTimeWindows.of(Time.seconds(10), Time.milliseconds(10)))
+                    .window(SlidingEventTimeWindows.of(Duration.ofSeconds(10), Duration.ofMillis(10)))
                     .process(new BrakeMonitoringWindowFunction(
                             MAINTENANCE_AREAS_WKT, VAR_FA_THRESHOLD, VAR_FF_THRESHOLD))
                     .print();
@@ -306,7 +305,7 @@ public class Query2_Main {
 
         /** Initialises the MEOS library for this operator instance. */
         @Override
-        public void open(Configuration parameters) throws Exception {
+        public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
             functions.meos_initialize_timezone("UTC");

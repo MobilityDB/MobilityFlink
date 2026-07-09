@@ -10,14 +10,13 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.SlidingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -68,7 +67,7 @@ import functions.error_handler_fn;
  *       {@code tgeo_at_stbox} returns the restricted temporal object itself & a null-check
  *       replaces the {@code == 1} comparison.</li>
  *   <li><b>Line 3 (sliding window 10s / 10ms)</b>:
- *       {@code SlidingEventTimeWindows.of(Time.seconds(10), Time.milliseconds(10))}.</li>
+ *       {@code SlidingEventTimeWindows.of(Duration.ofSeconds(10), Duration.ofMillis(10))}.</li>
  *   <li><b>Line 4 (temporal_sequence)</b>: surviving events are
  *       assembled into a {@code tgeogpoint} sequence via {@code tgeogpoint_in} and serialised
  *       to EWKT via {@code tspatial_as_ewkt}.</li>
@@ -194,7 +193,7 @@ public class Query4_Main {
             //   print()                   → outputs each restricted trajectory as EWKT.
             source
                     .keyBy(AISData::getMmsi)
-                    .window(SlidingEventTimeWindows.of(Time.seconds(10), Time.milliseconds(10)))
+                    .window(SlidingEventTimeWindows.of(Duration.ofSeconds(10), Duration.ofMillis(10)))
                     .process(new RestrictedTrajectoryWindowFunction(STBOX_XMIN, STBOX_XMAX, STBOX_YMIN, STBOX_YMAX, STBOX_TSPAN))
                     .print();
 
@@ -266,7 +265,7 @@ public class Query4_Main {
          * per second with a 10ms step).
          */
         @Override
-        public void open(Configuration parameters) throws Exception {
+        public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
             functions.meos_initialize_timezone("UTC");

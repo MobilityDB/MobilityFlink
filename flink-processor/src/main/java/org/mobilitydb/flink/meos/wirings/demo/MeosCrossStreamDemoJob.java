@@ -32,7 +32,6 @@ import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.mobilitydb.meos.MeosOpsFreeCore;
 import org.mobilitydb.meos.MeosOpsTBox;
 import org.mobilitydb.flink.meos.wirings.MeosCrossStreamJoin;
@@ -118,13 +117,13 @@ public final class MeosCrossStreamDemoJob {
         env.setParallelism(1);
 
         DataStream<Tuple4<Integer, Integer, String, Long>> a =
-                env.fromCollection(Arrays.asList(EVENTS_A))
+                env.fromData(Arrays.asList(EVENTS_A))
                    .assignTimestampsAndWatermarks(
                            WatermarkStrategy
                                    .<Tuple4<Integer, Integer, String, Long>>forBoundedOutOfOrderness(Duration.ofSeconds(1))
                                    .withTimestampAssigner((e, ts) -> e.f3));
         DataStream<Tuple4<Integer, Integer, String, Long>> b =
-                env.fromCollection(Arrays.asList(EVENTS_B))
+                env.fromData(Arrays.asList(EVENTS_B))
                    .assignTimestampsAndWatermarks(
                            WatermarkStrategy
                                    .<Tuple4<Integer, Integer, String, Long>>forBoundedOutOfOrderness(Duration.ofSeconds(1))
@@ -136,7 +135,7 @@ public final class MeosCrossStreamDemoJob {
         // Interval-join: pair events in A with events in B within ±1 minute, same region key.
         DataStream<Tuple5<Integer, Integer, Integer, Long, Long>> overlaps =
                 aKeyed.intervalJoin(bKeyed)
-                      .between(Time.minutes(-1), Time.minutes(1))
+                      .between(Duration.ofMinutes(-1), Duration.ofMinutes(1))
                       .process(new MeosCrossStreamJoin<
                               Tuple4<Integer, Integer, String, Long>,  // L
                               Tuple4<Integer, Integer, String, Long>,  // R

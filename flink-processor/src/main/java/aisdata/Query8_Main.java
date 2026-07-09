@@ -20,14 +20,13 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
-import org.apache.flink.configuration.Configuration;
+import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.connector.kafka.source.KafkaSource;
 import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -213,7 +212,7 @@ public class Query8_Main {
             //                              3. Emit raw + smoothed trajectories as EWKT.
             source
                     .keyBy(AISData::getMmsi)
-                    .window(TumblingEventTimeWindows.of(Time.seconds(10)))
+                    .window(TumblingEventTimeWindows.of(Duration.ofSeconds(10)))
                     .process(new EKFWindowFunction(GATE, Q, VARIANCE, DROP_OUTLIERS))
                     .print();
 
@@ -299,7 +298,7 @@ public class Query8_Main {
         }
 
         @Override
-        public void open(Configuration parameters) throws Exception {
+        public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             functions.meos_initialize_timezone("UTC");
             functions.meos_initialize_error_handler(new error_handler());

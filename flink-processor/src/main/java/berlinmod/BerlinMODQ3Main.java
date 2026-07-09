@@ -36,7 +36,6 @@ import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsIni
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,7 +105,7 @@ public class BerlinMODQ3Main {
 
         // Windowed form — distinct count per tumbling window
         DataStream<Tuple3<Long, Long, Long>> windowed = trips
-                .windowAll(TumblingEventTimeWindows.of(Time.seconds(WINDOW_SIZE_SECONDS)))
+                .windowAll(TumblingEventTimeWindows.of(Duration.ofSeconds(WINDOW_SIZE_SECONDS)))
                 .process(new Q3WindowedFunction(P_LON, P_LAT, RADIUS_METRES));
         windowed.print("Q3-windowed");
 

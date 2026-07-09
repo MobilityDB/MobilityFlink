@@ -34,7 +34,6 @@ import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindows;
-import org.apache.flink.streaming.api.windowing.time.Time;
 import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.mobilitydb.meos.MeosOpsFreeCore;
 import org.mobilitydb.meos.MeosOpsTBox;
@@ -152,7 +151,7 @@ public final class MeosAllTiersCapstoneDemo {
 
         // ── Stream A: vehicle events ────────────────────────────────────────
         DataStream<Tuple4<Integer, Integer, String, Long>> rawEvents =
-                env.fromCollection(Arrays.asList(VEHICLE_EVENTS))
+                env.fromData(Arrays.asList(VEHICLE_EVENTS))
                    .assignTimestampsAndWatermarks(
                            WatermarkStrategy
                                    .<Tuple4<Integer, Integer, String, Long>>forBoundedOutOfOrderness(Duration.ofSeconds(1))
@@ -188,7 +187,7 @@ public final class MeosAllTiersCapstoneDemo {
         // vehicle as the per-window summary.
         DataStream<Tuple4<Integer, Integer, String, Long>> windowed = runningUnion
                 .keyBy(t -> t.f0)   // key by vehicleId
-                .window(TumblingEventTimeWindows.of(Time.seconds(30)))
+                .window(TumblingEventTimeWindows.of(Duration.ofSeconds(30)))
                 .process(new MeosWindowedAggregate<
                         Integer,
                         Tuple4<Integer, Integer, String, Long>,
@@ -207,7 +206,7 @@ public final class MeosAllTiersCapstoneDemo {
 
         // ── Stream B: region queries (keyed by regionId for the join) ───────
         DataStream<Tuple2<Integer, String>> queryStream =
-                env.fromCollection(Arrays.asList(REGION_QUERIES))
+                env.fromData(Arrays.asList(REGION_QUERIES))
                    .assignTimestampsAndWatermarks(
                            WatermarkStrategy
                                    .<Tuple2<Integer, String>>forBoundedOutOfOrderness(Duration.ofSeconds(1))
@@ -223,7 +222,7 @@ public final class MeosAllTiersCapstoneDemo {
 
         DataStream<Tuple5<Integer, Integer, String, String, Long>> overlaps =
                 vehiclesKeyed.intervalJoin(queriesKeyed)
-                             .between(Time.minutes(-1), Time.minutes(1))
+                             .between(Duration.ofMinutes(-1), Duration.ofMinutes(1))
                              .process(new MeosCrossStreamJoin<
                                      Tuple4<Integer, Integer, String, Long>,
                                      Tuple2<Integer, String>,

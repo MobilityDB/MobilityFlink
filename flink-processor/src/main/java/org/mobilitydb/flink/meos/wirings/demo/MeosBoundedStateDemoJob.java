@@ -103,7 +103,7 @@ public final class MeosBoundedStateDemoJob {
         env.setParallelism(1);
 
         DataStream<Tuple2<Integer, String>> events =
-                env.fromCollection(Arrays.asList(EVENTS));
+                env.fromData(Arrays.asList(EVENTS));
 
         KeyedStream<Tuple2<Integer, String>, Integer> keyed =
                 events.keyBy(t -> t.f0);

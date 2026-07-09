@@ -31,7 +31,7 @@ import org.apache.flink.streaming.api.windowing.windows.TimeWindow;
 import org.apache.flink.util.Collector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.flink.configuration.Configuration; // Added import
+import org.apache.flink.api.common.functions.OpenContext; // Added import
 
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
@@ -53,7 +53,7 @@ ProcessWindowFunction<Tuple4<Integer, Double, Double, Long>, TGeomPointSeq, Inte
     // private int count = 0; // count variable seems unused, can be removed if not needed
 
     @Override
-    public void open(Configuration parameters) throws Exception {
+    public void open(OpenContext parameters) throws Exception {
         super.open(parameters);
         errorHandler = new error_handler(); // Initialize error handler here
         
