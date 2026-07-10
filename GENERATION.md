@@ -30,11 +30,17 @@ and the facade line do not diverge).
 Hand-written facades/glue are replaced by the generated forwarders **family by family,
 never wipe-first**: regenerate, build green, **prove generated ⊇ hand** against the **last
 green-CI version** (the test suite + the streaming benchmark), then retire the hand path.
-The generated facades are committed and regenerated when the JMEOS surface is refreshed.
+
+The `MeosOps*` facades are emitted at build time and are **not committed**: Maven
+`generate-sources` runs `tools/codegen_facades.py` into `target/generated-facades`, and
+`build-helper` adds it as a source root. Only the generator, its `tools/baseline/`, and the
+bundled jar are tracked; the sole hand-written class under `org.mobilitydb.meos` is
+`MeosSetSetJoin`.
 
 ## Surface match
 
-The bundled JMEOS jar is built from a JMEOS deliverable head (never committed as a binary),
-and the `libmeos.so` it links is built from the **same MobilityDB commit** the JMEOS surface
-was generated against — surface-match, else runtime symbol faults. That commit is the
-*catalog/surface* input for the whole binding.
+The bundled JMEOS jar (`flink-processor/jar/JMEOS.jar`) is committed and consumed
+system-scoped; the generator reads its raw-FFI surface. The `libmeos.so` it links must be
+built from the **same MobilityDB commit** the JMEOS surface was generated against —
+surface-match, else runtime symbol faults. That commit is the *catalog/surface* input for
+the whole binding.
