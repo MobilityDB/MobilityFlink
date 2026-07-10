@@ -25,6 +25,35 @@ emits the `org.mobilitydb.meos.MeosOps*` 1:1 forwarder facades the Flink process
 The facades are a *consumer* projection (they live here, not in JMEOS, so the JMEOS FFI line
 and the facade line do not diverge).
 
+## The streaming-relevance baseline (generator input)
+
+`tools/codegen_facades.py` emits a facade only for functions in the
+**streaming-relevant** tiers, read from `tools/baseline/streaming-relevance-baseline.json`.
+That baseline is itself **generated and reproducible** — it is not a hand-maintained
+list. It is produced by **`tools/classify_streaming_relevance.py`**, a deterministic
+classifier: the tier of a function is decided purely by its name, its object-model role,
+and its number of temporal parameters (zero per-function judgement), so the same MEOS
+catalog always yields the same baseline.
+
+The full input chain, from the tracked MobilityDB commit:
+
+```
+MobilityDB @ tools/meos-source-commit.txt
+  → MEOS-API/run.py over the MEOS headers        → meos-idl.json  (the catalog)
+  → tools/classify_streaming_relevance.py        → tools/baseline/streaming-relevance-baseline.json
+  → tools/codegen_facades.py  (jar-surface ∩ baseline)   → org.mobilitydb.meos.MeosOps* facades
+```
+
+To refresh the baseline (e.g. after bumping `tools/meos-source-commit.txt`): rebuild the
+catalog at the tracked commit with MEOS-API, then
+
+```
+tools/regen_baseline.sh <path-to-meos-idl.json>
+```
+
+and commit the diff. Because the classifier is deterministic, an unchanged catalog
+regenerates the baseline byte-for-byte.
+
 ## Generate-then-retire — the green-CI version is the probe
 
 Hand-written facades/glue are replaced by the generated forwarders **family by family,
