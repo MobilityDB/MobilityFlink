@@ -24,7 +24,7 @@ import org.apache.flink.util.Collector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import functions.functions;
+import functions.GeneratedFunctions;
 import functions.error_handler;
 import functions.error_handler_fn;
 import types.temporal.TInterpolation;
@@ -74,8 +74,8 @@ public class Query4_Main {
         logger.info("Java library path: {}", System.getProperty("java.library.path"));
 
         try {
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new error_handler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -112,7 +112,7 @@ public class Query4_Main {
             logger.error("Error during execution: {}", e.getMessage(), e);
             throw e;
         } finally {
-            try { functions.meos_finalize(); }
+            try { GeneratedFunctions.meos_finalize(); }
             catch (Exception e) { logger.error("Error during MEOS finalization: {}", e.getMessage(), e); }
         }
     }
@@ -148,11 +148,11 @@ public class Query4_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
-            Pointer tspan = functions.tstzspan_in(tspanLiteral);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
+            Pointer tspan = GeneratedFunctions.tstzspan_in(tspanLiteral);
             if (tspan == null) { log.error("tstzspan_in returned null for: {}", tspanLiteral); return; }
-            stbox = functions.stbox_make(true, false, true, 4326, xmin, xmax, ymin, ymax, 0, 0, tspan);
+            stbox = GeneratedFunctions.stbox_make(true, false, true, 4326, xmin, xmax, ymin, ymax, 0, 0, tspan);
             if (stbox == null) log.error("stbox_make returned null");
             else log.info("[V1] STBox built: xmin={} xmax={} ymin={} ymax={} tspan={}",
                     xmin, xmax, ymin, ymax, tspanLiteral);
@@ -170,10 +170,10 @@ public class Query4_Main {
 
             for (SNCBData event : elements) {
                 String ts = millisToTs(event.getTimestamp());
-                Pointer tpoint = functions.tgeogpoint_in(
+                Pointer tpoint = GeneratedFunctions.tgeogpoint_in(
                         String.format("POINT(%f %f)@%s", event.getLon(), event.getLat(), ts));
                 if (tpoint == null) continue;
-                if (functions.tgeo_at_stbox(tpoint, stbox, true) == null) continue;
+                if (GeneratedFunctions.tgeo_at_stbox(tpoint, stbox, true) == null) continue;
                 surviving.add(event);
             }
 
@@ -189,7 +189,7 @@ public class Query4_Main {
             }
             seq.append("}");
 
-            Pointer trajectory = functions.tgeogpoint_in(seq.toString());
+            Pointer trajectory = GeneratedFunctions.tgeogpoint_in(seq.toString());
             if (trajectory == null) { log.error("[V1] tgeogpoint_in returned null for seq: {}", seq); return; }
 
             emit(out, log, "V1", deviceId, surviving.size(), windowStart, windowEnd, trajectory);
@@ -231,11 +231,11 @@ public class Query4_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
-            Pointer tspan = functions.tstzspan_in(tspanLiteral);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
+            Pointer tspan = GeneratedFunctions.tstzspan_in(tspanLiteral);
             if (tspan == null) { log.error("tstzspan_in returned null for: {}", tspanLiteral); return; }
-            stbox = functions.stbox_make(true, false, true, 4326, xmin, xmax, ymin, ymax, 0, 0, tspan);
+            stbox = GeneratedFunctions.stbox_make(true, false, true, 4326, xmin, xmax, ymin, ymax, 0, 0, tspan);
             if (stbox == null) log.error("stbox_make returned null");
             else log.info("[V2] STBox built: xmin={} xmax={} ymin={} ymax={} tspan={}",
                     xmin, xmax, ymin, ymax, tspanLiteral);
@@ -263,26 +263,26 @@ public class Query4_Main {
             for (SNCBData event : sorted) {
                 String wkt   = String.format("POINT(%f %f)@%s",
                         event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
-                Pointer inst = functions.tgeogpoint_in(wkt);
+                Pointer inst = GeneratedFunctions.tgeogpoint_in(wkt);
                 if (inst == null) {
                     log.error("[V2] tgeogpoint_in returned null for DeviceID={} wkt={}", deviceId, wkt);
                     continue;
                 }
 
                 // STBox filter: reuse the already-parsed instant pointer.
-                if (functions.tgeo_at_stbox(inst, stbox, true) == null) continue;
+                if (GeneratedFunctions.tgeo_at_stbox(inst, stbox, true) == null) continue;
 
                 if (trajectory == null) {
                     Pointer seedArray = Memory.allocate(runtime, Long.BYTES);
                     seedArray.putPointer(0, inst);
-                    trajectory = functions.tsequence_make(
+                    trajectory = GeneratedFunctions.tsequence_make(
                             seedArray, 1, true, true, TInterpolation.LINEAR.getValue(), true);
                     if (trajectory == null) {
                         log.error("[V2] tsequence_make (seed) returned null for DeviceID={}", deviceId);
                         return;
                     }
                 } else {
-                    Pointer expanded = functions.temporal_append_tinstant(
+                    Pointer expanded = GeneratedFunctions.temporal_append_tinstant(
                             trajectory, inst, TInterpolation.LINEAR.getValue(), 0.0, null, true);
                     if (expanded == null) {
                         log.error("[V2] temporal_append_tinstant returned null for DeviceID={} wkt={}", deviceId, wkt);
@@ -314,7 +314,7 @@ public class Query4_Main {
                 "[TRAJ][Q4][%s] DeviceID=%-6d | points=%3d | window [%s - %s]%n"
                         + "              trajectory: %s",
                 version, deviceId, points, windowStart, windowEnd,
-                functions.tspatial_as_ewkt(trajectory, 6));
+                GeneratedFunctions.tspatial_as_ewkt(trajectory, 6));
         log.info(output);
         out.collect(output);
     }

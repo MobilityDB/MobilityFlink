@@ -31,7 +31,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
-import functions.functions;
+import functions.GeneratedFunctions;
 import functions.error_handler;
 
 /**
@@ -67,8 +67,8 @@ public class Query8_Main {
         logger.info("Java library path: {}", System.getProperty("java.library.path"));
 
         try {
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new error_handler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -101,7 +101,7 @@ public class Query8_Main {
             logger.error("Error during execution: {}", e.getMessage(), e);
             throw e;
         } finally {
-            try { functions.meos_finalize(); }
+            try { GeneratedFunctions.meos_finalize(); }
             catch (Exception e) { logger.error("Error during MEOS finalization: {}", e.getMessage(), e); }
         }
     }
@@ -129,8 +129,8 @@ public class Query8_Main {
         @Override
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new error_handler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
         }
 
         @Override
@@ -168,8 +168,8 @@ public class Query8_Main {
             rawSeq.append("}");
             smoothedSeq.append("}");
 
-            Pointer rawTraj      = functions.tgeogpoint_in(rawSeq.toString());
-            Pointer smoothedTraj = functions.tgeogpoint_in(smoothedSeq.toString());
+            Pointer rawTraj      = GeneratedFunctions.tgeogpoint_in(rawSeq.toString());
+            Pointer smoothedTraj = GeneratedFunctions.tgeogpoint_in(smoothedSeq.toString());
             if (rawTraj == null || smoothedTraj == null) return;
 
             String result = String.format(
@@ -178,8 +178,8 @@ public class Query8_Main {
                             + "         raw:      %s%n"
                             + "         smoothed: %s",
                     deviceId, sorted.size(), gate, q, variance, windowStart, windowEnd,
-                    functions.tspatial_as_ewkt(rawTraj, 6),
-                    functions.tspatial_as_ewkt(smoothedTraj, 6));
+                    GeneratedFunctions.tspatial_as_ewkt(rawTraj, 6),
+                    GeneratedFunctions.tspatial_as_ewkt(smoothedTraj, 6));
 
             log.info(result);
             out.collect(result);

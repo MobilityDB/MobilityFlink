@@ -15,7 +15,7 @@ import org.apache.flink.util.Collector;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import functions.functions;
+import functions.GeneratedFunctions;
 import functions.MeosErrorHandler;
 import functions.error_handler_fn;
 import java.time.Duration;
@@ -66,8 +66,8 @@ public class Query2_Main {
 
         try {
             logger.info("Initializing MEOS library");
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new MeosErrorHandler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new MeosErrorHandler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -112,7 +112,7 @@ public class Query2_Main {
             throw e;
         } finally {
             try {
-                functions.meos_finalize();
+                GeneratedFunctions.meos_finalize();
             } catch (Exception e) {
                 logger.error("Error during MEOS finalization: {}", e.getMessage(), e);
             }
@@ -144,12 +144,12 @@ public class Query2_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new MeosErrorHandler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
             // Parse maintenance area polygons once per worker
             maintenanceZones = new Pointer[maintenanceAreasWkt.length];
             for (int i = 0; i < maintenanceAreasWkt.length; i++) {
-                maintenanceZones[i] = functions.geog_in(maintenanceAreasWkt[i], -1);
+                maintenanceZones[i] = GeneratedFunctions.geog_in(maintenanceAreasWkt[i], -1);
                 if (maintenanceZones[i] == null) {
                     log.error("geog_in returned null for maintenance area {}", i + 1);
                 }
@@ -168,7 +168,7 @@ public class Query2_Main {
                 String timestamp = millisToTimestamp(elem.getTimestamp());
                 String point = String.format("Point(%f %f)@%s", elem.getLon(), elem.getLat(), timestamp);
 
-                Pointer tpoint = functions.tgeogpoint_in(point);
+                Pointer tpoint = GeneratedFunctions.tgeogpoint_in(point);
                 if (tpoint == null) {
                     log.error("tgeogpoint_in returned null for WKT: {}", point);
                     continue;
@@ -178,7 +178,7 @@ public class Query2_Main {
                 boolean inMaintenanceArea = false;
                 for (Pointer zone : maintenanceZones) {
                     if (zone == null) continue;
-                    if (functions.eintersects_tgeo_geo(tpoint, zone) == 1) {
+                    if (GeneratedFunctions.eintersects_tgeo_geo(tpoint, zone) == 1) {
                         inMaintenanceArea = true;
                         log.debug("MMSI={} skipped: point intersects maintenance area at ts={}",
                                 deviceId, timestamp);

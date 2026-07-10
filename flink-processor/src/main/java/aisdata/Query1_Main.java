@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
-import functions.functions;
+import functions.GeneratedFunctions;
 import functions.error_handler;
 import functions.error_handler_fn;
 
@@ -165,8 +165,8 @@ public class Query1_Main {
 
         try {
             logger.info("Initializing MEOS library");
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new error_handler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -231,7 +231,7 @@ public class Query1_Main {
         } finally {
             try {
                 logger.info("Finalizing MEOS library");
-                functions.meos_finalize();
+                GeneratedFunctions.meos_finalize();
             } catch (Exception e) {
                 logger.error("Error during MEOS finalization: {}", e.getMessage(), e);
             }
@@ -275,15 +275,15 @@ public class Query1_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
             // Parse the INPolygons only once per worker.
             // geog_in(wkt, -1) creates a geography type (SRID=4326), so
             // edwithin_tgeo_geo computes distances geodetically in metres - consistent
             // with the tgeogpoint created below via tgeogpoint_in.
             this.hazardZones = new Pointer[zoneWkt.length];
             for (int i = 0; i < zoneWkt.length; i++) {
-                hazardZones[i] = functions.geog_in(zoneWkt[i], -1);
+                hazardZones[i] = GeneratedFunctions.geog_in(zoneWkt[i], -1);
                 if (hazardZones[i] == null) {
                     log.error("geog_in returned null for ZONE {}", i + 1);
                 }
@@ -335,7 +335,7 @@ public class Query1_Main {
                 String tpointWkt = String.format(
                         "POINT(%f %f)@%s", event.getLon(), event.getLat(), ts);
 
-                Pointer tpoint = functions.tgeogpoint_in(tpointWkt);
+                Pointer tpoint = GeneratedFunctions.tgeogpoint_in(tpointWkt);
                 if (tpoint == null) {
                     log.error("tgeogpoint_in returned null for WKT: {}", tpointWkt);
                     continue;
@@ -346,7 +346,7 @@ public class Query1_Main {
 
                     // edwithin_tgeo_geo returns 1 if tpoint is within distanceMeters of the
                     // zone polygon at any instant — implements paper Line 2.
-                    int within = functions.edwithin_tgeo_geo(
+                    int within = GeneratedFunctions.edwithin_tgeo_geo(
                             tpoint, hazardZones[i], distanceMeters);
 
                     if (within == 1) {

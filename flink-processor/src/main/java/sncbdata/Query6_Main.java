@@ -12,7 +12,7 @@ import org.apache.flink.streaming.api.windowing.assigners.TumblingEventTimeWindo
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import functions.functions;
+import functions.GeneratedFunctions;
 import functions.error_handler_fn;
 import functions.MeosErrorHandler;
 
@@ -30,8 +30,8 @@ public class Query6_Main {
 
         try {
             logger.info("Initializing MEOS");
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new MeosErrorHandler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new MeosErrorHandler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -87,7 +87,7 @@ public class Query6_Main {
         } finally {
             try {
                 logger.info("Finalizing MEOS");
-                functions.meos_finalize();
+                GeneratedFunctions.meos_finalize();
             } catch (Exception e) {
                 logger.error("Error during MEOS finalization: {}", e.getMessage(), e);
             }
@@ -109,8 +109,8 @@ public class Query6_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new MeosErrorHandler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
         }
 
         @Override
@@ -121,8 +121,8 @@ public class Query6_Main {
             String pointLeft = String.format("Point(%f %f)@%s", left.getLon(), left.getLat(), tsLeft);
             String pointRight = String.format("Point(%f %f)@%s", right.getLon(), right.getLat(), tsRight);
 
-            Pointer tpointLeft = functions.tgeogpoint_in(pointLeft);
-            Pointer tpointRight = functions.tgeogpoint_in(pointRight);
+            Pointer tpointLeft = GeneratedFunctions.tgeogpoint_in(pointLeft);
+            Pointer tpointRight = GeneratedFunctions.tgeogpoint_in(pointRight);
 
             if (tpointLeft == null || tpointRight == null) {
                 log.error("tgeogpoint_in returned null for DeviceID={}", left.getDeviceId());
@@ -132,14 +132,14 @@ public class Query6_Main {
             // Paper Line 4: nearest approach distance approximated via geog_distance.
             // nad_tgeo_tgeo requires temporal overlap: for TInstants at different timestamps
             // it returns Double.MAX_VALUE, so we use geog_distance on extracted geography points.
-            Pointer geoLeft  = functions.tgeo_end_value(tpointLeft);
-            Pointer geoRight = functions.tgeo_end_value(tpointRight);
+            Pointer geoLeft  = GeneratedFunctions.tgeo_end_value(tpointLeft);
+            Pointer geoRight = GeneratedFunctions.tgeo_end_value(tpointRight);
             if (geoLeft == null || geoRight == null) {
                 log.error("temporal_end_value returned null for DeviceID={}", left.getDeviceId());
                 return null;
             }
 
-            double mindist = functions.geog_distance(geoLeft, geoRight);
+            double mindist = GeneratedFunctions.geog_distance(geoLeft, geoRight);
 
             // Paper Line 5: lat > 0.0.
             if (left.getLat() <= 0.0 || right.getLat() <= 0.0) return null;
