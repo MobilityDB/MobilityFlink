@@ -1,0 +1,3 @@
+# Generated / vendored surface inputs — exclude from language stats and collapse diffs.
+tools/baseline/streaming-relevance-baseline.json linguist-generated=true -diff
+flink-processor/jar/JMEOS.jar binary linguist-generated=true

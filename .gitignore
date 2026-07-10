@@ -6,5 +6,9 @@ target/
 .vscode
 *.jar
 
+# Python generator caches (tools/codegen_facades.py runs at build time)
+__pycache__/
+**/__pycache__/
+
 # Maven build output
 flink-processor/target/
