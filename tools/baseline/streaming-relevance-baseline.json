@@ -1,7 +1,6 @@
 {
   "schema_version": "0.1.0-draft",
-  "generated_at": "2026-05-21T07:46:14.181946Z",
-  "source_catalog": "/home/esteban/src/_streaming_relevance/meos-api/output/meos-idl.json",
+  "source_catalog": "meos-idl.json (MobilityDB master, MEOS-API run.py)",
   "source_catalog_function_count": 3548,
   "classifier": "v4",
   "vocabulary": [
