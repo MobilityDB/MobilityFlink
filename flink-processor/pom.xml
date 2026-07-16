@@ -221,13 +221,15 @@
                         <configuration>
                             <executable>python3</executable>
                             <arguments>
-                                <argument>${project.basedir}/../tools/codegen_facades.py</argument>
+                                <argument>${project.basedir}/../tools/codegen_jvm.py</argument>
+                                <argument>--engine</argument>
+                                <argument>flink</argument>
+                                <argument>--catalog</argument>
+                                <argument>${project.basedir}/../tools/meos-idl.json</argument>
                                 <argument>--jar</argument>
                                 <argument>${settings.localRepository}/org/jmeos/meos/1.0/meos-1.0.jar</argument>
                                 <argument>--out</argument>
                                 <argument>${project.build.directory}/generated-facades</argument>
-                                <argument>--engine</argument>
-                                <argument>flink</argument>
                             </arguments>
                         </configuration>
                     </execution>
