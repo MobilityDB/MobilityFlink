@@ -34,12 +34,11 @@ jobs:
           mobilitydb-ref: master
           build-libmeos: "true"
 
-      - name: Derive the streaming-relevance baseline from the catalog
-        # The facade generator reads tools/baseline/streaming-relevance-baseline.json; derive
-        # it from the master catalog with the deterministic classifier so the generator input
-        # tracks master too. The baseline is gitignored — it only ever exists as a build artifact.
+      - name: Stage the derived MEOS catalog
+        # codegen_jvm.py reads tools/meos-idl.json; place the derived catalog there so its
+        # wiring is unchanged. The catalog is gitignored — it only ever exists as a build artifact.
         run: |
-          tools/regen_baseline.sh "${{ steps.provision.outputs.catalog-path }}"
+          cp "${{ steps.provision.outputs.catalog-path }}" tools/meos-idl.json
           echo "LD_LIBRARY_PATH=/usr/local/lib" >> "$GITHUB_ENV"
 
       - name: Check out JMEOS at master
@@ -71,7 +70,7 @@ jobs:
             -DgroupId=org.jmeos -DartifactId=meos -Dversion=1.0 -Dpackaging=jar
 
       - name: Build + generate + smoke tests
-        # generate-sources runs the facade generator over the installed jar's surface ∩ baseline;
+        # generate-sources runs codegen_jvm.py --engine flink over the installed jar's full surface;
         # the smoke tests exercise the facades against the freshly built libmeos from /usr/local/lib.
         working-directory: flink-processor
         run: mvn -B -Dmeos.lib.dir=/usr/local/lib -Dmeos.enabled=true clean test
