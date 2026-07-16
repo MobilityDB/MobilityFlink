@@ -12,3 +12,7 @@ __pycache__/
 
 # Maven build output
 flink-processor/target/
+
+# Derived generator input — the streaming-relevance baseline is regenerated in CI
+# from the master MEOS catalog (tools/regen_baseline.sh), never committed.
+tools/baseline/streaming-relevance-baseline.json

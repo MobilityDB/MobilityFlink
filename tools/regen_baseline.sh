@@ -24,6 +24,10 @@ catalog="${1:?usage: regen_baseline.sh <meos-idl.json> [source-ref]}"
 source_ref="${2:-meos-idl.json (MEOS-API run.py over tools/meos-source-commit.txt)}"
 out="$here/baseline/streaming-relevance-baseline.json"
 
+# The baseline is a derived, gitignored build artifact, so its directory is absent
+# in a fresh checkout — create it before the classifier writes.
+mkdir -p "$here/baseline"
+
 python3 "$here/classify_streaming_relevance.py" "$catalog" \
   --source-ref "$source_ref" -o "$out"
 

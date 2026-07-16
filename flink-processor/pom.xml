@@ -102,13 +102,12 @@
             <version>1.18.1</version>
         </dependency>
 
-        <!-- JMEOS dependency -->
+        <!-- JMEOS dependency — built from JMEOS main in CI and installed under these
+             coordinates (org.jmeos:meos:1.0), so the FFI surface tracks master. -->
         <dependency>
-            <groupId>com.mobilitydb</groupId>
-            <artifactId>jmeos</artifactId>
-            <version>1.0.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/jar/JMEOS.jar</systemPath>
+            <groupId>org.jmeos</groupId>
+            <artifactId>meos</artifactId>
+            <version>1.0</version>
         </dependency>
 
         <!-- JUnit dependency -->
@@ -208,8 +207,8 @@
             </resource>
         </resources>
         <plugins>
-            <!-- Generate the org.mobilitydb.meos.MeosOps* streaming facades from the bundled
-                 JMEOS jar at build time (into target/, never committed). -->
+            <!-- Generate the org.mobilitydb.meos.MeosOps* streaming facades from the installed
+                 JMEOS jar's surface at build time (into target/, never committed). -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -224,7 +223,7 @@
                             <arguments>
                                 <argument>${project.basedir}/../tools/codegen_facades.py</argument>
                                 <argument>--jar</argument>
-                                <argument>${project.basedir}/jar/JMEOS.jar</argument>
+                                <argument>${settings.localRepository}/org/jmeos/meos/1.0/meos-1.0.jar</argument>
                                 <argument>--out</argument>
                                 <argument>${project.build.directory}/generated-facades</argument>
                                 <argument>--engine</argument>

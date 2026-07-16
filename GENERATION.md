@@ -35,24 +35,19 @@ classifier: the tier of a function is decided purely by its name, its object-mod
 and its number of temporal parameters (zero per-function judgement), so the same MEOS
 catalog always yields the same baseline.
 
-The full input chain, from the tracked MobilityDB commit:
+The full input chain, from upstream MobilityDB master:
 
 ```
-MobilityDB @ tools/meos-source-commit.txt
-  → MEOS-API/run.py over the MEOS headers        → meos-idl.json  (the catalog)
-  → tools/classify_streaming_relevance.py        → tools/baseline/streaming-relevance-baseline.json
-  → tools/codegen_facades.py  (jar-surface ∩ baseline)   → org.mobilitydb.meos.MeosOps* facades
+MobilityDB @ master
+  → provision-meos (MEOS-API/run.py over the MEOS headers)  → meos-idl.json  (the catalog)
+  → tools/classify_streaming_relevance.py                   → tools/baseline/streaming-relevance-baseline.json
+  → tools/codegen_facades.py  (jar-surface ∩ baseline)      → org.mobilitydb.meos.MeosOps* facades
 ```
 
-To refresh the baseline (e.g. after bumping `tools/meos-source-commit.txt`): rebuild the
-catalog at the tracked commit with MEOS-API, then
-
-```
-tools/regen_baseline.sh <path-to-meos-idl.json>
-```
-
-and commit the diff. Because the classifier is deterministic, an unchanged catalog
-regenerates the baseline byte-for-byte.
+CI derives the baseline from the master catalog with `tools/regen_baseline.sh
+<path-to-meos-idl.json>` before the build; the baseline is gitignored, not committed.
+Because the classifier is deterministic, the same catalog regenerates it byte-for-byte, so
+a local refresh is: build the catalog from master with MEOS-API, then run the same script.
 
 ## Generate-then-retire — the green-CI version is the probe
 
@@ -62,14 +57,14 @@ green-CI version** (the test suite + the streaming benchmark), then retire the h
 
 The `MeosOps*` facades are emitted at build time and are **not committed**: Maven
 `generate-sources` runs `tools/codegen_facades.py` into `target/generated-facades`, and
-`build-helper` adds it as a source root. Only the generator, its `tools/baseline/`, and the
-bundled jar are tracked; the sole hand-written class under `org.mobilitydb.meos` is
-`MeosSetSetJoin`.
+`build-helper` adds it as a source root. Only the generator and its `tools/` classifier are
+tracked; the catalog, the baseline and the JMEOS jar are all derived in CI, and the sole
+hand-written class under `org.mobilitydb.meos` is `MeosSetSetJoin`.
 
 ## Surface match
 
-The bundled JMEOS jar (`flink-processor/jar/JMEOS.jar`) is committed and consumed
-system-scoped; the generator reads its raw-FFI surface. The `libmeos.so` it links must be
-built from the **same MobilityDB commit** the JMEOS surface was generated against —
-surface-match, else runtime symbol faults. That commit is the *catalog/surface* input for
-the whole binding.
+The JMEOS jar is built from **JMEOS `main`** in CI against the master-derived catalog and
+installed as `org.jmeos:meos:1.0`; the generator reads its raw-FFI surface. The `libmeos.so`
+the smoke tests load is built from the **same** master catalog, so the jar surface, the
+facades and the native library all track master together — surface-match by construction,
+with no committed jar or pinned commit to drift.
