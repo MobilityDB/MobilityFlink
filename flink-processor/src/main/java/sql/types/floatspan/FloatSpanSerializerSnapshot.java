@@ -1,6 +1,7 @@
 package sql.types;
 
 import org.apache.flink.api.common.typeutils.SimpleTypeSerializerSnapshot;
+import sql.types.floatspan.FloatSpanSerializer;
 import types.collections.number.FloatSpan;
 
 public class FloatSpanSerializerSnapshot

@@ -3,6 +3,7 @@ package sql;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import sql.udf.floatspan.*;
+import sql.udf.tbox.*;
 
 public class MobilityFlinkSQL {
 
@@ -16,6 +17,27 @@ public class MobilityFlinkSQL {
         tEnv.createTemporaryFunction("floatspan_contains", FloatSpanContains.class);
         tEnv.createTemporaryFunction("floatspan_overlaps", FloatSpanOverlaps.class);
         tEnv.createTemporaryFunction("floatspan_distance", FloatSpanDistance.class);
+        tEnv.createTemporaryFunction("floatspan_out", FloatSpanToString.class);
+
+        // TBox UDFs
+        tEnv.createTemporaryFunction("tbox_hasx",          TBoxHasX.class);
+        tEnv.createTemporaryFunction("tbox_hast",          TBoxHasT.class);
+        tEnv.createTemporaryFunction("tbox_to_floatspan",  TBoxToFloatSpan.class);
+        tEnv.createTemporaryFunction("tbox_contains",      TBoxContains.class);
+        tEnv.createTemporaryFunction("tbox_contained",     TBoxContainedIn.class);
+        tEnv.createTemporaryFunction("tbox_overlaps",      TBoxOverlaps.class);
+        tEnv.createTemporaryFunction("tbox_same",          TBoxSame.class);
+        tEnv.createTemporaryFunction("tbox_adjacent",      TBoxAdjacent.class);
+        tEnv.createTemporaryFunction("tbox_left",          TBoxIsLeft.class);
+        tEnv.createTemporaryFunction("tbox_overleft",      TBoxIsOverLeft.class);
+        tEnv.createTemporaryFunction("tbox_right",         TBoxIsRight.class);
+        tEnv.createTemporaryFunction("tbox_overright",     TBoxIsOverRight.class);
+        tEnv.createTemporaryFunction("tbox_before",        TBoxIsBefore.class);
+        tEnv.createTemporaryFunction("tbox_overbefore",    TBoxIsOverBefore.class);
+        tEnv.createTemporaryFunction("tbox_after",         TBoxIsAfter.class);
+        tEnv.createTemporaryFunction("tbox_overafter",     TBoxIsOverAfter.class);
+        tEnv.createTemporaryFunction("tbox_union",         TBoxUnion.class);
+        tEnv.createTemporaryFunction("tbox_intersection",  TBoxIntersection.class);
 
         return tEnv;
     }
