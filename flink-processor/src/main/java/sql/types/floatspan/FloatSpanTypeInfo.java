@@ -1,9 +1,8 @@
-package sql.types;
+package sql.types.floatspan;
 
 import org.apache.flink.api.common.serialization.SerializerConfig;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
-import sql.types.floatspan.FloatSpanSerializer;
 import types.collections.number.FloatSpan;
 
 public class FloatSpanTypeInfo extends TypeInformation<FloatSpan> {

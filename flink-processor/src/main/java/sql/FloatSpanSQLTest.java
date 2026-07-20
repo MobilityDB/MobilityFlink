@@ -6,8 +6,8 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.java.typeutils.RowTypeInfo;
 import org.apache.flink.types.Row;
-import sql.types.FloatSpanSerializer;
-import sql.types.FloatSpanTypeInfo;
+import sql.types.floatspan.FloatSpanSerializer;
+import sql.types.floatspan.FloatSpanTypeInfo;
 import types.collections.number.FloatSpan;
 
 import java.util.Arrays;

@@ -1,5 +1,4 @@
 package sql.udf.floatspan;
-import org.apache.flink.table.annotation.DataTypeHint;
 import org.apache.flink.table.api.DataTypes;
 import org.apache.flink.table.catalog.DataTypeFactory;
 import org.apache.flink.table.functions.ScalarFunction;
@@ -7,7 +6,7 @@ import org.apache.flink.table.types.DataType;
 import org.apache.flink.table.types.inference.InputTypeStrategies;
 import org.apache.flink.table.types.inference.TypeInference;
 import org.apache.flink.table.types.inference.TypeStrategies;
-import sql.types.FloatSpanSerializer;
+import sql.types.floatspan.FloatSpanSerializer;
 import types.collections.number.FloatSpan;
 
 public class FloatSpanContains extends ScalarFunction {

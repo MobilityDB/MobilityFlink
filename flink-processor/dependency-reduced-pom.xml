@@ -19,6 +19,12 @@
         <version>3.12.1</version>
         <configuration>
           <release>${target.java.version}</release>
+          <excludes>
+            <exclude>${sedona.source.excludes}</exclude>
+          </excludes>
+          <testExcludes>
+            <testExclude>${sedona.source.excludes}</testExclude>
+          </testExcludes>
         </configuration>
       </plugin>
       <plugin>
@@ -77,11 +83,31 @@
       </plugin>
     </plugins>
   </build>
+  <profiles>
+    <profile>
+      <id>sedona</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.apache.sedona</groupId>
+          <artifactId>sedona-flink-shaded_2.12</artifactId>
+          <version>1.9.0</version>
+        </dependency>
+        <dependency>
+          <groupId>org.datasyslab</groupId>
+          <artifactId>geotools-wrapper</artifactId>
+          <version>1.8.1-33.1</version>
+        </dependency>
+      </dependencies>
+      <properties>
+        <sedona.source.excludes>nothing-excluded/**</sedona.source.excludes>
+      </properties>
+    </profile>
+  </profiles>
   <dependencies>
     <dependency>
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-streaming-java</artifactId>
-      <version>1.16.0</version>
+      <version>2.0.0</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -100,32 +126,24 @@
           <artifactId>commons-math3</artifactId>
           <groupId>org.apache.commons</groupId>
         </exclusion>
-        <exclusion>
-          <artifactId>flink-shaded-force-shading</artifactId>
-          <groupId>org.apache.flink</groupId>
-        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-clients</artifactId>
-      <version>1.16.0</version>
+      <version>2.0.0</version>
       <scope>provided</scope>
       <exclusions>
-        <exclusion>
-          <artifactId>flink-optimizer</artifactId>
-          <groupId>org.apache.flink</groupId>
-        </exclusion>
         <exclusion>
           <artifactId>commons-cli</artifactId>
           <groupId>commons-cli</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>flink-runtime</artifactId>
+          <artifactId>flink-datastream</artifactId>
           <groupId>org.apache.flink</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>flink-shaded-force-shading</artifactId>
+          <artifactId>flink-runtime</artifactId>
           <groupId>org.apache.flink</groupId>
         </exclusion>
       </exclusions>
@@ -133,15 +151,15 @@
     <dependency>
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-core</artifactId>
-      <version>1.16.0</version>
+      <version>2.0.0</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
-          <artifactId>flink-annotations</artifactId>
+          <artifactId>flink-core-api</artifactId>
           <groupId>org.apache.flink</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>flink-metrics-core</artifactId>
+          <artifactId>flink-annotations</artifactId>
           <groupId>org.apache.flink</groupId>
         </exclusion>
         <exclusion>
@@ -153,12 +171,16 @@
           <groupId>org.apache.flink</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>commons-lang3</artifactId>
+          <artifactId>snakeyaml-engine</artifactId>
+          <groupId>org.snakeyaml</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>commons-text</artifactId>
           <groupId>org.apache.commons</groupId>
         </exclusion>
         <exclusion>
           <artifactId>kryo</artifactId>
-          <groupId>com.esotericsoftware.kryo</groupId>
+          <groupId>com.esotericsoftware</groupId>
         </exclusion>
         <exclusion>
           <artifactId>commons-collections</artifactId>
@@ -172,72 +194,12 @@
           <artifactId>flink-shaded-guava</artifactId>
           <groupId>org.apache.flink</groupId>
         </exclusion>
-        <exclusion>
-          <artifactId>flink-shaded-force-shading</artifactId>
-          <groupId>org.apache.flink</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-java</artifactId>
-      <version>1.16.0</version>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>chill-java</artifactId>
-          <groupId>com.twitter</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-lang3</artifactId>
-          <groupId>org.apache.commons</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>commons-math3</artifactId>
-          <groupId>org.apache.commons</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>flink-shaded-force-shading</artifactId>
-          <groupId>org.apache.flink</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-connector-kafka</artifactId>
-      <version>1.16.0</version>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>flink-connector-base</artifactId>
-          <groupId>org.apache.flink</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>kafka-clients</artifactId>
-          <groupId>org.apache.kafka</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>flink-shaded-force-shading</artifactId>
-          <groupId>org.apache.flink</groupId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.flink</groupId>
-      <artifactId>flink-connector-jdbc</artifactId>
-      <version>1.16.0</version>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>flink-shaded-force-shading</artifactId>
-          <groupId>org.apache.flink</groupId>
-        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-table-api-java-bridge</artifactId>
-      <version>1.16.0</version>
+      <version>2.0.0</version>
       <scope>provided</scope>
       <exclusions>
         <exclusion>
@@ -248,18 +210,22 @@
           <artifactId>flink-table-api-bridge-base</artifactId>
           <groupId>org.apache.flink</groupId>
         </exclusion>
-        <exclusion>
-          <artifactId>flink-shaded-force-shading</artifactId>
-          <groupId>org.apache.flink</groupId>
-        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.flink</groupId>
       <artifactId>flink-table-planner_2.12</artifactId>
-      <version>1.16.0</version>
+      <version>2.0.0</version>
       <scope>provided</scope>
       <exclusions>
+        <exclusion>
+          <artifactId>value</artifactId>
+          <groupId>org.immutables</groupId>
+        </exclusion>
+        <exclusion>
+          <artifactId>value-annotations</artifactId>
+          <groupId>org.immutables</groupId>
+        </exclusion>
         <exclusion>
           <artifactId>commons-compiler</artifactId>
           <groupId>org.codehaus.janino</groupId>
@@ -269,15 +235,11 @@
           <groupId>org.codehaus.janino</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>flink-scala_2.12</artifactId>
+          <artifactId>flink-table-api-scala_2.12</artifactId>
           <groupId>org.apache.flink</groupId>
         </exclusion>
         <exclusion>
           <artifactId>flink-table-runtime</artifactId>
-          <groupId>org.apache.flink</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>flink-shaded-force-shading</artifactId>
           <groupId>org.apache.flink</groupId>
         </exclusion>
       </exclusions>
@@ -302,26 +264,21 @@
         </exclusion>
       </exclusions>
     </dependency>
-    <dependency>
-      <groupId>com.mobilitydb</groupId>
-      <artifactId>jmeos</artifactId>
-      <version>1.0.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/jar/JMEOS.jar</systemPath>
-    </dependency>
   </dependencies>
   <properties>
     <meos.lib.dir>${project.basedir}/lib</meos.lib.dir>
     <maven.compiler.source>21</maven.compiler.source>
     <jackson.version>2.13.4</jackson.version>
     <junit.jupiter.version>5.8.2</junit.jupiter.version>
-    <flink.version>1.16.0</flink.version>
+    <flink.version>2.0.0</flink.version>
     <queryMainClass>aisdata.Query1_Main</queryMainClass>
     <kafka.version>3.2.0</kafka.version>
     <maven.compiler.target>21</maven.compiler.target>
     <meos.enabled>true</meos.enabled>
+    <flink.kafka.version>4.0.1-2.0</flink.kafka.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <log4j.version>2.17.2</log4j.version>
     <target.java.version>21</target.java.version>
+    <sedona.source.excludes>**/sedona/**</sedona.source.excludes>
   </properties>
 </project>

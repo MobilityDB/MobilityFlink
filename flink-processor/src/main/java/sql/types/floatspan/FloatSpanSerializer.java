@@ -1,4 +1,4 @@
-package sql.types;
+package sql.types.floatspan;
 
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.common.typeutils.TypeSerializerSnapshot;

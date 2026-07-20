@@ -7,7 +7,7 @@ import org.apache.flink.table.types.inference.TypeInference;
 import org.apache.flink.table.types.inference.TypeStrategies;
 import org.apache.flink.table.types.inference.InputTypeStrategies;
 import org.apache.flink.table.types.DataType;
-import sql.types.FloatSpanSerializer;
+import sql.types.floatspan.FloatSpanSerializer;
 import types.collections.number.FloatSpan;
 
 public class FloatSpanLower extends ScalarFunction {
