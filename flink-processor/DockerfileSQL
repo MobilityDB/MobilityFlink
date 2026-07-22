@@ -76,4 +76,4 @@ COPY --from=java-builder /build/target/flink-kafka2postgres-1.0-SNAPSHOT.jar /op
 CMD ["java", \
      "-Djava.library.path=/usr/local/lib", \
      "-cp", "/opt/flink/lib/*:/opt/flink/usrlib/flink-processor.jar", \
-     "sql.FloatSpanSQLTest"]
+     "sql.TNumberSQLTest"]

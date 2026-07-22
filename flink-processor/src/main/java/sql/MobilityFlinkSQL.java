@@ -4,6 +4,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import sql.udf.floatspan.*;
 import sql.udf.tbox.*;
+import sql.udf.tnumber.*;
 
 public class MobilityFlinkSQL {
 
@@ -38,6 +39,15 @@ public class MobilityFlinkSQL {
         tEnv.createTemporaryFunction("tbox_overafter",     TBoxIsOverAfter.class);
         tEnv.createTemporaryFunction("tbox_union",         TBoxUnion.class);
         tEnv.createTemporaryFunction("tbox_intersection",  TBoxIntersection.class);
+
+        tEnv.createTemporaryFunction("tAdd",        TNumberAdd.class);
+        tEnv.createTemporaryFunction("tSub",        TNumberSub.class);
+        tEnv.createTemporaryFunction("tMul",        TNumberMul.class);
+        tEnv.createTemporaryFunction("deltaValue",  TNumberDeltaValue.class);
+        tEnv.createTemporaryFunction("derivative",  TFloatDerivative.class);
+        tEnv.createTemporaryFunction("tfloat_round", TFloatRound.class);
+        tEnv.createTemporaryFunction("tfloat_out",  TFloatToString.class);
+        tEnv.createTemporaryFunction("tint_out",    TIntToString.class);
 
         return tEnv;
     }
