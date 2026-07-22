@@ -24,7 +24,6 @@ import org.apache.flink.util.Collector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import functions.functions;
 import functions.GeneratedFunctions;
 import functions.error_handler;
 import functions.error_handler_fn;
@@ -63,8 +62,8 @@ public class Query8_V2_Main {
         logger.info("Java library path: {}", System.getProperty("java.library.path"));
 
         try {
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(new error_handler());
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -97,7 +96,7 @@ public class Query8_V2_Main {
             logger.error("Error during execution: {}", e.getMessage(), e);
             throw e;
         } finally {
-            try { functions.meos_finalize(); }
+            try { GeneratedFunctions.meos_finalize(); }
             catch (Exception e) { logger.error("Error during MEOS finalization: {}", e.getMessage(), e); }
         }
     }
@@ -125,8 +124,8 @@ public class Query8_V2_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             errorHandler = new error_handler();
-            functions.meos_initialize_timezone("UTC");
-            functions.meos_initialize_error_handler(errorHandler);
+            GeneratedFunctions.meos_initialize_timezone("UTC");
+            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
         }
 
         @Override
@@ -149,11 +148,11 @@ public class Query8_V2_Main {
                 AISData event = sorted.get(0);
                 String wkt   = String.format("POINT(%f %f)@%s",
                         event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
-                Pointer inst = functions.tgeompoint_in(wkt);
+                Pointer inst = GeneratedFunctions.tgeompoint_in(wkt);
                 if (inst == null) return;
                 Pointer seedArray = Memory.allocate(runtime, Long.BYTES);
                 seedArray.putPointer(0, inst);
-                Pointer singleSeq = functions.tsequence_make(
+                Pointer singleSeq = GeneratedFunctions.tsequence_make(
                         seedArray, 1, true, true, TInterpolation.LINEAR.getValue(), true);
                 if (singleSeq == null) return;
                 String result = String.format(
@@ -161,7 +160,7 @@ public class Query8_V2_Main {
                                 + " | window [%s - %s]%n"
                                 + "             raw=cleaned: %s",
                         mmsi, windowStart, windowEnd,
-                        functions.tspatial_as_ewkt(singleSeq, 6));
+                        GeneratedFunctions.tspatial_as_ewkt(singleSeq, 6));
                 log.info(result);
                 out.collect(result);
                 return;
@@ -172,7 +171,7 @@ public class Query8_V2_Main {
             for (AISData event : sorted) {
                 String ts   = millisToTs(event.getTimestamp());
                 String wkt  = String.format("POINT(%f %f)@%s", event.getLon(), event.getLat(), ts);
-                Pointer inst = functions.tgeompoint_in(wkt);
+                Pointer inst = GeneratedFunctions.tgeompoint_in(wkt);
                 if (inst == null) {
                     log.error("[EKF-V2] tgeompoint_in returned null for MMSI={} wkt={}", mmsi, wkt);
                     continue;
@@ -186,7 +185,7 @@ public class Query8_V2_Main {
             for (int i = 0; i < instants.size(); i++) {
                 ptrArray.putPointer((long) i * Long.BYTES, instants.get(i));
             }
-            Pointer rawSeq = functions.tsequence_make(
+            Pointer rawSeq = GeneratedFunctions.tsequence_make(
                     ptrArray, instants.size(), true, true, TInterpolation.LINEAR.getValue(), true);
             if (rawSeq == null) {
                 log.error("[EKF-V2] tsequence_make returned null for MMSI={}", mmsi);
@@ -208,8 +207,8 @@ public class Query8_V2_Main {
                             + "             cleaned: %s",
                     mmsi, instants.size(), gate, q, r, dropOutliers,
                     windowStart, windowEnd,
-                    functions.tspatial_as_ewkt(rawSeq, 6),
-                    functions.tspatial_as_ewkt(cleanedSeq, 6));
+                    GeneratedFunctions.tspatial_as_ewkt(rawSeq, 6),
+                    GeneratedFunctions.tspatial_as_ewkt(cleanedSeq, 6));
 
             log.info(result);
             out.collect(result);
