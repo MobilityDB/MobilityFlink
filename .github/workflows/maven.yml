@@ -72,5 +72,4 @@ jobs:
       - name: Build + generate + smoke tests
         # generate-sources runs codegen_jvm.py --engine flink over the installed jar's full surface;
         # the smoke tests exercise the facades against the freshly built libmeos from /usr/local/lib.
-        working-directory: flink-processor
         run: mvn -B -Dmeos.lib.dir=/usr/local/lib -Dmeos.enabled=true clean test

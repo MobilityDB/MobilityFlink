@@ -10,8 +10,6 @@ target/
 __pycache__/
 **/__pycache__/
 
-# Maven build output
-flink-processor/target/
 
 # Derived generator input — the MEOS catalog is staged in CI from upstream
 # MobilityDB master (provision-meos), never committed.
