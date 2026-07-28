@@ -14,3 +14,6 @@ __pycache__/
 # Derived generator input — the MEOS catalog is staged in CI from upstream
 # MobilityDB master (provision-meos), never committed.
 tools/meos-idl.json
+
+# tools/refresh-from-master.sh scratch (sibling clones + libmeos prefix).
+.meos-chain/
