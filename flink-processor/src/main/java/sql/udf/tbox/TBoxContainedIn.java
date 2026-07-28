@@ -9,7 +9,8 @@ public class TBoxContainedIn extends ScalarFunction {
     public Boolean eval(TBox a, TBox b) {
         return a == null || b == null ? null : a.is_contained_in(b);
     }
+
     @Override public TypeInference getTypeInference(DataTypeFactory f) {
-        return TBoxHasX.tboxTwoArgBoolean();
+        return TBoxTypeInferenceSupport.tboxTwoArgBoolean();
     }
 }

@@ -10,7 +10,8 @@ public class TBoxUnion extends ScalarFunction {
     public TBox eval(TBox a, TBox b) {
         return a == null || b == null ? null : a.union(b, true);
     }
+
     @Override public TypeInference getTypeInference(DataTypeFactory f) {
-        return TBoxHasX.tboxTwoArgTBox();
+        return TBoxTypeInferenceSupport.tboxTwoArgTBox();
     }
 }

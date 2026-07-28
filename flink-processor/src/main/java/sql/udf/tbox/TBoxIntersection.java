@@ -10,6 +10,6 @@ public class TBoxIntersection extends ScalarFunction {
         return a == null || b == null ? null : a.intersection(b);
     }
     @Override public TypeInference getTypeInference(DataTypeFactory f) {
-        return TBoxHasX.tboxTwoArgTBox();
+        return TBoxTypeInferenceSupport.tboxTwoArgTBox();
     }
 }

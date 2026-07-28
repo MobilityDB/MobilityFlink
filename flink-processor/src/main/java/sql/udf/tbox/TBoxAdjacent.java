@@ -11,6 +11,6 @@ public class TBoxAdjacent extends ScalarFunction {
     }
 
     @Override public TypeInference getTypeInference(DataTypeFactory f) {
-        return TBoxHasX.tboxTwoArgBoolean();
+        return TBoxTypeInferenceSupport.tboxTwoArgBoolean();
     }
 }
