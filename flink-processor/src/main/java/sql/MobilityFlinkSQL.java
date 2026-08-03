@@ -3,6 +3,7 @@ package sql;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import sql.udf.floatspan.*;
+import sql.udf.stbox.*;
 import sql.udf.tbox.*;
 import sql.udf.tnumber.*;
 
@@ -40,6 +41,7 @@ public class MobilityFlinkSQL {
         tEnv.createTemporaryFunction("tbox_union",         TBoxUnion.class);
         tEnv.createTemporaryFunction("tbox_intersection",  TBoxIntersection.class);
 
+        // TNumber UDFs
         tEnv.createTemporaryFunction("tAdd",        TNumberAdd.class);
         tEnv.createTemporaryFunction("tSub",        TNumberSub.class);
         tEnv.createTemporaryFunction("tMul",        TNumberMul.class);
@@ -48,6 +50,18 @@ public class MobilityFlinkSQL {
         tEnv.createTemporaryFunction("tfloat_round", TFloatRound.class);
         tEnv.createTemporaryFunction("tfloat_out",  TFloatToString.class);
         tEnv.createTemporaryFunction("tint_out",    TIntToString.class);
+
+        // STBox UDFs
+        tEnv.createTemporaryFunction("stbox",           STBoxFromString.class);
+        tEnv.createTemporaryFunction("stbox_has_xy",    STBoxHasXY.class);
+        tEnv.createTemporaryFunction("stbox_has_t",     STBoxHasT.class);
+        tEnv.createTemporaryFunction("stbox_xmin",      STBoxXMin.class);
+        tEnv.createTemporaryFunction("stbox_ymin",      STBoxYMin.class);
+        tEnv.createTemporaryFunction("stbox_overlaps",  STBoxOverlaps.class);
+        tEnv.createTemporaryFunction("stbox_contains",  STBoxContains.class);
+        tEnv.createTemporaryFunction("stbox_expand",    STBoxExpandSpace.class);
+        tEnv.createTemporaryFunction("stbox_get_space", STBoxGetSpace.class);
+        tEnv.createTemporaryFunction("stbox_out",       STBoxToString.class);
 
         return tEnv;
     }
