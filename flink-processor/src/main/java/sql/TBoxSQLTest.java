@@ -44,8 +44,8 @@ public class TBoxSQLTest {
         Table result = tEnv.sqlQuery("""
             SELECT
                 f0                                          AS id,
-                tbox_hasx(f1)                               AS `has_x`,
-                tbox_hast(f1)                               AS `has_t`,
+                tbox_has_x(f1)                               AS `has_x`,
+                tbox_has_t(f1)                               AS `has_t`,
             floatspan_out(tbox_to_floatspan(f1))            AS `float_span`,
                 tbox_overlaps(f1,
                     tbox('TBOXFLOAT XT([8, 15),[2020-06-04, 2020-06-08])'))
@@ -54,5 +54,15 @@ public class TBoxSQLTest {
         """);
 
         result.execute().print();
+
+        // ── Query : aggregation ───────────────────────────────────────
+        System.out.println("\n=== TBox: Extent ===");
+        Table query = tEnv.sqlQuery("""
+            SELECT
+                floatspan_out(tbox_to_floatspan(tbox_extent(f1))) AS `extent`
+            FROM tboxes
+            WHERE tbox_has_x(f1) = true AND tbox_has_t(f1) = true
+        """);
+        query.execute().print();
     }
 }

@@ -51,5 +51,14 @@ public class FloatSpanSQLTest {
         """);
 
         result.execute().print();
+
+        // ── Query : aggregation ───────────────────────────────────────
+        System.out.println("\n=== FloatSpan: Extent ===");
+        Table q4 = tEnv.sqlQuery("""
+            SELECT
+                floatspan_out(floatspan_extent(f1)) AS `extent`
+            FROM spans
+        """);
+        q4.execute().print();
     }
 }

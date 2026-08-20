@@ -13,6 +13,8 @@ import sql.types.stbox.STBoxTypeInfo;
 import types.boxes.STBox;
 
 import java.util.Arrays;
+import functions.functions;
+
 
 public class STBoxSQLTest {
 
@@ -80,5 +82,14 @@ public class STBoxSQLTest {
         """);
         q3.execute().print();
 
+        // ── Query 4: aggregation ───────────────────────────────────────
+        System.out.println("\n=== STBox: Extent ===");
+        Table q4 = tEnv.sqlQuery("""
+            SELECT
+                stbox_out(stbox_extent(f1)) AS `extent`
+            FROM stboxes
+            WHERE stbox_has_xy(f1) = true AND stbox_has_t(f1) = true
+        """);
+        q4.execute().print();
     }
 }

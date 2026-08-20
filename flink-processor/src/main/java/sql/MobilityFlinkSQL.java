@@ -20,10 +20,11 @@ public class MobilityFlinkSQL {
         tEnv.createTemporaryFunction("floatspan_overlaps", FloatSpanOverlaps.class);
         tEnv.createTemporaryFunction("floatspan_distance", FloatSpanDistance.class);
         tEnv.createTemporaryFunction("floatspan_out", FloatSpanToString.class);
+        tEnv.createTemporaryFunction("floatspan_extent", FloatSpanExtent.class);
 
         // TBox UDFs
-        tEnv.createTemporaryFunction("tbox_hasx",          TBoxHasX.class);
-        tEnv.createTemporaryFunction("tbox_hast",          TBoxHasT.class);
+        tEnv.createTemporaryFunction("tbox_has_x",          TBoxHasX.class);
+        tEnv.createTemporaryFunction("tbox_has_t",          TBoxHasT.class);
         tEnv.createTemporaryFunction("tbox_to_floatspan",  TBoxToFloatSpan.class);
         tEnv.createTemporaryFunction("tbox_contains",      TBoxContains.class);
         tEnv.createTemporaryFunction("tbox_contained",     TBoxContainedIn.class);
@@ -40,6 +41,7 @@ public class MobilityFlinkSQL {
         tEnv.createTemporaryFunction("tbox_overafter",     TBoxIsOverAfter.class);
         tEnv.createTemporaryFunction("tbox_union",         TBoxUnion.class);
         tEnv.createTemporaryFunction("tbox_intersection",  TBoxIntersection.class);
+        tEnv.createTemporaryFunction("tbox_extent", TBoxExtent.class);
 
         // TNumber UDFs
         tEnv.createTemporaryFunction("tAdd",        TNumberAdd.class);
@@ -49,6 +51,7 @@ public class MobilityFlinkSQL {
         tEnv.createTemporaryFunction("derivative",  TFloatDerivative.class);
         tEnv.createTemporaryFunction("tfloat_round", TFloatRound.class);
         tEnv.createTemporaryFunction("tfloat_out",  TFloatToString.class);
+        tEnv.createTemporaryFunction("tfloat_tavg", TFloatTAvg.class);
         tEnv.createTemporaryFunction("tint_out",    TIntToString.class);
 
         // STBox UDFs
@@ -62,6 +65,7 @@ public class MobilityFlinkSQL {
         tEnv.createTemporaryFunction("stbox_expand",    STBoxExpandSpace.class);
         tEnv.createTemporaryFunction("stbox_get_space", STBoxGetSpace.class);
         tEnv.createTemporaryFunction("stbox_out",       STBoxToString.class);
+        tEnv.createTemporaryFunction("stbox_extent", STBoxExtent.class);
 
         return tEnv;
     }

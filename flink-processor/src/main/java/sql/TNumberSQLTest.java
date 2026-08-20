@@ -102,9 +102,18 @@ public class TNumberSQLTest {
         """);
         q3.execute().print();
 
-        // ── Query 4: TInt arithmetic and deltaValue ───────────────────────
-        System.out.println("\n=== TInt: tAdd, tSub, deltaValue ===");
+        // ── Query 4: TFloat + TFloat ──────────────────────────────────────
+        System.out.println("\n=== TFloat: tAvg ===");
         Table q4 = tEnv.sqlQuery("""
+            SELECT
+                tfloat_tavg(tfloat_out(f1)) AS `tavg`
+            FROM tfloats
+        """);
+        q4.execute().print();
+
+        // ── Query 5: TInt arithmetic and deltaValue ───────────────────────
+        System.out.println("\n=== TInt: tAdd, tSub, deltaValue ===");
+        Table q5 = tEnv.sqlQuery("""
             SELECT
                 f0                              AS id,
                 tint_out(tAdd(f1, 10))          AS `plus_10`,
@@ -113,6 +122,6 @@ public class TNumberSQLTest {
             FROM tints
         """);
         //tint_out(tMul(f1, 2))           AS `times_2`,
-        q4.execute().print();
+        q5.execute().print();
     }
 }
