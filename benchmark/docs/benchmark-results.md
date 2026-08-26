@@ -22,7 +22,7 @@ terminated by a counting sink; throughput is input events ÷ wall-clock and
 16-core x86-64 Linux; libmeos built `-DMEOS=ON -DCBUFFER=ON -DNPOINT=ON
 -DPOSE=ON -DRGEO=ON`.
 
-Run from `flink-processor/`:
+Run from `../`:
 
 ```
 LD_LIBRARY_PATH=<libmeos-dir> java \

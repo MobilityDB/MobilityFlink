@@ -33,7 +33,7 @@ No window; output updates per event. Watermark-independent.
 
 Use case: real-time geofence alerting where each event matters.
 
-Implemented by [`Q3ContinuousFunction`](../flink-processor/src/main/java/berlinmod/Q3ContinuousFunction.java).
+Implemented by [`Q3ContinuousFunction`](../benchmark/src/main/java/berlinmod/Q3ContinuousFunction.java).
 
 ### 2. Windowed form
 
@@ -48,7 +48,7 @@ Tumbling event-time window of size `W` (default `W = 10s`). For each window:
 
 Use case: time-bucketed dashboards, near-real-time aggregates.
 
-Implemented by [`Q3WindowedFunction`](../flink-processor/src/main/java/berlinmod/Q3WindowedFunction.java).
+Implemented by [`Q3WindowedFunction`](../benchmark/src/main/java/berlinmod/Q3WindowedFunction.java).
 
 ### 3. Snapshot form — **the parity oracle**
 
@@ -73,7 +73,7 @@ streaming-Q3-snapshot(T) ≡ batch-BerlinMOD-Q3 on data up to T
 Use case: lambda-architecture style verification — streaming pipeline's
 output must converge to the batch reference.
 
-Implemented by [`Q3SnapshotFunction`](../flink-processor/src/main/java/berlinmod/Q3SnapshotFunction.java).
+Implemented by [`Q3SnapshotFunction`](../benchmark/src/main/java/berlinmod/Q3SnapshotFunction.java).
 
 ## Default parameters
 
@@ -90,7 +90,7 @@ The `BerlinMODQ3Main` entry point uses:
 ## Predicate implementation
 
 The scaffold today uses a pure-Java great-circle (Haversine) distance check in
-[`Haversine`](../flink-processor/src/main/java/berlinmod/Haversine.java). This
+[`Haversine`](../benchmark/src/main/java/berlinmod/Haversine.java). This
 matches the predicate semantics of the MEOS `edwithin_tgeo_geo` operator (the
 same call used by `MobilityNebula/Queries/Query1.yaml`), so swapping the
 predicate body for a JMEOS-bridged `edwithin_tgeo_geo` call is a one-line

@@ -7,4 +7,4 @@ target/
 *.jar
 
 # Maven build output
-flink-processor/target/
+benchmark/target/

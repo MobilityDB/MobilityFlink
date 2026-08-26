@@ -31,7 +31,7 @@ FROM maven:3.9.6-eclipse-temurin-21 AS java-builder
 WORKDIR /build
 
 # Install into local Maven repo
-COPY flink-processor/jar/JMEOS.jar /tmp/JMEOS.jar
+COPY benchmark/jar/JMEOS.jar /tmp/JMEOS.jar
 RUN mvn install:install-file \
     -Dfile=/tmp/JMEOS.jar \
     -DgroupId=com.mobilitydb \
@@ -41,12 +41,12 @@ RUN mvn install:install-file \
     -q
 
 # Also copy to the path pom.xml's systemPath points to
-COPY flink-processor/jar/JMEOS.jar ./jar/JMEOS.jar
+COPY benchmark/jar/JMEOS.jar ./jar/JMEOS.jar
 
-COPY flink-processor/pom.xml .
+COPY benchmark/pom.xml .
 RUN mvn dependency:go-offline -q
 
-COPY flink-processor/src ./src
+COPY benchmark/src ./src
 RUN mvn clean package -DskipTests -q
 
 # ─────────────────────────────────────────────
@@ -69,15 +69,15 @@ COPY --from=meos-builder /usr/local/lib/libmeos* /usr/local/lib/
 RUN ldconfig
 
 # Copy the fat JAR
-COPY --from=java-builder /build/target/flink-kafka2postgres-1.0-SNAPSHOT.jar /opt/flink/usrlib/flink-processor.jar
+COPY --from=java-builder /build/target/flink-kafka2postgres-1.0-SNAPSHOT.jar /opt/flink/usrlib/benchmark.jar
 
 # Run FloatSpanSQLTest standalone
 # Remove the bundled planner — DelegateExecutorFactory in opt/ is the correct one
 CMD ["java", \
      "-Djava.library.path=/usr/local/lib", \
-     "-cp", "/opt/flink/lib/*:/opt/flink/usrlib/flink-processor.jar", \
+     "-cp", "/opt/flink/lib/*:/opt/flink/usrlib/benchmark.jar", \
 
-     "sql.FloatSpanSQLTest"]
+#     "sql.FloatSpanSQLTest"]
 #     "sql.STBoxSQLTest"]
 #     "sql.TBoxSQLTest"]
-#     "sql.TNumberSQLTest"]
+     "sql.TNumberSQLTest"]

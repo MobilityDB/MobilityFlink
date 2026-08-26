@@ -229,4 +229,4 @@ new row; it is best suited to bounded or batch-style queries.
 
 For implementation details, internal architecture, and a catalogue of
 known pitfalls (useful if you're extending this PoC rather than just using
-it), see `ARCHITECTURE.md` and `PITFALLS.md` in `flink-processor/docs/sql-doc`.
+it), see `ARCHITECTURE.md` and `PITFALLS.md` in `benchmark/docs/sql-doc`.
