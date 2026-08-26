@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.mobilitydb.flink</groupId>
+    <artifactId>mobility-flink-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>binding</module>
+        <module>benchmark</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <target.java.version>21</target.java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <flink.version>2.0.0</flink.version>
+        <!-- The Kafka connector is externalized (own release line) since Flink 1.17. -->
+        <flink.kafka.version>4.0.1-2.0</flink.kafka.version>
+        <jackson.version>2.13.4</jackson.version>
+        <junit.jupiter.version>5.7.0</junit.jupiter.version>
+        <kafka.version>3.2.0</kafka.version>
+        <log4j.version>2.17.2</log4j.version>
+        <jmeos.version>1.0</jmeos.version>
+        <jnr.version>2.1.10</jnr.version>
+        <!-- MEOS smoke tests run when libmeos is present. libmeos is built from the tracked
+             MobilityDB commit and installed to /usr/local/lib (CI and the Dockerfiles do this).
+             Override it to point at a local build dir. -->
+        <meos.enabled>true</meos.enabled>
+        <meos.lib.dir>/usr/local/lib</meos.lib.dir>
+    </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.12.1</version>
+                    <configuration>
+                        <release>${target.java.version}</release>
+                    </configuration>
+                </plugin>
+                <!-- Both modules run MEOS through JNR, so both resolve libmeos from meos.lib.dir
+                     on the fork's LD_LIBRARY_PATH and need the same JPMS opens. -->
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>3.2.5</version>
+                    <configuration>
+                        <reuseForks>false</reuseForks>
+                        <systemPropertyVariables>
+                            <meos.enabled>${meos.enabled}</meos.enabled>
+                        </systemPropertyVariables>
+                        <environmentVariables>
+                            <LD_LIBRARY_PATH>${meos.lib.dir}</LD_LIBRARY_PATH>
+                        </environmentVariables>
+                        <argLine>--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED</argLine>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>

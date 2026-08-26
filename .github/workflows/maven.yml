@@ -1,0 +1,75 @@
+name: Maven CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  # ── Linux ────────────────────────────────────────────────────────────────────
+  linux:
+    name: Build and test — Linux (Java 21 / Flink 2.0)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      # Derive the MEOS catalog (meos-idl.json via run.py) and build+install the
+      # all-families libmeos.so from upstream MobilityDB master, through the shared
+      # composite action (PG purge, apt.postgresql.org PG17, deps, cmake, install under
+      # /usr/local). Tracking master (not a pinned commit) keeps the source, the catalog,
+      # the JMEOS jar and the libmeos the smoke tests load all moving together, so the
+      # generated facades can never drift from the surface they are built against.
+      - name: Provision MEOS catalog + libmeos
+        id: provision
+        uses: MobilityDB/MEOS-API/.github/actions/provision-meos@master
+        with:
+          mobilitydb-ref: master
+          build-libmeos: "true"
+
+      - name: Stage the derived MEOS catalog
+        # codegen_jvm.py reads tools/meos-idl.json; place the derived catalog there so its
+        # wiring is unchanged. The catalog is gitignored — it only ever exists as a build artifact.
+        run: |
+          cp "${{ steps.provision.outputs.catalog-path }}" tools/meos-idl.json
+          echo "LD_LIBRARY_PATH=/usr/local/lib" >> "$GITHUB_ENV"
+
+      - name: Check out JMEOS at master
+        # Build the JMEOS jar (org.jmeos:meos:1.0) from JMEOS main against the SAME
+        # master-derived catalog and libmeos, so the jar's FFI surface can never drift from the
+        # surface the facade generator reads or the libmeos the smoke tests load.
+        uses: actions/checkout@v4
+        with:
+          repository: MobilityDB/JMEOS
+          ref: main
+          path: jmeos
+
+      - name: Build + install the JMEOS jar as org.jmeos:meos:1.0
+        # Mirror JMEOS's own CI: stage the already-derived catalog + libmeos into the JMEOS
+        # checkout and build it (jmeos-core's generate-sources emits GeneratedFunctions from the
+        # catalog). The jar plugin writes the plain jar/JMEOS.jar (finalName JMEOS) — jnr-ffi is
+        # supplied by this project's own pom, so the plain jar is what the removed committed
+        # jar/JMEOS.jar was; libmeos is loaded from LD_LIBRARY_PATH, never from the jar. It is
+        # installed under the org.jmeos:meos:1.0 coordinates the facade generator and the
+        # processor consume. Tests are skipped — only the jar is needed; JMEOS's own CI exercises
+        # its FFI suite.
+        run: |
+          mkdir -p jmeos/codegen/input
+          cp "${{ steps.provision.outputs.catalog-path }}" jmeos/codegen/input/meos-idl.json
+          cp /usr/local/lib/libmeos.so jmeos/jmeos-core/src/
+          mvn -B -f jmeos/pom.xml clean install -Dmaven.test.skip=true
+          mvn -B install:install-file \
+            -Dfile=jmeos/jar/JMEOS.jar \
+            -DgroupId=org.jmeos -DartifactId=meos -Dversion=1.0 -Dpackaging=jar
+
+      - name: Build + generate + smoke tests
+        # generate-sources runs codegen_jvm.py --engine flink over the installed jar's full surface;
+        # the smoke tests exercise the facades against the freshly built libmeos from /usr/local/lib.
+        run: mvn -B -Dmeos.lib.dir=/usr/local/lib -Dmeos.enabled=true clean test

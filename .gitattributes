@@ -1,0 +1,2 @@
+# Generated output — exclude from language stats.
+flink-processor/target/** linguist-generated=true

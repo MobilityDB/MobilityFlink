@@ -24,7 +24,6 @@ import org.apache.flink.util.Collector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import functions.functions;
 import functions.GeneratedFunctions;
 import functions.error_handler;
 import functions.error_handler_fn;
