@@ -6,6 +6,8 @@ target/
 .vscode
 *.jar
 
+# Maven build output
+benchmark/target/
 # Python generator caches (tools/codegen_facades.py runs at build time)
 __pycache__/
 **/__pycache__/
