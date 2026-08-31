@@ -51,7 +51,7 @@ RUN FPATH=/usr/local/jmeos/src/main/java/functions/functions.java && \
 
 # Build JMEOS jar (with EKF-capable libmeos.so embedded + patched functions.java).
 # Jars are output to /usr/local/jmeos/jar/ (not target/).
-RUN cd /usr/local/jmeos && mvn clean package -DskipTests \
+RUN cd /usr/local/jmeos && mvn clean package \
     && mkdir -p /usr/local/jar \
     && cp /usr/local/jmeos/jar/*.jar /usr/local/jar/
 
@@ -66,7 +66,7 @@ COPY src /build/src
 COPY pom.xml /build/pom.xml
 RUN mkdir -p /build/jar && cp /usr/local/jar/JMEOS.jar /build/jar/JMEOS.jar
 RUN cd /build \
-    && mvn clean package -DskipTests -DqueryMainClass="aisdata.Query8_V2_Main" -q \
+    && mvn clean package -DqueryMainClass="aisdata.Query8_V2_Main" -q \
     && mkdir -p /app \
     && cp target/flink-kafka2postgres-1.0-SNAPSHOT.jar /app/flink-kafka2postgres.jar
 

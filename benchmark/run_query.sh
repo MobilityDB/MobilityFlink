@@ -123,7 +123,7 @@ restore_q8_files() {
 trap 'restore_q8_files; rm -f "$TMP_DOCKERFILE" 2>/dev/null || true' EXIT
 
 echo ""
-info "Step 1/3: Build Maven (mvn clean package -DskipTests) ..."
+info "Step 1/3: Build Maven (mvn clean package) ..."
 
 if [[ "$QUERY_NUM" != "8" ]]; then
   info "Temporarily masking Query8 files (temporal_ext_kalman_filter not available before the patch)..."
@@ -133,7 +133,7 @@ if [[ "$QUERY_NUM" != "8" ]]; then
   fi
 fi
 
-if ! mvn clean package -DskipTests -DqueryMainClass="${CLASS}" -q; then
+if ! mvn clean package -DqueryMainClass="${CLASS}" -q; then
   error "Maven build failed."
   exit 1
 fi
