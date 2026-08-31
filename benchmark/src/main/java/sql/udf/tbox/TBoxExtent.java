@@ -1,6 +1,6 @@
 package sql.udf.tbox;
 
-import functions.functions;
+import functions.GeneratedFunctions;
 import jnr.ffi.Pointer;
 import org.apache.flink.table.api.DataTypes;
 import org.apache.flink.table.catalog.DataTypeFactory;
@@ -31,7 +31,7 @@ public class TBoxExtent
         }
         // rebuild current box from WKT
         TBox current = new TBox(acc.currentSpanWkt);
-        Pointer result = functions.union_tbox_tbox(
+        Pointer result = GeneratedFunctions.union_tbox_tbox(
                 current.get_inner(),
                 box.get_inner(),
                 false
