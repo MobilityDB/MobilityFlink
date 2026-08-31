@@ -1,6 +1,6 @@
 package sql.udf.floatspan;
 
-import functions.functions;
+import functions.GeneratedFunctions;
 import jnr.ffi.Pointer;
 import org.apache.flink.table.api.DataTypes;
 import org.apache.flink.table.catalog.DataTypeFactory;
@@ -31,7 +31,7 @@ public class FloatSpanExtent
         }
         // rebuild current span from WKT
         FloatSpan current = new FloatSpan(acc.currentSpanWkt);
-        Pointer result = functions.span_extent_transfn(
+        Pointer result = GeneratedFunctions.span_extent_transfn(
                 current.get_inner(),
                 span.get_inner()
         );

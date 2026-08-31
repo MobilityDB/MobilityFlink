@@ -1,6 +1,6 @@
 package sql.udf.stbox;
 
-import functions.functions;
+import functions.GeneratedFunctions;
 import jnr.ffi.Pointer;
 import org.apache.flink.table.api.DataTypes;
 import org.apache.flink.table.catalog.DataTypeFactory;
@@ -31,7 +31,7 @@ public class STBoxExtent
         }
         // rebuild current box from WKT
         STBox current = new STBox(acc.currentSpanWkt);
-        Pointer result = functions.union_stbox_stbox(
+        Pointer result = GeneratedFunctions.union_stbox_stbox(
                 current.get_inner(),
                 box.get_inner(),
                 false

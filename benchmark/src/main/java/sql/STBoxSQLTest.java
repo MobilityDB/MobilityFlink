@@ -13,7 +13,7 @@ import sql.types.stbox.STBoxTypeInfo;
 import types.boxes.STBox;
 
 import java.util.Arrays;
-import functions.functions;
+import functions.GeneratedFunctions;
 
 
 public class STBoxSQLTest {
