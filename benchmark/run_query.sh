@@ -33,12 +33,12 @@ declare -A QUERY_DESC=(
   [5]="Trajectory Creation and High-Speed Alert"
   [6]="Positional Divergence for a Device"
   [7]="Global Closest Device Pairs (Top-k)"
-  [8]="Trajectory Denoising — MEOS native EKF (marianaGarcez fork)"
+  [8]="Trajectory Denoising — MEOS native EKF"
   [9]="Windowed Per-Device kNN Join"
 )
 
 declare -A QUERY_DOCKERFILE=(
-  [1]="" [2]="" [3]="" [4]="" [5]="" [6]="" [7]="" [8]="Dockerfile_q8_meos_kalman" [9]=""
+  [1]="" [2]="" [3]="" [4]="" [5]="" [6]="" [7]="" [8]="" [9]=""
 )
 
 QUERY_NUM="${1:-}"
