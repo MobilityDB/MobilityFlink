@@ -4,6 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://www.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- The reactor lists this module, and the parent's pluginManagement is written for both
+         ("Both modules run MEOS through JNR ..."), so it inherits that configuration and the
+         versions declared there — jmeos.version among them — rather than restating any. -->
+    <parent>
+        <groupId>org.mobilitydb.flink</groupId>
+        <artifactId>mobility-flink-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
     <groupId>Mariana</groupId>
     <artifactId>flink-kafka2postgres</artifactId>
     <version>1.0-SNAPSHOT</version>
@@ -79,11 +88,11 @@
             <version>1.18.1</version>
         </dependency>
 
-        <!-- JMEOS dependency -->
+        <!-- JMEOS, under the coordinates tools/refresh.conf installs it as -->
         <dependency>
-            <groupId>com.mobilitydb</groupId>
-            <artifactId>jmeos</artifactId>
-            <version>1.0.0</version>
+            <groupId>org.jmeos</groupId>
+            <artifactId>meos</artifactId>
+            <version>${jmeos.version}</version>
             <!--            <scope>system</scope>-->
             <!--            <systemPath>${project.basedir}/jar/JMEOS.jar</systemPath>-->
         </dependency>
@@ -193,6 +202,52 @@
         </resources>
         <plugins>
             <!-- Java Compiler -->
+            <!-- SIBLING-FROM binding/pom.xml: the facades are generated from the catalog
+                 against the installed jar at generate-sources and added as a source root, so
+                 they cannot drift from the surface they are built against. -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-facades</id>
+                        <phase>generate-sources</phase>
+                        <goals><goal>exec</goal></goals>
+                        <configuration>
+                            <executable>python3</executable>
+                            <arguments>
+                                <argument>${project.basedir}/../tools/codegen_jvm.py</argument>
+                                <argument>--engine</argument>
+                                <argument>flink</argument>
+                                <argument>--catalog</argument>
+                                <argument>${project.basedir}/../tools/meos-idl.json</argument>
+                                <argument>--jar</argument>
+                                <argument>${settings.localRepository}/org/jmeos/meos/${jmeos.version}/meos-${jmeos.version}.jar</argument>
+                                <argument>--out</argument>
+                                <argument>${project.build.directory}/generated-facades</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.5.0</version>
+                <executions>
+                    <execution>
+                        <id>add-generated-facades</id>
+                        <phase>generate-sources</phase>
+                        <goals><goal>add-source</goal></goals>
+                        <configuration>
+                            <sources>
+                                <source>${project.build.directory}/generated-facades/src/main/java</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.12.1</version>
