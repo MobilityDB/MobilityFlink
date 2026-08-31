@@ -1,0 +1,107 @@
+name: Docker image
+
+# Nothing else in this repository builds the benchmark image, so its clone ref and
+# its cmake flags go stale unnoticed — which is how it came to build a release
+# branch while the jar it runs is generated from the catalog of master. Building it
+# IS the test.
+#
+# It runs on a change to the image, to what the image copies, or to this workflow;
+# on a push to main; and weekly. The weekly run is the one that matters: the image
+# tracks MobilityDB master, so it can start failing with nothing here having changed.
+
+on:
+  pull_request:
+    paths:
+      - benchmark/Dockerfile
+      - benchmark/run_query.sh
+      - benchmark/wait-for-it.sh
+      - .github/workflows/docker.yml
+  push:
+    branches: [main]
+    paths:
+      - benchmark/Dockerfile
+      - benchmark/run_query.sh
+      - benchmark/wait-for-it.sh
+      - .github/workflows/docker.yml
+  schedule:
+    - cron: "37 5 * * 1"
+  workflow_dispatch:
+
+jobs:
+  image:
+    name: Build the benchmark image and check what it carries
+    runs-on: ubuntu-latest
+    # The image compiles MobilityDB from source with every family on, on top of the
+    # chain that produces the application jar it copies in.
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      # The image COPYs benchmark/target/flink-kafka2postgres-1.0-SNAPSHOT.jar, so the
+      # jar has to exist before docker build runs — which means the same chain the build
+      # job uses. Reaching it through the shared action rather than restating it keeps
+      # this job from drifting away from that one.
+      - name: Provision MEOS catalog + libmeos
+        id: provision
+        uses: MobilityDB/MEOS-API/.github/actions/provision-meos@master
+        with:
+          mobilitydb-ref: master
+          build-libmeos: "true"
+
+      - name: Stage the derived MEOS catalog
+        run: |
+          cp "${{ steps.provision.outputs.catalog-path }}" tools/meos-idl.json
+          echo "LD_LIBRARY_PATH=/usr/local/lib" >> "$GITHUB_ENV"
+
+      - name: Check out JMEOS at main
+        uses: actions/checkout@v4
+        with:
+          repository: MobilityDB/JMEOS
+          ref: main
+          path: jmeos
+
+      - name: Stage the JVM generator JMEOS owns
+        run: cp jmeos/tools/codegen_jvm.py jmeos/tools/codegen_spark_udfs.py tools/
+
+      - name: Build + install the JMEOS jar as org.jmeos:meos:1.0
+        run: |
+          CATALOG="${{ steps.provision.outputs.catalog-path }}" \
+          LIBMEOS=/usr/local/lib/libmeos.so \
+            jmeos/tools/regen-from-catalog.sh
+          mvn -B install:install-file \
+            -Dfile=jmeos/jar/JMEOS.jar \
+            -DgroupId=org.jmeos -DartifactId=meos -Dversion=1.0 -Dpackaging=jar
+
+      - name: Build the application jar the image copies
+        run: mvn -B -Dmeos.lib.dir=/usr/local/lib -Dmeos.enabled=true -pl benchmark -am package
+
+      - name: Build the image
+        run: docker build --progress=plain -f benchmark/Dockerfile -t flink-benchmark-ci:${{ github.sha }} benchmark/
+
+      # A build that succeeds still proves nothing about WHICH library the image holds,
+      # and a narrower one is the failure this guards: a libmeos configured without
+      # -DALL=ON carries no S2CELL and no POSECHAIN entry, while the jar generated from
+      # the catalog of master names both. `temporal_merge` is the positive control — were
+      # it missing too, the check would be reading the wrong file rather than a narrow
+      # build. The jar assertion is the other half: the shaded jar carries JMEOS itself,
+      # which is why the image needs no separate copy of it on the classpath.
+      - name: The image carries the application jar and an all-families libmeos
+        run: |
+          docker run --rm --entrypoint bash flink-benchmark-ci:${{ github.sha }} -euc '
+            test -f /app/flink-kafka2postgres.jar
+            grep -ac "functions/GeneratedFunctions.class" /app/flink-kafka2postgres.jar
+            L=/usr/local/lib/libmeos.so
+            for s in ts2cell_in tposechain_in temporal_merge; do
+              n=$(grep -ac "$s" "$L" || true)
+              echo "$s: $n"
+              [ "${n:-0}" -ge 1 ] || { echo "::error::$L carries no $s"; exit 1; }
+            done
+          '
