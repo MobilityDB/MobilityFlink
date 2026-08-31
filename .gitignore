@@ -23,3 +23,10 @@ tools/codegen_spark_udfs.py
 
 # tools/refresh-from-master.sh scratch (sibling clones + libmeos prefix).
 .meos-chain/
+
+# Build output, never committed: the shade plugin's rewritten pom, and any
+# libmeos a working copy builds. A committed library goes stale against the
+# catalog the surface is generated from — the tests then answer from a MEOS
+# that predates it, while CI answers from the one it just built.
+dependency-reduced-pom.xml
+**/lib/libmeos.so

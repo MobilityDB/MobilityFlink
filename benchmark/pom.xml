@@ -35,11 +35,6 @@
         <kafka.version>3.2.0</kafka.version>
         <log4j.version>2.17.2</log4j.version>
         <target.java.version>21</target.java.version>
-        <!-- MEOS smoke tests run when libmeos is present; the runner resolves it
-             through the repo lib via LD_LIBRARY_PATH (avoids a stale system
-             /usr/local/lib/libmeos.so shadowing the pinned one). -->
-        <meos.enabled>true</meos.enabled>
-        <meos.lib.dir>${project.basedir}/lib</meos.lib.dir>
     </properties>
 
     <dependencies>
