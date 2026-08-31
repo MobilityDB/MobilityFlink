@@ -62,6 +62,6 @@ class MeosPoseSmokeTest {
         Pointer pose = MeosOpsFreePose.pose_in("Pose(Point(1 1), 0.5)");
         assertNotNull(pose);
         assertNotNull(MeosOpsFreePose.pose_out(pose, 6));
-        assertEquals(0.5, MeosOpsFreePose.pose_rotation(pose), 1e-9);
+        assertEquals(0.5, MeosOpsFreePose.pose_yaw(pose), 1e-9);
     }
 }
