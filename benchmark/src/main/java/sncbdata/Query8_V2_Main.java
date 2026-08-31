@@ -33,7 +33,8 @@ import types.temporal.TInterpolation;
  * Query 8 V2 - Trajectory Denoising with MEOS native EKF (SNCB dataset)
  *
  * <p>Uses the Extended Kalman Filter implemented natively in MEOS via
- * {@code temporal_ext_kalman_filter()} (PR #749: marianaGarcez/MobilityDB fork).
+ * {@code temporal_ext_kalman_filter()}, a public entry of {@code meos.h} that
+ * the generated JMEOS surface carries.
  * This replaces the Apache Commons Math Kalman Filter used in V1.
  *
  * <p>Original MobilityNebula pseudocode:
@@ -55,7 +56,7 @@ import types.temporal.TInterpolation;
  * </ul>
  *
  * <h2>Build requirement</h2>
- * <p>Requires {@code libmeos.so} compiled from the {@code marianaGarcez/MobilityDB}
+ * <p>Requires {@code libmeos.so} compiled from {@code MobilityDB/MobilityDB}
  * fork (branch {@code master}) and {@code GeneratedFunctions.java} patched to expose
  * {@code temporal_ext_kalman_filter}, both handled by {@code Dockerfile.q8v2}.
  *
@@ -66,7 +67,7 @@ public class Query8_V2_Main {
 
     private static final Logger logger = LoggerFactory.getLogger(Query8_V2_Main.class);
 
-    // EKF parameters: degree² units (C reference example defaults: https://github.com/marianaGarcez/MobilityDB/blob/e3319c1e6fc9157d19cb0580e097224cd42a8214/meos/examples/ais_ekf_clean.c)
+    // EKF parameters: degree² units (C reference example defaults: meos/examples/ais_ekf_clean.c)
     private static final double GATE = 3.0;
 
     private static final double Q = 5e-10;

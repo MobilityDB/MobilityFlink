@@ -12,13 +12,17 @@ RUN apt-get update \
   && apt-get update \
   && apt-get install -y java-21-amazon-corretto-jdk 
 
-# Build MobilityDB with MEOS
-RUN git clone --depth 1 https://github.com/MobilityDB/MobilityDB.git -b stable-1.3 /usr/local/src/MobilityDB
-RUN mkdir -p /usr/local/src/MobilityDB/build 
+# Build MobilityDB with MEOS. The jar this image runs is generated from the
+# catalog of MobilityDB master with every family on, so the library must answer
+# for the same surface: -DALL=ON is what CMakeLists.txt turns into the family
+# list, and a narrower build leaves the jar naming symbols libmeos lacks.
+RUN git clone --depth 1 https://github.com/MobilityDB/MobilityDB.git -b master /usr/local/src/MobilityDB
+RUN mkdir -p /usr/local/src/MobilityDB/build
 RUN cd /usr/local/src/MobilityDB/build && \
-    cmake -DMEOS=ON .. && \
+    cmake -DMEOS=ON -DALL=ON .. && \
     make -j$(nproc) && \
-    make install
+    make install && \
+    ldconfig
 
 # Set up Maven
 ENV MAVEN_HOME /usr/share/maven
@@ -28,19 +32,12 @@ COPY --from=maven:3.9.6-eclipse-temurin-11 /usr/local/bin/mvn-entrypoint.sh /usr
 COPY --from=maven:3.9.6-eclipse-temurin-11 /usr/share/maven/ref/settings-docker.xml /usr/share/maven/ref/settings-docker.xml
 RUN ln -s ${MAVEN_HOME}/bin/mvn /usr/bin/mvn
 
-# Set up MobilityDB-JMEOS
-RUN git clone --depth 1 --branch fix-tests-using-docker https://github.com/MobilityDB/JMEOS /usr/local/jmeos
-RUN rm /usr/local/jmeos/src/main/resources/lib/libmeos.so
-RUN cp /usr/local/lib/libmeos.so /usr/local/jmeos/src/main/resources/lib/libmeos.so
-RUN rm /usr/local/jmeos/jar/*
-
 # Clean up
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*lists/* 
 RUN apt-get remove --purge --autoremove -y curl gnupg 
 
 # Copy project-specific files
 COPY target/flink-kafka2postgres-1.0-SNAPSHOT.jar /app/flink-kafka2postgres.jar
-COPY jar/JMEOS.jar /usr/local/jar/JMEOS.jar
 COPY wait-for-it.sh /app/wait-for-it.sh
 
 # Make the wait-for-it script executable
@@ -53,4 +50,4 @@ ENV LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
 WORKDIR /app
 
 # Set entrypoint with the correct classpath
-ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar:/usr/local/jar/JMEOS.jar", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "aisdata.Query9_Main"]
+ENTRYPOINT ["/app/wait-for-it.sh", "kafka:29092", "--", "java", "-cp", "/app/flink-kafka2postgres.jar", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "aisdata.Query9_Main"]
