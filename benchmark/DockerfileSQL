@@ -47,7 +47,7 @@ COPY benchmark/pom.xml .
 RUN mvn dependency:go-offline -q
 
 COPY benchmark/src ./src
-RUN mvn clean package -DskipTests -q
+RUN mvn clean package -q
 
 # ─────────────────────────────────────────────
 # Stage 3: Runtime — Flink base + libmeos + JAR
