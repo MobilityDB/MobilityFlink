@@ -37,10 +37,6 @@ declare -A QUERY_DESC=(
   [9]="Windowed Per-Device kNN Join"
 )
 
-declare -A QUERY_DOCKERFILE=(
-  [1]="" [2]="" [3]="" [4]="" [5]="" [6]="" [7]="" [8]="" [9]=""
-)
-
 QUERY_NUM="${1:-}"
 if [[ -z "$QUERY_NUM" || ! "$QUERY_NUM" =~ ^[1-9]$ ]]; then
   error "Usage : $(basename "$0") <1-9>"
@@ -54,7 +50,6 @@ fi
 
 CLASS="${QUERY_CLASS[$QUERY_NUM]}"
 DESC="${QUERY_DESC[$QUERY_NUM]}"
-CUSTOM_DF="${QUERY_DOCKERFILE[$QUERY_NUM]}"
 
 banner "Query $QUERY_NUM — $DESC"
 
@@ -90,8 +85,9 @@ if [[ ! -f "pom.xml" ]]; then
   exit 1
 fi
 
-# Dockerfile source
-BASE_DOCKERFILE="${CUSTOM_DF:-Dockerfile}"
+# Dockerfile source. Every query builds the same image; only the entrypoint
+# class differs, and the patch below supplies it.
+BASE_DOCKERFILE="Dockerfile"
 if [[ ! -f "$BASE_DOCKERFILE" ]]; then
   error "Dockerfile source '$BASE_DOCKERFILE' missing."
   exit 1
