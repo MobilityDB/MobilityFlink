@@ -59,9 +59,9 @@ class MeosPoseSmokeTest {
 
     @Test
     void pose() {
-        Pointer pose = MeosOpsFreePose.pose_in("Pose(Point(1 1), 0.5)");
+        Pointer pose = MeosOpsPose.pose_in("Pose(Point(1 1), 0.5)");
         assertNotNull(pose);
-        assertNotNull(MeosOpsFreePose.pose_out(pose, 6));
-        assertEquals(0.5, MeosOpsFreePose.pose_yaw(pose), 1e-9);
+        assertNotNull(MeosOpsPose.pose_out(pose, 6));
+        assertEquals(0.5, MeosOpsPose.pose_yaw(pose), 1e-9);
     }
 }

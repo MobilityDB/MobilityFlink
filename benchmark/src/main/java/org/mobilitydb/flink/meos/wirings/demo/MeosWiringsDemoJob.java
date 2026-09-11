@@ -49,7 +49,7 @@ import java.util.Arrays;
  *   <li>Parses each into a JMEOS {@code Pointer} via
  *       {@code MeosOpsTBox.tbox_in} (tier = {@code io-meta}).</li>
  *   <li>Filters to those that overlap with a fixed query TBox via
- *       {@code MeosOpsTBox.overlaps_tbox_tbox} wrapped as a
+ *       {@code MeosOpsFreeCore.overlaps_tbox_tbox} wrapped as a
  *       {@link MeosStatelessFilter} (tier = {@code stateless}).</li>
  *   <li>Maps each surviving TBox to its serialized WKB hex via
  *       {@code MeosOpsTBox.tbox_as_hexwkb} wrapped as a

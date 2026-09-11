@@ -38,8 +38,8 @@ import java.io.Serializable;
  *
  * <p>The {@code windowed} tier is "output cardinality changes; needs a
  * window". The canonical examples are
- * {@code temporal_length(tgeo)} (one length per trajectory window),
- * {@code temporal_twavg(tnumber)} (one time-weighted average per
+ * {@code tpoint_length(tpoint)} (one length per trajectory window),
+ * {@code tnumber_twavg(tnumber)} (one time-weighted average per
  * window), and the per-class {@code _trajectory} / {@code _time} /
  * {@code _timespan} accessors that reduce a full sequence to a single
  * derived value.
@@ -61,7 +61,7 @@ import java.io.Serializable;
  * per-window.
  *
  * <p><b>Typical usage</b> — per-vehicle per-tumbling-window
- * trajectory length via {@code MeosOpsTemporal.temporal_length} (tier
+ * trajectory length via {@code MeosOpsTPoint.tpoint_length} (tier
  * = {@code windowed}):
  *
  * <pre>{@code
@@ -73,7 +73,7 @@ import java.io.Serializable;
  *     .process(new MeosWindowedAggregate<Integer, VehiclePoint, VehicleLength, TimeWindow>(
  *         (window, events, ctx) -> {
  *             Pointer trajectory = buildTrajectoryFromPoints(events);  // adopter helper
- *             double length = MeosOpsTemporal.temporal_length(trajectory);
+ *             double length = MeosOpsTPoint.tpoint_length(trajectory);
  *             return new VehicleLength(ctx.getCurrentKey(), window.getStart(), length);
  *         }));
  * }</pre>

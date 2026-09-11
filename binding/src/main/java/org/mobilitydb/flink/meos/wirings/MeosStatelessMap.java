@@ -52,14 +52,14 @@ import java.io.Serializable;
  *
  * <p><b>Typical usage</b>: register a stateless MEOS predicate / arithmetic
  * call as a per-event map step in a DataStream pipeline. Example with
- * the generated {@code MeosOpsTBox.overlaps_tbox_tbox} (tier =
+ * the generated {@code MeosOpsFreeCore.overlaps_tbox_tbox} (tier =
  * {@code stateless}, per the codegen manifest):
  *
  * <pre>{@code
  * DataStream<TbiePair> in = ...;            // (tboxA, tboxB)
  * DataStream<Boolean> overlap = in.map(
  *     new MeosStatelessMap<>(
- *         pair -> MeosOpsTBox.overlaps_tbox_tbox(pair.a, pair.b)));
+ *         pair -> MeosOpsFreeCore.overlaps_tbox_tbox(pair.a, pair.b)));
  * }</pre>
  *
  * <p><b>Tier coverage</b>: as of the codegen state on the parent PR,

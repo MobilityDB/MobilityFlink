@@ -44,14 +44,14 @@ import java.io.Serializable;
  * independently.
  *
  * <p><b>Typical usage</b>: scalar-predicate filter against the
- * generated {@code MeosOpsTBox.overlaps_tbox_tbox} (tier =
+ * generated {@code MeosOpsFreeCore.overlaps_tbox_tbox} (tier =
  * {@code stateless}):
  *
  * <pre>{@code
  * DataStream<TbiePair> in = ...;
  * DataStream<TbiePair> overlapping = in.filter(
  *     new MeosStatelessFilter<>(
- *         pair -> MeosOpsTBox.overlaps_tbox_tbox(pair.a, pair.b)));
+ *         pair -> MeosOpsFreeCore.overlaps_tbox_tbox(pair.a, pair.b)));
  * }</pre>
  *
  * <p>For int-coded predicates (JMEOS returns {@code int} for some MEOS

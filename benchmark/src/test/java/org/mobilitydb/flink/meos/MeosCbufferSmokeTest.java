@@ -59,9 +59,9 @@ class MeosCbufferSmokeTest {
 
     @Test
     void cbuffer() {
-        Pointer cb = MeosOpsFreeCbuffer.cbuffer_make(MeosOpsFreeGeo.geom_in("POINT(1 1)", 0), 0.5);
+        Pointer cb = MeosOpsCbuffer.cbuffer_make(MeosOpsGeometry.geom_in("POINT(1 1)", 0), 0.5);
         assertNotNull(cb);
-        assertEquals(0.5, MeosOpsFreeCbuffer.cbuffer_radius(cb), 1e-9);
-        assertNotNull(MeosOpsFreeCbuffer.cbuffer_out(cb, 6));
+        assertEquals(0.5, MeosOpsCbuffer.cbuffer_radius(cb), 1e-9);
+        assertNotNull(MeosOpsCbuffer.cbuffer_out(cb, 6));
     }
 }
