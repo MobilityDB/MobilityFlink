@@ -49,6 +49,23 @@ MobilityDB @ master
 CI stages the master-derived catalog to `tools/meos-idl.json` before the build; the catalog
 is gitignored, not committed.
 
+## The Flink SQL surface
+
+`codegen_jvm.py --engine flink-sql` emits the MobilityDB SQL surface for Flink SQL from the
+same catalog and jar: one Flink function per SQL name the catalog states (a signature's
+`sqlName`, else the function's `@sqlfn`), each overload an `eval` method, and one RAW type per
+MEOS value type the signatures use. A MEOS value crosses Flink as the serialized form its
+catalog codec writes, hex WKB where the catalog states a WKB decoder and an `asHexWKB`
+encoder and text otherwise, never as a native pointer, so Flink can copy, checkpoint and group
+it. A signature whose types the surface cannot carry (arrays, `Datum`, aggregate state) is
+skipped and counted in the generator's report.
+
+`org.mobilitydb.flink.sql.MobilityFlinkSql.registerAll(tEnv)` registers every function as a
+catalog function under its MobilityDB SQL name. A Flink built-in of the same name (`lower`,
+`round`, `abs`, …) resolves before a catalog function, and a name Flink's parser reserves
+(`overlaps`, `contains`, `union`, …) is written quoted, `` `overlaps`(a, b) ``. Maven
+`generate-sources` runs the engine into `target/generated-sql`, beside the facades.
+
 ## Generate-then-retire — the green-CI version is the probe
 
 Hand-written facades/glue are replaced by the generated forwarders **family by family,

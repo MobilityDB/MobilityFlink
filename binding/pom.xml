@@ -12,8 +12,9 @@
 
     <artifactId>mobility-flink-binding</artifactId>
 
-    <!-- The Flink MEOS binding: the org.mobilitydb.meos.MeosOps* facades generated from the
-         JMEOS catalog at build time, plus the generic Flink DataStream wiring layer over them.
+    <!-- The Flink MEOS binding: the org.mobilitydb.meos.MeosOps* facades and the
+         org.mobilitydb.flink.sql SQL surface, both generated from the JMEOS catalog at build
+         time, plus the generic Flink DataStream wiring layer over the facades.
          A pure projection of the MEOS surface — no application or benchmark code. -->
 
     <dependencies>
@@ -31,6 +32,17 @@
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-clients</artifactId>
             <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-api-java</artifactId>
+            <version>${flink.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.flink</groupId>
+            <artifactId>flink-table-planner_2.12</artifactId>
+            <version>${flink.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -101,6 +113,26 @@
                             </arguments>
                         </configuration>
                     </execution>
+                    <!-- The org.mobilitydb.flink.sql SQL surface, from the same catalog and jar. -->
+                    <execution>
+                        <id>generate-sql-surface</id>
+                        <phase>generate-sources</phase>
+                        <goals><goal>exec</goal></goals>
+                        <configuration>
+                            <executable>python3</executable>
+                            <arguments>
+                                <argument>${project.basedir}/../tools/codegen_jvm.py</argument>
+                                <argument>--engine</argument>
+                                <argument>flink-sql</argument>
+                                <argument>--catalog</argument>
+                                <argument>${project.basedir}/../tools/meos-idl.json</argument>
+                                <argument>--jar</argument>
+                                <argument>${settings.localRepository}/org/jmeos/meos/${jmeos.version}/meos-${jmeos.version}.jar</argument>
+                                <argument>--out</argument>
+                                <argument>${project.build.directory}/generated-sql</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -115,6 +147,7 @@
                         <configuration>
                             <sources>
                                 <source>${project.build.directory}/generated-facades/src/main/java</source>
+                                <source>${project.build.directory}/generated-sql/src/main/java</source>
                             </sources>
                         </configuration>
                     </execution>
