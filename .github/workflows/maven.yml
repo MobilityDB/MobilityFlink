@@ -97,7 +97,7 @@ jobs:
         # the smoke tests exercise the facades against the freshly built libmeos from /usr/local/lib.
         run: |
           set -o pipefail
-          mvn -B -Dmeos.lib.dir=/usr/local/lib -Dmeos.enabled=true clean test | tee "$RUNNER_TEMP/build.log"
+          mvn -B -Dmeos.lib.dir=/usr/local/lib clean test | tee "$RUNNER_TEMP/build.log"
 
       # The build's own summary states two things this job's conclusion does
       # not: a test reported SKIPPED asserts nothing while the job still reads

@@ -72,7 +72,7 @@ Run with:
 ```bash
 mvn -q exec:java \
     -Dexec.mainClass=org.mobilitydb.flink.meos.wirings.demo.MeosWiringsDemoJob \
-    -Dmeos.enabled=true
+    -Dmobilityflink.meos.enabled=true
 ```
 
 Output (expected): two `overlapping-tbox-hex` lines (the two input

@@ -81,7 +81,7 @@ jobs:
             -DgroupId=org.jmeos -DartifactId=meos -Dversion=1.0 -Dpackaging=jar
 
       - name: Build the application jar the image copies
-        run: mvn -B -Dmeos.lib.dir=/usr/local/lib -Dmeos.enabled=true -pl benchmark -am package
+        run: mvn -B -Dmeos.lib.dir=/usr/local/lib -pl benchmark -am package
 
       - name: Build the image
         run: docker build --progress=plain -f benchmark/Dockerfile -t flink-benchmark-ci:${{ github.sha }} benchmark/

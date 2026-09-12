@@ -72,7 +72,7 @@ import java.util.Arrays;
  * <pre>{@code
  * mvn -q exec:java \
  *     -Dexec.mainClass=org.mobilitydb.flink.meos.wirings.demo.MeosBoundedStateDemoJob \
- *     -Dmeos.enabled=true
+ *     -Dmobilityflink.meos.enabled=true
  * }</pre>
  *
  * <p>Expected output: 6 lines (3 per vehicle), each showing the growing

@@ -62,11 +62,11 @@ import java.util.Arrays;
  * <pre>{@code
  * mvn -q exec:java \
  *     -Dexec.mainClass=org.mobilitydb.flink.meos.wirings.demo.MeosWiringsDemoJob \
- *     -Dmeos.enabled=true   # require libmeos loadable
+ *     -Dmobilityflink.meos.enabled=true   # require libmeos loadable
  * }</pre>
  *
  * <p>If libmeos is not loadable on the runtime (or
- * {@code -Dmeos.enabled=false}), every wrapped MeosOps
+ * {@code -Dmobilityflink.meos.enabled=false}), every wrapped MeosOps
  * call throws {@code UnsupportedOperationException} with a clear
  * message — the demo prints the throw shape and exits non-zero.
  */
@@ -89,7 +89,7 @@ public final class MeosWiringsDemoJob {
         // fires the first time any MeosOps class is touched).
         if (!MeosOpsTBox.MEOS_AVAILABLE) {
             LOG.error("MEOS not available — the demo requires libmeos. "
-                    + "Set -Dmeos.enabled=true and ensure libmeos is loadable.");
+                    + "Set -Dmobilityflink.meos.enabled=true and ensure libmeos is loadable.");
             System.exit(1);
         }
 

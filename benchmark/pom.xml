@@ -251,9 +251,6 @@
                     <excludes>
                         <exclude>${sedona.source.excludes}</exclude>
                     </excludes>
-                    <testExcludes>
-                        <testExclude>${sedona.source.excludes}</testExclude>
-                    </testExcludes>
                 </configuration>
             </plugin>
             <plugin>
@@ -299,18 +296,14 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Run the MEOS smoke tests against the pinned libmeos: propagate
-                 meos.enabled to the forked JVM and resolve libmeos from the repo
-                 lib dir (LD_LIBRARY_PATH takes precedence over a stale system lib). -->
+            <!-- Run the MEOS smoke tests against the pinned libmeos, resolved from the
+                 repo lib dir (LD_LIBRARY_PATH takes precedence over a stale system lib). -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
                 <configuration>
                     <reuseForks>false</reuseForks>
-                    <systemPropertyVariables>
-                        <meos.enabled>${meos.enabled}</meos.enabled>
-                    </systemPropertyVariables>
                     <environmentVariables>
                         <LD_LIBRARY_PATH>${meos.lib.dir}</LD_LIBRARY_PATH>
                     </environmentVariables>
@@ -345,12 +338,4 @@
         </profile>
     </profiles>
 
-    <!-- Optional extended temporal-type families, mirroring the MobilityDB/MEOS
-         CMake build flags. Family inclusion is selected at build time with the
-         same uppercase flag names and ON|OFF (also 1|0) values as MEOS:
-           -DCBUFFER=ON -DNPOINT=OFF -DPOSE=ON -DRGEO=ON -DH3=ON
-         Defaults match MEOS: NPOINT is included by default; CBUFFER, POSE, RGEO,
-         and H3 are excluded unless their flag is ON|1. RGEO requires POSE (enable
-         both). When a family is excluded, its generated MeosOps* facade sources
-         and its smoke test are dropped from the build. -->
 </project>

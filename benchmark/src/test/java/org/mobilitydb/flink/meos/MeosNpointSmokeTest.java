@@ -32,7 +32,6 @@ import jnr.ffi.Pointer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -42,7 +41,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * correct results. Compiled and run when the build includes the npoint family
  * (the default; dropped with {@code -DNPOINT=OFF}).
  */
-@EnabledIfSystemProperty(named = "meos.enabled", matches = "true")
 class MeosNpointSmokeTest {
 
     @BeforeAll

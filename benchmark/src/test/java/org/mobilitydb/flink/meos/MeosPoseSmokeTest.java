@@ -32,7 +32,6 @@ import jnr.ffi.Pointer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -43,7 +42,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * family ({@code -DPOSE=ON}); the family requires a libmeos built with
  * {@code -DPOSE=ON}.
  */
-@EnabledIfSystemProperty(named = "meos.enabled", matches = "true")
 class MeosPoseSmokeTest {
 
     @BeforeAll
