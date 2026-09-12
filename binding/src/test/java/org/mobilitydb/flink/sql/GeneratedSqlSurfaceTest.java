@@ -38,6 +38,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mobilitydb.flink.sql.types.TFloat;
+import org.mobilitydb.flink.sql.types.TGeomPoint;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -134,6 +135,26 @@ class GeneratedSqlSurfaceTest {
     void aBuiltinNameResolvesToTheBuiltinUnlessQualified() throws Exception {
         assertThrows(Exception.class, () -> scalar("SELECT lower(floatspan_in('[1, 3]'))"));
         assertEquals(1.0, scalar("SELECT default_database.`lower`(floatspan_in('[1, 3]'))"));
+    }
+
+    private static String tgeompoint(String text) {
+        return "tgeompointFromHexEWKB('"
+                + TGeomPoint.encode(GeneratedFunctions.tgeompoint_in(text)).form + "')";
+    }
+
+    @Test
+    void arraysCrossAsFlinkArrays() throws Exception {
+        assertEquals("{1, 2, 3}", scalar("SELECT intset_out(`set`(ARRAY[3, 1, 2]))"));
+        assertEquals(Instant.parse("2020-01-01T00:00:00Z"), scalar("SELECT startValue(`set`(ARRAY["
+                + "TO_TIMESTAMP_LTZ(1577923200000, 3), TO_TIMESTAMP_LTZ(1577836800000, 3)]))"));
+        String origin = tgeompoint("[Point(0 0)@2020-01-01, Point(0 0)@2020-01-02]");
+        String far = tgeompoint("[Point(3 4)@2020-01-01, Point(3 4)@2020-01-02]");
+        String near = tgeompoint("[Point(0 1)@2020-01-01, Point(0 1)@2020-01-02]");
+        assertEquals(5.0, scalar("SELECT minDistance(ARRAY[" + origin + "], ARRAY[" + far + "])"));
+        assertEquals(1.0, scalar("SELECT minDistance(ARRAY[" + origin + "], ARRAY[" + far + ", "
+                + near + "])"));
+        assertThrows(Exception.class,
+                () -> scalar("SELECT intset_out(`set`(ARRAY[1, CAST(NULL AS INT)]))"));
     }
 
     @Test

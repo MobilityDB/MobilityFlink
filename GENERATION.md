@@ -57,8 +57,10 @@ same catalog and jar: one Flink function per SQL name the catalog states (a sign
 MEOS value type the signatures use. A MEOS value crosses Flink as the serialized form its
 catalog codec writes, hex WKB where the catalog states a WKB decoder and an `asHexWKB`
 encoder and text otherwise, never as a native pointer, so Flink can copy, checkpoint and group
-it. A signature whose types the surface cannot carry (arrays, `Datum`, aggregate state) is
-skipped and counted in the generator's report.
+it. A SQL array argument stands for the C array the catalog pairs with a count
+(`shape.inputArrays`), and the eval passes the length of the Flink array as that count. A
+signature whose types the surface cannot carry (`Datum`, aggregate state, an array element with
+no codec) is skipped and counted in the generator's report.
 
 `org.mobilitydb.flink.sql.MobilityFlinkSql.registerAll(tEnv)` registers every function as a
 catalog function under its MobilityDB SQL name. A Flink built-in of the same name (`lower`,
