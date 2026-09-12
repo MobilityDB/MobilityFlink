@@ -77,7 +77,7 @@ import java.util.Arrays;
  * <pre>{@code
  * mvn -q exec:java \
  *     -Dexec.mainClass=org.mobilitydb.flink.meos.wirings.demo.MeosCrossStreamDemoJob \
- *     -Dmeos.enabled=true
+ *     -Dmobilityflink.meos.enabled=true
  * }</pre>
  */
 public final class MeosCrossStreamDemoJob {

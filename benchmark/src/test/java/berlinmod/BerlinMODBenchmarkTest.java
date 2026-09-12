@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,10 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * only runnable as a {@code main}. Runs one keyed cell and one single-subtask
  * ({@code keyBy(x -> 0)}) cell through {@link BerlinMODBenchmark#runCell}, which
  * builds and executes a real Flink job whose spatial predicate evaluates through
- * MEOS. Runs only with an extended libmeos on the loader path
- * ({@code -Dmeos.enabled=true}), like the other MEOS-backed tests.
+ * MEOS, so it needs an extended libmeos on the loader path, like the other
+ * MEOS-backed tests.
  */
-@EnabledIfSystemProperty(named = "meos.enabled", matches = "true")
 class BerlinMODBenchmarkTest {
 
     /** Two vehicles moving on nearby WGS84 tracks — enough for the Flink jobs to run. */

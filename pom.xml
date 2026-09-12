@@ -28,10 +28,9 @@
         <log4j.version>2.17.2</log4j.version>
         <jmeos.version>1.0</jmeos.version>
         <jnr.version>2.1.10</jnr.version>
-        <!-- MEOS smoke tests run when libmeos is present. libmeos is built from the tracked
+        <!-- The MEOS tests load libmeos from here. libmeos is built from the tracked
              MobilityDB commit and installed to /usr/local/lib (CI and the Dockerfiles do this).
              Override it to point at a local build dir. -->
-        <meos.enabled>true</meos.enabled>
         <meos.lib.dir>/usr/local/lib</meos.lib.dir>
     </properties>
 
@@ -52,9 +51,6 @@
                     <version>3.2.5</version>
                     <configuration>
                         <reuseForks>false</reuseForks>
-                        <systemPropertyVariables>
-                            <meos.enabled>${meos.enabled}</meos.enabled>
-                        </systemPropertyVariables>
                         <environmentVariables>
                             <LD_LIBRARY_PATH>${meos.lib.dir}</LD_LIBRARY_PATH>
                         </environmentVariables>

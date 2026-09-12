@@ -32,7 +32,6 @@ import jnr.ffi.Pointer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -40,14 +39,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Runtime check that the always-built MEOS facade families (core and geo) call
  * into libmeos and return correct results. Each constructs a value through a
- * {@code MeosOps*} facade method and reads it back. Runs only with
- * {@code -Dmeos.enabled=true} and a libmeos on the load path. The
- * optional families have their own gated smoke tests
+ * {@code MeosOps*} facade method and reads it back, against a libmeos on the
+ * load path. The optional families have their own smoke tests
  * ({@link MeosCbufferSmokeTest}, {@link MeosNpointSmokeTest},
- * {@link MeosPoseSmokeTest}), each compiled only when its build flag includes
- * the family.
+ * {@link MeosPoseSmokeTest}).
  */
-@EnabledIfSystemProperty(named = "meos.enabled", matches = "true")
 class MeosFacadeSmokeTest {
 
     @BeforeAll

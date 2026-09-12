@@ -29,7 +29,6 @@ import jnr.ffi.Pointer;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 import org.mobilitydb.meos.MeosSetSetJoin;
 
 import java.util.HashSet;
@@ -43,10 +42,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * {@link MeosSetSetJoin} set-set family) against an independent per-pair scalar
  * baseline ({@code edwithin_tgeo_tgeo} / {@code eintersects_tgeo_tgeo}). The two
  * code paths must agree exactly on which trip pairs ever meet / are always
- * disjoint. Runs only with {@code -Dmeos.enabled=true} and an extended libmeos
- * on the library path.
+ * disjoint. It needs an extended libmeos on the library path.
  */
-@EnabledIfSystemProperty(named = "meos.enabled", matches = "true")
 class BerlinMODSetSetJoinTest {
 
     // Four trajectory trips: T1 crosses T0's path mid-window; T3 coincides with

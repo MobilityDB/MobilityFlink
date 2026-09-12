@@ -75,7 +75,7 @@ import java.util.Arrays;
  * <pre>{@code
  * mvn -q exec:java \
  *     -Dexec.mainClass=org.mobilitydb.flink.meos.wirings.demo.MeosWindowedDemoJob \
- *     -Dmeos.enabled=true
+ *     -Dmobilityflink.meos.enabled=true
  * }</pre>
  *
  * <p>Expected output: 4 lines (2 windows × 2 vehicles), each showing
