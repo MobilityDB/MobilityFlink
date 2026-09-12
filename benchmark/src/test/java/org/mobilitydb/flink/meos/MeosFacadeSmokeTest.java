@@ -86,8 +86,8 @@ class MeosFacadeSmokeTest {
 
     @Test
     void geoGeometry() {
-        Pointer geom = MeosOpsFreeGeo.geom_in("POINT(1 1)", 0);
+        Pointer geom = MeosOpsGeometry.geom_in("POINT(1 1)", 0);
         assertNotNull(geom);
-        assertTrue(MeosOpsFreeGeo.geo_as_text(geom, 6).toUpperCase().contains("POINT"));
+        assertTrue(MeosOpsGeo.geo_as_text(geom, 6).toUpperCase().contains("POINT"));
     }
 }

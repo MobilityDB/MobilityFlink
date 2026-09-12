@@ -51,7 +51,7 @@ import java.io.Serializable;
  *
  * <p><b>Typical usage</b> — per-vehicle-pair "did they come within
  * 100m of each other in the last 5 minutes?" via
- * {@code MeosOpsTGeo.edwithin_tgeo_tgeo} (tier = {@code cross-stream}):
+ * {@code MeosOpsFreeGeo.edwithin_tgeo_tgeo} (tier = {@code cross-stream}):
  *
  * <pre>{@code
  * KeyedStream<VehiclePosition, Integer> a = streamA.keyBy(VehiclePosition::regionId);
@@ -64,7 +64,7 @@ import java.io.Serializable;
  *             (left, right, ctx) -> {
  *                 Pointer leftT  = left.toTGeoPointer();
  *                 Pointer rightT = right.toTGeoPointer();
- *                 if (MeosOpsTGeo.edwithin_tgeo_tgeo(leftT, rightT, 100.0) != 0) {
+ *                 if (MeosOpsFreeGeo.edwithin_tgeo_tgeo(leftT, rightT, 100.0) != 0) {
  *                     return new MeetingEvent(left.id(), right.id(), ctx.getLeftTimestamp());
  *                 }
  *                 return null;  // no output for non-matches

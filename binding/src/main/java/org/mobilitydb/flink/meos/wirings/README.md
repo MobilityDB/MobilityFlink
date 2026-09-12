@@ -38,11 +38,11 @@ The pattern is the same across all four tiers:
 ```java
 // 1. Pick the generated MeosOps method
 //    (Javadoc tier marker tells you which wiring to use)
-boolean overlap = MeosOpsTBox.overlaps_tbox_tbox(boxA, boxB);  // tier = stateless
+boolean overlap = MeosOpsFreeCore.overlaps_tbox_tbox(boxA, boxB);  // tier = stateless
 
 // 2. Wrap with the matching wiring
 MeosStatelessFilter<TboxPair> filter = MeosStatelessFilter.fromIntPredicate(
-    pair -> MeosOpsTBox.overlaps_tbox_tbox(pair.a, pair.b));
+    pair -> MeosOpsFreeCore.overlaps_tbox_tbox(pair.a, pair.b));
 
 // 3. Apply to the DataStream
 DataStream<TboxPair> overlapping = stream.filter(filter);
@@ -61,9 +61,9 @@ through a 3-stage DataStream pipeline using two of the generated
 facades wired through `MeosStatelessMap` + `MeosStatelessFilter`:
 
 1. Parse a stream of TBox WKT strings via
-   `MeosOpsFreeCore.tbox_in` (io-meta, no state).
+   `MeosOpsTBox.tbox_in` (io-meta, no state).
 2. Filter to those overlapping a fixed query box via
-   `MeosOpsTBox.overlaps_tbox_tbox` (stateless predicate).
+   `MeosOpsFreeCore.overlaps_tbox_tbox` (stateless predicate).
 3. Serialize each survivor to hex-WKB via
    `MeosOpsTBox.tbox_as_hexwkb` (io-meta, no state).
 
