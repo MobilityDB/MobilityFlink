@@ -30,6 +30,8 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.flink.core.memory.DataInputDeserializer;
+import org.apache.flink.core.memory.DataOutputSerializer;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.TableEnvironment;
 import org.apache.flink.types.Row;
@@ -62,7 +64,7 @@ class GeneratedSqlSurfaceTest {
         GeneratedFunctions.meos_initialize_error_handler((level, code, message) -> { });
         GeneratedFunctions.meos_initialize();
         String hex = TFloat.encode(GeneratedFunctions.tfloat_in(
-                "[1@2020-01-01 00:00:00+00, 3@2020-01-03 00:00:00+00]")).form;
+                "[1@2020-01-01 00:00:00+00, 3@2020-01-03 00:00:00+00]")).toString();
         hexLiteral = "'" + hex + "'";
         tfloat = "tfloatFromHexWKB(" + hexLiteral + ")";
         tEnv = TableEnvironment.create(EnvironmentSettings.inStreamingMode());
@@ -139,7 +141,7 @@ class GeneratedSqlSurfaceTest {
 
     private static String tgeompoint(String text) {
         return "tgeompointFromHexEWKB('"
-                + TGeomPoint.encode(GeneratedFunctions.tgeompoint_in(text)).form + "')";
+                + TGeomPoint.encode(GeneratedFunctions.tgeompoint_in(text)).toString() + "')";
     }
 
     @Test
@@ -164,5 +166,25 @@ class GeneratedSqlSurfaceTest {
         Row last = r.get(r.size() - 1);
         assertEquals(1.0, last.getField(0));
         assertEquals(2L, last.getField(1));
+    }
+
+    @Test
+    void aValueOfAnySizeCrossesTheSerializer() throws Exception {
+        // 20,000 instants, a trajectory of an ordinary day: its WKB is over 64 KB, the most
+        // a string write carries. The path zigzags, so no instant is collinear with its
+        // neighbours and normalization keeps every one.
+        StringBuilder s = new StringBuilder("[");
+        for (int i = 0; i < 20000; i++) {
+            s.append(i == 0 ? "" : ", ").append("Point(").append(i).append(' ').append(i % 2)
+                .append(")@").append(Instant.ofEpochSecond(1577836800L + i));
+        }
+        TGeomPoint v = TGeomPoint.encode(GeneratedFunctions.tgeompoint_in(s.append(']').toString()));
+        assertTrue(v.form.length > 65535, "the value is past a string write");
+        TGeomPoint.Serializer ser = new TGeomPoint.Serializer();
+        DataOutputSerializer out = new DataOutputSerializer(64);
+        ser.serialize(v, out);
+        TGeomPoint back = ser.deserialize(new DataInputDeserializer(out.getCopyOfBuffer()));
+        assertEquals(v, back);
+        assertEquals(20000, GeneratedFunctions.temporal_num_instants(back.decode()));
     }
 }

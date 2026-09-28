@@ -55,9 +55,10 @@ is gitignored, not committed.
 same catalog and jar: one Flink function per SQL name the catalog states (a signature's
 `sqlName`, else the function's `@sqlfn`), each overload an `eval` method, and one RAW type per
 MEOS value type the signatures use. A MEOS value crosses Flink as the serialized form its
-catalog codec writes, hex WKB where the catalog states a WKB decoder and an `asHexWKB`
-encoder and text otherwise, never as a native pointer, so Flink can copy, checkpoint and group
-it. A SQL array argument stands for the C array the catalog pairs with a count
+catalog codec writes, its WKB bytes where the catalog states the byte codec of its type, hex
+WKB where it states only a WKB decoder and an `asHexWKB` encoder, and text otherwise, never as
+a native pointer, so Flink can copy, checkpoint and group it. The serializer writes the
+length of the form and its bytes, so a value of any size crosses. A SQL array argument stands for the C array the catalog pairs with a count
 (`shape.inputArrays`), and the eval passes the length of the Flink array as that count. A
 signature whose types the surface cannot carry (`Datum`, aggregate state, an array element with
 no codec) is skipped and counted in the generator's report.
