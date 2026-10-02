@@ -93,12 +93,6 @@
         </dependency>
 
         <!-- JUnit dependency -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.7.0</version>
-            <scope>test</scope>
-        </dependency>
 
         <!-- Jackson dependencies for JSON processing -->
         <dependency>
