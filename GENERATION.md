@@ -79,7 +79,7 @@ The `MeosOps*` facades are emitted at build time and are **not committed**: Mave
 `generate-sources` runs `tools/codegen_jvm.py --engine flink` into `target/generated-facades`,
 and `build-helper` adds it as a source root. Only the generator is tracked; the catalog and
 the JMEOS jar are all derived in CI, and the sole hand-written class under
-`org.mobilitydb.meos` is `MeosSetSetJoin`.
+`org.mobilitydb.meos` is `MeosSetSetJoin`, in the benchmark module.
 
 ## Surface match
 
