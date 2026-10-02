@@ -41,6 +41,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mobilitydb.flink.sql.types.TFloat;
 import org.mobilitydb.flink.sql.types.TGeomPoint;
+import org.mobilitydb.flink.sql.types.TInt;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -157,6 +158,34 @@ class GeneratedSqlSurfaceTest {
                 + near + "])"));
         assertThrows(Exception.class,
                 () -> scalar("SELECT intset_out(`set`(ARRAY[1, CAST(NULL AS INT)]))"));
+    }
+
+    @Test
+    void setReturningRowsUnfoldThroughCrossJoinUnnest() throws Exception {
+        // A set-returning function answers its rows as an array, which CROSS JOIN UNNEST
+        // unfolds; `unnest` is a keyword Flink's parser takes only quoted.
+        String one = "(VALUES (1)) AS s(x) CROSS JOIN UNNEST(";
+        List<Row> elems = rows("SELECT v FROM " + one + "`unnest`(`set`(ARRAY[3, 1, 2]))) AS u(v)");
+        assertEquals(List.of(1, 2, 3), elems.stream().map(r -> r.getField(0)).toList());
+        // unnest of a tint: one row per distinct value, with the time it holds that value
+        String tint = "tintFromHexWKB('" + TInt.encode(GeneratedFunctions.tint_in(
+                "[1@2020-01-01 00:00:00+00, 2@2020-01-02 00:00:00+00, 1@2020-01-03 00:00:00+00]"))
+                + "')";
+        List<Row> values = rows("SELECT v FROM " + one + "`unnest`(" + tint + ")) AS u(v, t)");
+        assertEquals(List.of(1, 2), values.stream().map(r -> (Integer) r.getField(0)).sorted().toList());
+        // timeSplit by a day from the first instant, the upper border included as in SQL:
+        // the fragments of the two days and the instant on the last border
+        assertEquals(3, rows("SELECT b FROM " + one + "timeSplit(" + tint + ", INTERVAL '1' DAY, "
+                + "TO_TIMESTAMP_LTZ(1577836800000, 3))) AS u(b, f)").size());
+        // eDwithinPairs: the index pairs, 1-based, of the trips ever within the distance
+        String origin = tgeompoint("[Point(0 0)@2020-01-01, Point(0 0)@2020-01-02]");
+        String far = tgeompoint("[Point(3 4)@2020-01-01, Point(3 4)@2020-01-02]");
+        String near = tgeompoint("[Point(0 1)@2020-01-01, Point(0 1)@2020-01-02]");
+        List<Row> pairs = rows("SELECT i, j FROM " + one + "eDwithinPairs(ARRAY[" + origin
+                + "], ARRAY[" + far + ", " + near + "], CAST(2.0 AS DOUBLE))) AS u(i, j)");
+        assertEquals(1, pairs.size());
+        assertEquals(1, pairs.get(0).getField(0));
+        assertEquals(2, pairs.get(0).getField(1));
     }
 
     @Test
