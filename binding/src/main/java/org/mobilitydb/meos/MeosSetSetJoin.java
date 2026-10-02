@@ -1,12 +1,11 @@
 package org.mobilitydb.meos;
 
+import com.kenai.jffi.MemoryIO;
 import functions.GeneratedFunctions;
 import java.lang.ref.Reference;
-import java.lang.reflect.Field;
 import jnr.ffi.Memory;
 import jnr.ffi.Pointer;
 import jnr.ffi.Runtime;
-import sun.misc.Unsafe;
 
 /**
  * NxN cross-stream set-set join operator over two arrays of temporal geometries.
@@ -23,10 +22,11 @@ import sun.misc.Unsafe;
  *
  * <p>The backing C functions take {@code (Temporal **arr1, int n1, Temporal **arr2, int n2,
  * [double dist,] int *count [, SpanSet ***periods])} and return a flat {@code int *} of
- * {@code 2*count} indices (caller frees). Native result buffers are freed via {@code Unsafe}.
+ * {@code 2*count} indices (caller frees). Native result buffers are freed through jffi's {@code MemoryIO}, which calls the system
+ * free MEOS allocates with.
  */
 public final class MeosSetSetJoin {
-    private static final Unsafe UNSAFE;
+    private static final MemoryIO IO = MemoryIO.getInstance();
 
     private MeosSetSetJoin() {
     }
@@ -113,17 +113,7 @@ public final class MeosSetSetJoin {
 
     private static void free(Pointer p) {
         if (p != null) {
-            UNSAFE.freeMemory(p.address());
-        }
-    }
-
-    static {
-        try {
-            Field f = Unsafe.class.getDeclaredField("theUnsafe");
-            f.setAccessible(true);
-            UNSAFE = (Unsafe) f.get(null);
-        } catch (ReflectiveOperationException e) {
-            throw new ExceptionInInitializerError(e);
+            IO.freeMemory(p.address());
         }
     }
 
