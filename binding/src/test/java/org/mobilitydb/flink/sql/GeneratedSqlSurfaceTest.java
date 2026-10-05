@@ -129,9 +129,9 @@ class GeneratedSqlSurfaceTest {
     }
 
     @Test
-    void aReservedNameIsCalledQuoted() throws Exception {
-        assertEquals(true,
-                scalar("SELECT `overlaps`(floatspan_in('[1, 3]'), floatspan_in('[2, 4]'))"));
+    void theClassPrefixedNameIsCalledUnquoted() throws Exception {
+        assertEquals(true, scalar(
+                "SELECT spanOverlaps(floatspanFromText('[1, 3]'), floatspanFromText('[2, 4]'))"));
     }
 
     @Test
