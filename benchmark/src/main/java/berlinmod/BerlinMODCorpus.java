@@ -27,7 +27,6 @@ package berlinmod;
 
 import functions.GeneratedFunctions;
 import jnr.ffi.Pointer;
-import org.mobilitydb.flink.meos.wirings.MeosWiringRuntime;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -92,7 +91,6 @@ public final class BerlinMODCorpus {
      * (columns {@code tripid,vehid,day,seqno,geom,t}), reprojected 3857→4326
      * through MEOS, sorted by timestamp. {@code maxRows <= 0} loads all rows. */
     public static List<BerlinMODTrip> fromInstantsCsv(String path, int maxRows) throws Exception {
-        MeosWiringRuntime.ensureInitializedOnThread();
         List<BerlinMODTrip> events = new ArrayList<>();
         try (Stream<String> lines = Files.lines(Paths.get(path))) {
             java.util.Iterator<String> it = lines.iterator();

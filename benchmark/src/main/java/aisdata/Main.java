@@ -51,7 +51,6 @@ import types.basic.tpoint.TPoint.*;
 
 public class Main {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
-    static error_handler_fn errorHandler = new error_handler();
     private STBox stbx; 
 
     public static void main(String[] args) throws Exception {
@@ -63,7 +62,6 @@ public class Main {
         try {
             logger.info("Initializing MEOS library");
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
             
             final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(1);

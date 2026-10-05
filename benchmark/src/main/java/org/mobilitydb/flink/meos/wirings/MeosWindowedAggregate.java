@@ -25,7 +25,6 @@
 
 package org.mobilitydb.flink.meos.wirings;
 
-import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.streaming.api.functions.windowing.ProcessWindowFunction;
 import org.apache.flink.streaming.api.windowing.windows.Window;
 import org.apache.flink.util.Collector;
@@ -122,12 +121,6 @@ public final class MeosWindowedAggregate<K, IN, OUT, W extends Window>
 
     public MeosWindowedAggregate(WindowFn<K, IN, OUT, W> windowFn) {
         this.windowFn = windowFn;
-    }
-
-    @Override
-    public void open(OpenContext parameters) throws Exception {
-        super.open(parameters);
-        MeosWiringRuntime.ensureInitializedOnThread();
     }
 
     @Override

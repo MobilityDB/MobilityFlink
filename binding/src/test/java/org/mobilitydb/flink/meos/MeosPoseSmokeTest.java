@@ -27,10 +27,7 @@ package org.mobilitydb.flink.meos;
 
 import org.mobilitydb.meos.*;
 
-import functions.GeneratedFunctions;
 import jnr.ffi.Pointer;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -43,17 +40,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * {@code -DPOSE=ON}.
  */
 class MeosPoseSmokeTest {
-
-    @BeforeAll
-    static void init() {
-        GeneratedFunctions.meos_initialize_error_handler((level, code, message) -> { });
-        GeneratedFunctions.meos_initialize();
-    }
-
-    @AfterAll
-    static void finalizeMeos() {
-        GeneratedFunctions.meos_finalize();
-    }
 
     @Test
     void pose() {

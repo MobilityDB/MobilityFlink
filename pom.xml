@@ -27,7 +27,7 @@
         <kafka.version>3.2.0</kafka.version>
         <log4j.version>2.17.2</log4j.version>
         <jmeos.version>1.0</jmeos.version>
-        <jnr.version>2.1.10</jnr.version>
+        <jnr.version>2.2.14</jnr.version>
         <!-- The MEOS tests load libmeos from here. libmeos is built from the tracked
              MobilityDB commit and installed to /usr/local/lib (CI and the Dockerfiles do this).
              Override it to point at a local build dir. -->

@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
-import functions.error_handler;
 
 /**
  * Query 7 - Global Closest Device Pairs (Top-k)
@@ -59,7 +58,6 @@ public class Query7_Main {
 
         try {
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -118,16 +116,13 @@ public class Query7_Main {
         private final int topK;
 
         // Initialized once per worker in open().
-        private transient error_handler errorHandler;
 
         public ClosestPairsCoGroupFunction(int topK) { this.topK = topK; }
 
         @Override
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
-            errorHandler = new error_handler();
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
         }
 
         @Override

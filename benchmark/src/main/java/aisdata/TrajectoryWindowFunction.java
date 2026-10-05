@@ -49,16 +49,13 @@ public class TrajectoryWindowFunction extends
 ProcessWindowFunction<Tuple4<Integer, Double, Double, Long>, TGeomPointSeq, Integer, TimeWindow> {
 
     private static final Logger logger = LoggerFactory.getLogger(TrajectoryWindowFunction.class);
-    private transient error_handler_fn errorHandler; // Non-static and transient
     // private int count = 0; // count variable seems unused, can be removed if not needed
 
     @Override
     public void open(OpenContext parameters) throws Exception {
         super.open(parameters);
-        errorHandler = new error_handler(); // Initialize error handler here
         
         GeneratedFunctions.meos_initialize_timezone("UTC");
-        GeneratedFunctions.meos_initialize_error_handler(errorHandler);
         logger.info("MEOS initialized in TrajectoryWindowFunction.open()");
     }
 

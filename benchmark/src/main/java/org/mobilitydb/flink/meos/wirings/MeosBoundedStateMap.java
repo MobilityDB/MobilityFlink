@@ -157,7 +157,6 @@ public final class MeosBoundedStateMap<K, IN, OUT>
     @Override
     public void open(OpenContext parameters) throws Exception {
         super.open(parameters);
-        MeosWiringRuntime.ensureInitializedOnThread();
         ValueStateDescriptor<byte[]> descriptor = new ValueStateDescriptor<>(
                 "meos-bounded-state",
                 PrimitiveArrayTypeInfo.BYTE_PRIMITIVE_ARRAY_TYPE_INFO);

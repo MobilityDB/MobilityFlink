@@ -27,7 +27,6 @@ package berlinmod;
 
 import functions.GeneratedFunctions;
 import jnr.ffi.Pointer;
-import org.mobilitydb.flink.meos.wirings.MeosWiringRuntime;
 
 /**
  * Thin wiring from the BerlinMOD streaming-form predicates to MEOS via JMEOS.
@@ -42,9 +41,8 @@ import org.mobilitydb.flink.meos.wirings.MeosWiringRuntime;
  * mathematics of its own: it constructs the MEOS inputs and delegates the
  * computation to libmeos.
  *
- * <p>{@link MeosWiringRuntime#ensureInitializedOnThread()} initialises MEOS on
- * the calling task thread (idempotent per thread) before the first call, since
- * MEOS keeps its session state per OS thread.
+ * <p>Each {@code GeneratedFunctions} call initialises MEOS on the calling task
+ * thread on its first use, since MEOS keeps its session state per OS thread.
  */
 public final class MEOSBridge {
 
@@ -66,7 +64,6 @@ public final class MEOSBridge {
     public static boolean dwithinMetres(double lon1, double lat1,
                                         double lon2, double lat2,
                                         double radiusMetres) {
-        MeosWiringRuntime.ensureInitializedOnThread();
         return GeneratedFunctions.edwithin_tgeo_geo(
                 tgeogInst(lon1, lat1), pointGeog(lon2, lat2), radiusMetres) == 1;
     }
@@ -81,7 +78,6 @@ public final class MEOSBridge {
                                                double s1Lon, double s1Lat,
                                                double s2Lon, double s2Lat,
                                                double radiusMetres) {
-        MeosWiringRuntime.ensureInitializedOnThread();
         return GeneratedFunctions.edwithin_tgeo_geo(
                 tgeogInst(pLon, pLat),
                 lineGeog(s1Lon, s1Lat, s2Lon, s2Lat), radiusMetres) == 1;
@@ -96,7 +92,6 @@ public final class MEOSBridge {
     public static boolean intersectsBox(double lon, double lat,
                                         double xmin, double ymin,
                                         double xmax, double ymax) {
-        MeosWiringRuntime.ensureInitializedOnThread();
         return GeneratedFunctions.eintersects_tgeo_geo(
                 tgeomInst(lon, lat), boxPolygon(xmin, ymin, xmax, ymax)) == 1;
     }
@@ -107,7 +102,6 @@ public final class MEOSBridge {
      */
     public static double distanceMetres(double lon1, double lat1,
                                         double lon2, double lat2) {
-        MeosWiringRuntime.ensureInitializedOnThread();
         return GeneratedFunctions.geog_distance(pointGeog(lon1, lat1), pointGeog(lon2, lat2));
     }
 
@@ -118,7 +112,6 @@ public final class MEOSBridge {
     public static double distanceSegmentMetres(double pLon, double pLat,
                                                double s1Lon, double s1Lat,
                                                double s2Lon, double s2Lat) {
-        MeosWiringRuntime.ensureInitializedOnThread();
         return GeneratedFunctions.geog_distance(
                 pointGeog(pLon, pLat), lineGeog(s1Lon, s1Lat, s2Lon, s2Lat));
     }

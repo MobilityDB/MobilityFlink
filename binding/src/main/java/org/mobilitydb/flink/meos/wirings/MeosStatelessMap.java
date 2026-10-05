@@ -27,7 +27,6 @@ package org.mobilitydb.flink.meos.wirings;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.common.functions.OpenContext;
 
 import java.io.Serializable;
 
@@ -100,19 +99,7 @@ public final class MeosStatelessMap<IN, OUT> extends RichMapFunction<IN, OUT> {
     }
 
     @Override
-    public void open(OpenContext parameters) throws Exception {
-        super.open(parameters);
-        // No per-key state in the stateless tier; the only per-operator
-        // concern is MEOS' per-thread session, initialized on this task thread.
-        MeosWiringRuntime.ensureInitializedOnThread();
-    }
-
-    @Override
     public OUT map(IN event) throws Exception {
-        // When chained to a legacy source, records are processed on the source's
-        // emitter thread rather than the thread open() ran on; the ThreadLocal
-        // guard makes this a cheap no-op after the first call per thread.
-        MeosWiringRuntime.ensureInitializedOnThread();
         return call.apply(event);
     }
 }

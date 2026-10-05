@@ -25,8 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import functions.GeneratedFunctions;
-import functions.error_handler;
-import functions.error_handler_fn;
 import types.temporal.TInterpolation;
 
 /**
@@ -75,7 +73,6 @@ public class Query4_Main {
 
         try {
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -136,7 +133,6 @@ public class Query4_Main {
         private final String tspanLiteral;
 
         private transient Pointer stbox;
-        private transient error_handler_fn errorHandler;
 
         public RestrictedTrajectoryV1_WKT(
                 double xmin, double xmax, double ymin, double ymax, String tspanLiteral) {
@@ -147,9 +143,7 @@ public class Query4_Main {
         @Override
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
-            errorHandler = new error_handler();
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
             Pointer tspan = GeneratedFunctions.tstzspan_in(tspanLiteral);
             if (tspan == null) { log.error("tstzspan_in returned null for: {}", tspanLiteral); return; }
             stbox = GeneratedFunctions.stbox_make(true, false, true, 4326, xmin, xmax, ymin, ymax, 0, 0, tspan);
@@ -219,7 +213,6 @@ public class Query4_Main {
         private final String tspanLiteral;
 
         private transient Pointer stbox;
-        private transient error_handler_fn errorHandler;
 
         public RestrictedTrajectoryV2_Expand(
                 double xmin, double xmax, double ymin, double ymax, String tspanLiteral) {
@@ -230,9 +223,7 @@ public class Query4_Main {
         @Override
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
-            errorHandler = new error_handler();
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
             Pointer tspan = GeneratedFunctions.tstzspan_in(tspanLiteral);
             if (tspan == null) { log.error("tstzspan_in returned null for: {}", tspanLiteral); return; }
             stbox = GeneratedFunctions.stbox_make(true, false, true, 4326, xmin, xmax, ymin, ymax, 0, 0, tspan);

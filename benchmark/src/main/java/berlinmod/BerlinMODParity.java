@@ -86,7 +86,6 @@ public final class BerlinMODParity {
                 csv != null ? "real BerlinMOD instants" : "synthetic", corpus.size(),
                 p.pLon, p.pLat, p.radiusMetres);
 
-        MeosWiringInit();
         BiPredicate<Double, Double> q3 = (lon, lat) ->
                 MEOSBridge.dwithinMetres(lon, lat, p.pLon, p.pLat, p.radiusMetres);
         BiPredicate<Double, Double> q8 = (lon, lat) ->
@@ -142,9 +141,5 @@ public final class BerlinMODParity {
                 query, corpus.size(), streamed.length, streamingTrue, batchTrue, mismatches, parity ? "YES" : "NO");
         return new String[]{query, String.valueOf(corpus.size()), String.valueOf(streamingTrue),
                 String.valueOf(batchTrue), String.valueOf(mismatches), parity ? "exact" : "MISMATCH"};
-    }
-
-    private static void MeosWiringInit() {
-        org.mobilitydb.flink.meos.wirings.MeosWiringRuntime.ensureInitializedOnThread();
     }
 }

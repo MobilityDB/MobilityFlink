@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
-import functions.error_handler;
 
 /**
  * Query 8 - Trajectory Denoising with Extended Kalman Filter (SNCB dataset)
@@ -68,7 +67,6 @@ public class Query8_Main {
 
         try {
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -130,7 +128,6 @@ public class Query8_Main {
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
         }
 
         @Override

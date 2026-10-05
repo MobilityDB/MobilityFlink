@@ -17,8 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import functions.GeneratedFunctions;
-import functions.MeosErrorHandler;
-import functions.error_handler_fn;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -71,7 +69,6 @@ public class Query1_Main {
         try {
             logger.info("Initializing MEOS library");
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(new MeosErrorHandler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -132,7 +129,6 @@ public class Query1_Main {
         private final double distanceMeters;
 
         private transient Pointer[] hazardZones;
-        private transient error_handler_fn error_handler;
 
         private static final DateTimeFormatter TIMESTAMP_FMT =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
@@ -145,9 +141,7 @@ public class Query1_Main {
         @Override
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
-            error_handler = new MeosErrorHandler();
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(error_handler);
             // Parse INPolygons once per worker: not per window call.
             this.hazardZones = new Pointer[zoneWkt.length];
             for (int i = 0; i < zoneWkt.length; i++) {
