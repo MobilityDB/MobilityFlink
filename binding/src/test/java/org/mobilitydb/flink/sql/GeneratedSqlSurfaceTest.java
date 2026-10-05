@@ -36,7 +36,6 @@ import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.TableEnvironment;
 import org.apache.flink.types.Row;
 import org.apache.flink.util.CloseableIterator;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mobilitydb.flink.sql.types.TFloat;
@@ -61,20 +60,12 @@ class GeneratedSqlSurfaceTest {
 
     @BeforeAll
     static void init() {
-        // No-op error handler so a parse error returns rather than terminating the JVM.
-        GeneratedFunctions.meos_initialize_error_handler((level, code, message) -> { });
-        GeneratedFunctions.meos_initialize();
         String hex = TFloat.encode(GeneratedFunctions.tfloat_in(
                 "[1@2020-01-01 00:00:00+00, 3@2020-01-03 00:00:00+00]")).toString();
         hexLiteral = "'" + hex + "'";
         tfloat = "tfloatFromHexWKB(" + hexLiteral + ")";
         tEnv = TableEnvironment.create(EnvironmentSettings.inStreamingMode());
         MobilityFlinkSql.registerAll(tEnv);
-    }
-
-    @AfterAll
-    static void finalizeMeos() {
-        GeneratedFunctions.meos_finalize();
     }
 
     /** Every row the query emits; a grouped query's last row is its final answer. */

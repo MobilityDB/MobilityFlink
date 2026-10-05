@@ -25,8 +25,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import functions.GeneratedFunctions;
-import functions.error_handler;
-import functions.error_handler_fn;
 import types.temporal.TInterpolation;
 
 /**
@@ -64,7 +62,6 @@ public class Query8_V2_Main {
 
         try {
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -112,7 +109,6 @@ public class Query8_V2_Main {
         private final double r;
         private final boolean dropOutliers;
 
-        private transient error_handler_fn errorHandler;
 
         public MeosEkfWindowFunction(double gate, double q, double r, boolean dropOutliers) {
             this.gate = gate;
@@ -124,9 +120,7 @@ public class Query8_V2_Main {
         @Override
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
-            errorHandler = new error_handler();
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
         }
 
         @Override

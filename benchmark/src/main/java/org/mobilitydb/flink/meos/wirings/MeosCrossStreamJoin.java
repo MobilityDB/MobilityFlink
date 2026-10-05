@@ -25,7 +25,6 @@
 
 package org.mobilitydb.flink.meos.wirings;
 
-import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.streaming.api.functions.co.ProcessJoinFunction;
 import org.apache.flink.util.Collector;
 
@@ -116,12 +115,6 @@ public final class MeosCrossStreamJoin<L, R, OUT>
 
     public MeosCrossStreamJoin(JoinFn<L, R, OUT> joinFn) {
         this.joinFn = joinFn;
-    }
-
-    @Override
-    public void open(OpenContext parameters) throws Exception {
-        super.open(parameters);
-        MeosWiringRuntime.ensureInitializedOnThread();
     }
 
     @Override

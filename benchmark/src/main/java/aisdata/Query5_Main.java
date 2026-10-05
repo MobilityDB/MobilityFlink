@@ -26,8 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
-import functions.error_handler;
-import functions.error_handler_fn;
 
 /**
  * Query 5 - Trajectory Creation and High-Speed Alert
@@ -169,7 +167,6 @@ public class Query5_Main {
         try {
             logger.info("Initializing MEOS library");
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -269,7 +266,6 @@ public class Query5_Main {
         private final double minSpeedThresholdMs;
 
         /** Initialised in {@link #open} since Pointer is not serialisable. */
-        private transient error_handler_fn errorHandler;
 
         /**
          * Geofence polygon pointer, parsed once in {@link #open} for reuse across all windows.
@@ -298,9 +294,7 @@ public class Query5_Main {
         @Override
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
-            errorHandler = new error_handler();
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
 
             // geog_in(wkt, -1) → SRID=4326 geography, consistent with tgeogpoint_in.
             geofence = GeneratedFunctions.geog_in(geofenceWkt, -1);

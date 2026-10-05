@@ -26,8 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
-import functions.error_handler;
-import functions.error_handler_fn;
 
 /**
  * Query 2 - Brake System Monitoring
@@ -169,7 +167,6 @@ public class Query2_Main {
         try {
             logger.info("Initializing MEOS library");
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -289,7 +286,6 @@ public class Query2_Main {
 
         private transient Pointer[] maintenanceZones;
 
-        private transient error_handler_fn errorHandler;
 
         private static final DateTimeFormatter TIMESTAMP_FMT =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
@@ -307,9 +303,7 @@ public class Query2_Main {
         @Override
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
-            errorHandler = new error_handler();
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
             // Parse the maintenance area polygons only once per worker.
             // geog_in(wkt, -1) creates a geography type (SRID=4326 implicit), consistent
             // with the tgeogpoint created by tgeogpoint_in below.

@@ -26,8 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import functions.GeneratedFunctions;
-import functions.error_handler;
-import functions.error_handler_fn;
 import types.temporal.TInterpolation;
 
 /**
@@ -66,7 +64,6 @@ public class Query3_Main {
 
         try {
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -120,14 +117,11 @@ public class Query3_Main {
         private static final Logger log = LoggerFactory.getLogger(TrajectoryCreationV1_WKT.class);
         private static final DateTimeFormatter TIMESTAMP_FMT =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
-        private transient error_handler_fn errorHandler;
 
         @Override
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
-            errorHandler = new error_handler();
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
         }
 
         @Override
@@ -179,14 +173,11 @@ public class Query3_Main {
         private static final Logger log = LoggerFactory.getLogger(TrajectoryCreationV2_Expand.class);
         private static final DateTimeFormatter TIMESTAMP_FMT =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
-        private transient error_handler_fn errorHandler;
 
         @Override
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
-            errorHandler = new error_handler();
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
         }
 
         @Override

@@ -13,8 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import functions.GeneratedFunctions;
-import functions.error_handler_fn;
-import functions.MeosErrorHandler;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -31,7 +29,6 @@ public class Query6_Main {
         try {
             logger.info("Initializing MEOS");
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(new MeosErrorHandler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -103,14 +100,11 @@ public class Query6_Main {
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
 
             // Initialized once per worker in open().
-            private transient error_handler_fn errorHandler;
 
         @Override
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
-            errorHandler = new MeosErrorHandler();
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
         }
 
         @Override

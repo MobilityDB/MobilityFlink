@@ -26,7 +26,6 @@ package berlinmod;
 
 import functions.GeneratedFunctions;
 import jnr.ffi.Pointer;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mobilitydb.meos.MeosSetSetJoin;
@@ -60,15 +59,8 @@ class BerlinMODSetSetJoinTest {
 
     @BeforeAll
     static void init() {
-        GeneratedFunctions.meos_initialize_error_handler((level, code, message) -> { });
-        GeneratedFunctions.meos_initialize();
         trips = new Pointer[TRIPS.length];
         for (int i = 0; i < TRIPS.length; i++) trips[i] = GeneratedFunctions.tgeompoint_in(TRIPS[i]);
-    }
-
-    @AfterAll
-    static void fini() {
-        GeneratedFunctions.meos_finalize();
     }
 
     private static Set<Long> pairSet(int[][] pairs) {

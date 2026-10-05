@@ -16,8 +16,6 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import functions.GeneratedFunctions;
-import functions.MeosErrorHandler;
-import functions.error_handler_fn;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
@@ -67,7 +65,6 @@ public class Query2_Main {
         try {
             logger.info("Initializing MEOS library");
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(new MeosErrorHandler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -129,7 +126,6 @@ public class Query2_Main {
         private final double varFfThreshold;
 
         private transient Pointer[] maintenanceZones;
-        private transient error_handler_fn errorHandler;
 
         private static final DateTimeFormatter TIMESTAMP_FMT =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
@@ -143,9 +139,7 @@ public class Query2_Main {
         @Override
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
-            errorHandler = new MeosErrorHandler();
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
             // Parse maintenance area polygons once per worker
             maintenanceZones = new Pointer[maintenanceAreasWkt.length];
             for (int i = 0; i < maintenanceAreasWkt.length; i++) {

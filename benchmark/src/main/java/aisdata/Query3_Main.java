@@ -27,8 +27,6 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
-import functions.error_handler;
-import functions.error_handler_fn;
 
 /**
  * Query 3 - Trajectory Creation
@@ -99,7 +97,6 @@ public class Query3_Main {
         try {
             logger.info("Initializing MEOS library");
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(new error_handler());
 
             final StreamExecutionEnvironment env =
                     StreamExecutionEnvironment.getExecutionEnvironment();
@@ -181,7 +178,6 @@ public class Query3_Main {
         private static final Logger log =
                 LoggerFactory.getLogger(TrajectoryCreationWindowFunction.class);
 
-        private transient error_handler_fn errorHandler;
 
         private static final DateTimeFormatter TIMESTAMP_FMT =
                 DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
@@ -190,9 +186,7 @@ public class Query3_Main {
         @Override
         public void open(OpenContext parameters) throws Exception {
             super.open(parameters);
-            errorHandler = new error_handler();
             GeneratedFunctions.meos_initialize_timezone("UTC");
-            GeneratedFunctions.meos_initialize_error_handler(errorHandler);
             log.info("MEOS initialized in TrajectoryCreationWindowFunction.open()");
         }
 

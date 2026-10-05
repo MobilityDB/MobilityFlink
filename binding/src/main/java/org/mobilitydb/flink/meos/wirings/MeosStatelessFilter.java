@@ -27,7 +27,6 @@ package org.mobilitydb.flink.meos.wirings;
 
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.RichFilterFunction;
-import org.apache.flink.api.common.functions.OpenContext;
 
 import java.io.Serializable;
 
@@ -96,17 +95,7 @@ public final class MeosStatelessFilter<IN> extends RichFilterFunction<IN> {
     }
 
     @Override
-    public void open(OpenContext parameters) throws Exception {
-        super.open(parameters);
-        MeosWiringRuntime.ensureInitializedOnThread();
-    }
-
-    @Override
     public boolean filter(IN event) throws Exception {
-        // When chained to a legacy source, records are processed on the source's
-        // emitter thread rather than the thread open() ran on; the ThreadLocal
-        // guard makes this a cheap no-op after the first call per thread.
-        MeosWiringRuntime.ensureInitializedOnThread();
         return predicate.test(event);
     }
 }
