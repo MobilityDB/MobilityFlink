@@ -168,7 +168,7 @@ public class Query1_Main {
                     if (hazardZones[i] == null) continue;
                     // Paper Line 2: edwithin_tgeo_geo returns 1 if tpoint is within
                     // distanceMeters of the zone polygon at any instant.
-                    if (GeneratedFunctions.edwithin_tgeo_geo(tpoint, hazardZones[i], distanceMeters) == 1) {
+                    if (GeneratedFunctions.edwithin_tgeo_geo(tpoint, hazardZones[i], distanceMeters, true) == 1) {
                         String alert = String.format(
                                 "[ALERT][Q1] DeviceID=%-6d | lon=%10.5f lat=%9.5f"
                                         + " | ts=%s | within %.0f m of ZONE %d | window [%s - %s]",

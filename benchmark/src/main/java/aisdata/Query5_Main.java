@@ -358,7 +358,7 @@ public class Query5_Main {
 
                 // Paper Line 2: edwithin_tgeo_geo(lon, lat, ts, POLYGON, 1) == 1
                 // Distance=1m is effectively an intersection test.
-                if (GeneratedFunctions.edwithin_tgeo_geo(tpoint, geofence, geofenceDistMeters) != 1) {
+                if (GeneratedFunctions.edwithin_tgeo_geo(tpoint, geofence, geofenceDistMeters, true) != 1) {
                     log.debug("MMSI={} skipped: outside geofence at ts={}", mmsi, ts);
                     continue;
                 }

@@ -63,7 +63,7 @@ import java.io.Serializable;
  *             (left, right, ctx) -> {
  *                 Pointer leftT  = left.toTGeoPointer();
  *                 Pointer rightT = right.toTGeoPointer();
- *                 if (MeosOpsFreeGeo.edwithin_tgeo_tgeo(leftT, rightT, 100.0) != 0) {
+ *                 if (MeosOpsFreeGeo.edwithin_tgeo_tgeo(leftT, rightT, 100.0, true) != 0) {
  *                     return new MeetingEvent(left.id(), right.id(), ctx.getLeftTimestamp());
  *                 }
  *                 return null;  // no output for non-matches

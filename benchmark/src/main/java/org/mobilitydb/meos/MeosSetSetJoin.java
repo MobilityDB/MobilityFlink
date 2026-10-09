@@ -39,7 +39,7 @@ public final class MeosSetSetJoin {
         Pointer arr1 = marshal(a, rt);
         Pointer arr2 = marshal(b, rt);
         Pointer countPtr = Memory.allocateDirect(rt, 4);
-        Pointer res = GeneratedFunctions.edwithin_tgeoarr_tgeoarr(arr1, a.length, arr2, b.length, dist, countPtr);
+        Pointer res = GeneratedFunctions.edwithin_tgeoarr_tgeoarr(arr1, a.length, arr2, b.length, dist, true, countPtr);
         Reference.reachabilityFence(arr1);
         Reference.reachabilityFence(arr2);
         return readPairsAndFree(res, countPtr.getInt(0L));
@@ -68,7 +68,7 @@ public final class MeosSetSetJoin {
         Pointer arr2 = marshal(b, rt);
         Pointer countPtr = Memory.allocateDirect(rt, 4);
         Pointer periodsPtr = Memory.allocateDirect(rt, 8);
-        Pointer res = GeneratedFunctions.tdwithin_tgeoarr_tgeoarr(arr1, a.length, arr2, b.length, dist, countPtr, periodsPtr);
+        Pointer res = GeneratedFunctions.tdwithin_tgeoarr_tgeoarr(arr1, a.length, arr2, b.length, dist, true, countPtr, periodsPtr);
         Reference.reachabilityFence(arr1);
         Reference.reachabilityFence(arr2);
         int cnt = countPtr.getInt(0L);

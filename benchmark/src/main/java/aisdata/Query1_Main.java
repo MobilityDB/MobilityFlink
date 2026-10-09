@@ -341,7 +341,7 @@ public class Query1_Main {
                     // edwithin_tgeo_geo returns 1 if tpoint is within distanceMeters of the
                     // zone polygon at any instant — implements paper Line 2.
                     int within = GeneratedFunctions.edwithin_tgeo_geo(
-                            tpoint, hazardZones[i], distanceMeters);
+                            tpoint, hazardZones[i], distanceMeters, true);
 
                     if (within == 1) {
                         String alert = String.format(

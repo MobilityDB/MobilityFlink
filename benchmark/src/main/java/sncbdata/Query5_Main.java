@@ -179,7 +179,7 @@ public class Query5_Main {
                         event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
                 Pointer tpoint = GeneratedFunctions.tgeogpoint_in(wkt);
                 if (tpoint == null) continue;
-                if (GeneratedFunctions.edwithin_tgeo_geo(tpoint, geofence, geofenceDistMeters) != 1) continue;
+                if (GeneratedFunctions.edwithin_tgeo_geo(tpoint, geofence, geofenceDistMeters, true) != 1) continue;
                 surviving.add(event);
             }
 
@@ -289,7 +289,7 @@ public class Query5_Main {
                 }
 
                 // Geofence filter: reuse the already-parsed instant pointer.
-                if (GeneratedFunctions.edwithin_tgeo_geo(inst, geofence, geofenceDistMeters) != 1) continue;
+                if (GeneratedFunctions.edwithin_tgeo_geo(inst, geofence, geofenceDistMeters, true) != 1) continue;
 
                 double speedMs = event.getGpsSpeed() * KMH_TO_MS;
                 speedSumMs += speedMs;
