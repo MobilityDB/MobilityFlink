@@ -133,7 +133,7 @@ public class Query6_Main {
                 return null;
             }
 
-            double mindist = GeneratedFunctions.geog_distance(geoLeft, geoRight);
+            double mindist = GeneratedFunctions.geog_distance(geoLeft, geoRight, true);
 
             // Paper Line 5: lat > 0.0.
             if (left.getLat() <= 0.0 || right.getLat() <= 0.0) return null;

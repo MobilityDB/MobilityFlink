@@ -75,7 +75,7 @@ class BerlinMODSetSetJoinTest {
         Set<Long> baseline = new HashSet<>();
         for (int i = 0; i < trips.length; i++)
             for (int j = 0; j < trips.length; j++)
-                if (GeneratedFunctions.edwithin_tgeo_tgeo(trips[i], trips[j], MEET_DIST) == 1)
+                if (GeneratedFunctions.edwithin_tgeo_tgeo(trips[i], trips[j], MEET_DIST, true) == 1)
                     baseline.add(((long) i << 32) | j);
         assertEquals(baseline, kernel, "set-set eDwithinPairs must equal the per-pair edwithin scalar");
         // T0/T3 coincide and T1 crosses T0 — the join is non-empty.

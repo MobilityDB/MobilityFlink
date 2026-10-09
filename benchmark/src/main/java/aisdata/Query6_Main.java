@@ -255,7 +255,7 @@ public class Query6_Main {
                 return null;
             }
 
-            double mindist = GeneratedFunctions.geog_distance(geoLeft, geoRight);
+            double mindist = GeneratedFunctions.geog_distance(geoLeft, geoRight, true);
 
             // Paper Line 5: filter(lat > 0.0): keep only pairs where left-side lat is positive.
             // All AIS positions in this dataset are in the Northern Hemisphere (~55–58°N),

@@ -177,7 +177,7 @@ public class Query9_Main {
                     // Paper Line 2: device_id != device_id2
                     if (left.getDeviceId() == right.getDeviceId()) continue;
 
-                    double dist = GeneratedFunctions.geog_distance(geoLeft, geoRight);
+                    double dist = GeneratedFunctions.geog_distance(geoLeft, geoRight, true);
                     String key = left.getDeviceId() + "->" + right.getDeviceId();
                     if (!minDistMap.containsKey(key) || dist < minDistMap.get(key)[2]) {
                         minDistMap.put(key, new double[]{

@@ -298,7 +298,7 @@ public class Query7_Main {
                     // Paper Line 2: device_id < device_id2
                     if (left.getMmsi() >= right.getMmsi()) continue;
 
-                    double dist = GeneratedFunctions.geog_distance(geoLeft, geoRight);
+                    double dist = GeneratedFunctions.geog_distance(geoLeft, geoRight, true);
 
                     // Keep only the minimum distance per unique (mmsi1, mmsi2) pair.
                     String key = left.getMmsi() + ":" + right.getMmsi();

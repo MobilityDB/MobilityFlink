@@ -175,7 +175,7 @@ public class Query7_Main {
                     // Paper Line 2: device_id < device_id2
                     if (left.getDeviceId() >= right.getDeviceId()) continue;
 
-                    double dist = GeneratedFunctions.geog_distance(geoLeft, geoRight);
+                    double dist = GeneratedFunctions.geog_distance(geoLeft, geoRight, true);
                     String key = left.getDeviceId() + ":" + right.getDeviceId();
                     if (!pairMap.containsKey(key) || dist < pairMap.get(key)[2]) {
                         pairMap.put(key, new double[]{

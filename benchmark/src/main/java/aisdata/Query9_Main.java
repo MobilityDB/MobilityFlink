@@ -256,7 +256,7 @@ public class Query9_Main {
                     // Paper Line 2: device_id != device_id2
                     if (left.getMmsi() == right.getMmsi()) continue;
 
-                    double dist = GeneratedFunctions.geog_distance(geoLeft, geoRight);
+                    double dist = GeneratedFunctions.geog_distance(geoLeft, geoRight, true);
 
                     // Key: directed pair "mmsi1→mmsi2"
                     String key = left.getMmsi() + "->" + right.getMmsi();

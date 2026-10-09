@@ -65,7 +65,7 @@ public final class MEOSBridge {
                                         double lon2, double lat2,
                                         double radiusMetres) {
         return GeneratedFunctions.edwithin_tgeo_geo(
-                tgeogInst(lon1, lat1), pointGeog(lon2, lat2), radiusMetres) == 1;
+                tgeogInst(lon1, lat1), pointGeog(lon2, lat2), radiusMetres, true) == 1;
     }
 
     /**
@@ -80,7 +80,7 @@ public final class MEOSBridge {
                                                double radiusMetres) {
         return GeneratedFunctions.edwithin_tgeo_geo(
                 tgeogInst(pLon, pLat),
-                lineGeog(s1Lon, s1Lat, s2Lon, s2Lat), radiusMetres) == 1;
+                lineGeog(s1Lon, s1Lat, s2Lon, s2Lat), radiusMetres, true) == 1;
     }
 
     /**
@@ -102,7 +102,7 @@ public final class MEOSBridge {
      */
     public static double distanceMetres(double lon1, double lat1,
                                         double lon2, double lat2) {
-        return GeneratedFunctions.geog_distance(pointGeog(lon1, lat1), pointGeog(lon2, lat2));
+        return GeneratedFunctions.geog_distance(pointGeog(lon1, lat1), pointGeog(lon2, lat2), true);
     }
 
     /**
@@ -113,7 +113,7 @@ public final class MEOSBridge {
                                                double s1Lon, double s1Lat,
                                                double s2Lon, double s2Lat) {
         return GeneratedFunctions.geog_distance(
-                pointGeog(pLon, pLat), lineGeog(s1Lon, s1Lat, s2Lon, s2Lat));
+                pointGeog(pLon, pLat), lineGeog(s1Lon, s1Lat, s2Lon, s2Lat), true);
     }
 
     // ----------------------------------------------------------------------
