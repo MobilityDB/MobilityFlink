@@ -241,16 +241,49 @@ class GeneratedSqlSurfaceTest {
      */
     private static String aggregate(TableEnvironment env, String agg, String in, String... values)
             throws Exception {
+        return aggregateCall(env, agg + "(v)", in, values);
+    }
+
+    /** The text of the aggregate call over the values v, as #aggregate reads one of one argument. */
+    private static String aggregateCall(TableEnvironment env, String call, String in, String... values)
+            throws Exception {
         StringBuilder rows = new StringBuilder();
         for (String v : values) {
             rows.append(rows.length() == 0 ? "" : ", ").append("('").append(v).append("')");
         }
         List<Row> out = new ArrayList<>();
-        try (CloseableIterator<Row> it = env.executeSql("SELECT asText(" + agg + "(v)) FROM (SELECT "
+        try (CloseableIterator<Row> it = env.executeSql("SELECT asText(" + call + ") FROM (SELECT "
                 + in + "(s) AS v FROM (VALUES " + rows + ") AS t(s))").collect()) {
             it.forEachRemaining(out::add);
         }
         return (String) out.get(out.size() - 1).getField(0);
+    }
+
+    @Test
+    void windowAggregatesAnswerWhatMobilityDBAnswers() throws Exception {
+        // What MobilityDB answers for the same window aggregate over the same values and a window
+        // of one day with the time zone set to UTC, in a streaming job and in a batch job of two
+        // phases, the twin of MobilitySpark's test.
+        TableEnvironment batch = TableEnvironment.create(EnvironmentSettings.inBatchMode());
+        batch.getConfig().set("table.optimizer.agg-phase-strategy", "TWO_PHASE");
+        MobilityFlinkSql.registerAll(batch);
+        String day = "(v, INTERVAL '1' DAY)";
+        String[] tints = {"[1@2001-01-01 00:00:00+00, 2@2001-01-03 00:00:00+00]",
+                          "[3@2001-01-02 00:00:00+00, 4@2001-01-04 00:00:00+00]"};
+        for (TableEnvironment env : new TableEnvironment[] {tEnv, batch}) {
+            assertEquals("{[1@2001-01-01 00:00:00+00, 2@2001-01-02 00:00:00+00, 2@2001-01-04 00:00:00+00], "
+                + "(1@2001-01-04 00:00:00+00, 1@2001-01-05 00:00:00+00]}",
+                aggregateCall(env, "wCount" + day, "tintFromText", tints));
+            assertEquals("{[1@2001-01-01 00:00:00+00, 3@2001-01-02 00:00:00+00, 3@2001-01-05 00:00:00+00]}",
+                aggregateCall(env, "wMax" + day, "tintFromText", tints));
+            assertEquals("Interp=Step;{[1@2001-01-01 00:00:00+00, 2@2001-01-02 00:00:00+00, "
+                + "2@2001-01-04 00:00:00+00], (3@2001-01-04 00:00:00+00, 3@2001-01-05 00:00:00+00]}",
+                aggregateCall(env, "wAvg" + day, "tintFromText", tints));
+            assertEquals("{[1@2001-01-01 00:00:00+00, 1@2001-01-02 00:00:00+00], "
+                + "[3@2001-01-03 00:00:00+00, 3@2001-01-04 00:00:00+00]}",
+                aggregateCall(env, "wSum" + day, "tfloatFromText",
+                              "{1@2001-01-01 00:00:00+00, 3@2001-01-03 00:00:00+00}"));
+        }
     }
 
     @Test
