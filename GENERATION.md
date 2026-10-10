@@ -63,6 +63,17 @@ length of the form and its bytes, so a value of any size crosses. A SQL array ar
 signature whose types the surface cannot carry (`Datum`, aggregate state, an array element with
 no codec) is skipped and counted in the generator's report.
 
+An aggregate of the catalog's `aggregates` section is one Flink `AggregateFunction` per SQL name,
+each overload an `accumulate` method, run from the public MEOS function of each role the
+aggregate states: the transition folds a value into the state, the combine joins two partial
+states, and the final answers the result. The accumulator, `MeosAggState`, holds the bytes of the
+state, those the serialize function writes and the deserialize function reads, or the form the
+codec of the state's type writes (the box of `extent`), never a native pointer. An aggregate
+taking one value with a combine is generated; the others (`appendInstant`, the `w*` window
+aggregates) are counted in the generator's report. A name a scalar function carries goes to the
+scalar, the aggregate taking the `Agg` name the catalog states (`mergeAgg`, `tMinAgg`) or the
+suffix (`tAndAgg`, `setUnionAgg`).
+
 `org.mobilitydb.flink.sql.MobilityFlinkSql.registerAll(tEnv)` registers every function as a
 catalog function under its MobilityDB SQL name. A Flink built-in of the same name (`lower`,
 `round`, `abs`, …) resolves before a catalog function, and a name Flink's parser reserves
