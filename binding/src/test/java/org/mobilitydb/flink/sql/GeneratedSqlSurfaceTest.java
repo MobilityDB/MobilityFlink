@@ -38,6 +38,7 @@ import org.apache.flink.types.Row;
 import org.apache.flink.util.CloseableIterator;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.mobilitydb.flink.sql.functions.TAvg;
 import org.mobilitydb.flink.sql.types.TFloat;
 import org.mobilitydb.flink.sql.types.TGeomPoint;
 import org.mobilitydb.flink.sql.types.TInt;
@@ -231,6 +232,81 @@ class GeneratedSqlSurfaceTest {
         Row last = r.get(r.size() - 1);
         assertEquals(1.0, last.getField(0));
         assertEquals(2L, last.getField(1));
+    }
+
+    /**
+     * The text of an aggregate over the values, the last row a grouped query emits in env, read
+     * as #rows reads the rows of tEnv; the twin of MobilitySpark's GeneratedSqlSurfaceTest
+     * aggregate.
+     */
+    private static String aggregate(TableEnvironment env, String agg, String in, String... values)
+            throws Exception {
+        StringBuilder rows = new StringBuilder();
+        for (String v : values) {
+            rows.append(rows.length() == 0 ? "" : ", ").append("('").append(v).append("')");
+        }
+        List<Row> out = new ArrayList<>();
+        try (CloseableIterator<Row> it = env.executeSql("SELECT asText(" + agg + "(v)) FROM (SELECT "
+                + in + "(s) AS v FROM (VALUES " + rows + ") AS t(s))").collect()) {
+            it.forEachRemaining(out::add);
+        }
+        return (String) out.get(out.size() - 1).getField(0);
+    }
+
+    @Test
+    void aggregatesAnswerWhatMobilityDBAnswers() throws Exception {
+        // What MobilityDB answers for the same aggregate over the same values with the time zone
+        // set to UTC, in a streaming job folding each value into the bytes of the state, and in
+        // a batch job of two phases, whose global phase combines the partial states the local
+        // one writes: the skip lists of tCount, tAvg and tCentroid as taggstate_serialize writes
+        // them, the set and span set of the unions as setstate_serialize and
+        // spansetstate_serialize write them, and the box of extent as its WKB.
+        TableEnvironment batch = TableEnvironment.create(EnvironmentSettings.inBatchMode());
+        batch.getConfig().set("table.optimizer.agg-phase-strategy", "TWO_PHASE");
+        MobilityFlinkSql.registerAll(batch);
+        for (TableEnvironment env : new TableEnvironment[] {tEnv, batch}) {
+            assertEquals("{[1@2001-01-01 00:00:00+00, 2@2001-01-02 00:00:00+00, "
+                + "3@2001-01-03 00:00:00+00], (2@2001-01-03 00:00:00+00, 2@2001-01-04 00:00:00+00], "
+                + "(1@2001-01-04 00:00:00+00, 1@2001-01-05 00:00:00+00]}",
+                aggregate(env, "tCount", "tintFromText",
+                          "[1@2001-01-01 00:00:00+00, 2@2001-01-03 00:00:00+00]",
+                          "[3@2001-01-02 00:00:00+00, 4@2001-01-04 00:00:00+00]",
+                          "[5@2001-01-03 00:00:00+00, 5@2001-01-05 00:00:00+00]"));
+            assertEquals("{[1@2001-01-01 00:00:00+00, 2@2001-01-02 00:00:00+00), "
+                + "[2.5@2001-01-02 00:00:00+00, 3.5@2001-01-03 00:00:00+00], "
+                + "(4@2001-01-03 00:00:00+00, 5@2001-01-04 00:00:00+00]}",
+                aggregate(env, "tAvg", "tfloatFromText",
+                          "[1@2001-01-01 00:00:00+00, 3@2001-01-03 00:00:00+00]",
+                          "[3@2001-01-02 00:00:00+00, 5@2001-01-04 00:00:00+00]"));
+            assertEquals("{[POINT(1 0)@2001-01-01 00:00:00+00, POINT(3 2)@2001-01-03 00:00:00+00]}",
+                aggregate(env, "tCentroid", "tgeompointFromText",
+                          "[Point(0 0)@2001-01-01 00:00:00+00, Point(2 2)@2001-01-03 00:00:00+00]",
+                          "[Point(2 0)@2001-01-01 00:00:00+00, Point(4 2)@2001-01-03 00:00:00+00]"));
+            assertEquals("{1, 2, 3, 5}",
+                aggregate(env, "setUnionAgg", "intsetFromText", "{1, 3}", "{2, 3, 5}"));
+            assertEquals("{[1, 5), [7, 8)}",
+                aggregate(env, "spanUnionAgg", "intspanFromText", "[1, 3)", "[2, 5)", "[7, 8)"));
+            assertEquals("STBOX X((0,1),(2,4))",
+                aggregate(env, "extent", "stboxFromText", "STBOX X((1,1),(2,2))", "STBOX X((0,3),(1,4))"));
+        }
+        // The batch job's one local partition hands its global phase one partial state, so two
+        // partial states are joined here as a global phase joins those of two partitions, the
+        // second read back from the bytes its serializer writes for the exchange.
+        TAvg avg = new TAvg();
+        MeosAggState a = avg.createAccumulator();
+        MeosAggState b = avg.createAccumulator();
+        avg.accumulate(a, TFloat.encode(GeneratedFunctions.tfloat_in(
+                "[1@2001-01-01 00:00:00+00, 3@2001-01-03 00:00:00+00]")));
+        avg.accumulate(b, TFloat.encode(GeneratedFunctions.tfloat_in(
+                "[3@2001-01-02 00:00:00+00, 5@2001-01-04 00:00:00+00]")));
+        MeosAggState.Serializer ser = new MeosAggState.Serializer();
+        DataOutputSerializer out = new DataOutputSerializer(64);
+        ser.serialize(b, out);
+        avg.merge(a, List.of(ser.deserialize(new DataInputDeserializer(out.getCopyOfBuffer()))));
+        assertEquals("{[1@2001-01-01 00:00:00+00, 2@2001-01-02 00:00:00+00), "
+            + "[2.5@2001-01-02 00:00:00+00, 3.5@2001-01-03 00:00:00+00], "
+            + "(4@2001-01-03 00:00:00+00, 5@2001-01-04 00:00:00+00]}",
+            GeneratedFunctions.tfloat_out(((TFloat) avg.getValue(a)).decode(), 15));
     }
 
     @Test
