@@ -80,6 +80,22 @@ catalog function under its MobilityDB SQL name. A Flink built-in of the same nam
 (`overlaps`, `contains`, `union`, …) is written quoted, `` `overlaps`(a, b) ``. Maven
 `generate-sources` runs the engine into `target/generated-sql`, beside the facades.
 
+A SQL session that runs plain SQL, the SQL Client, the SQL Gateway or a table environment,
+loads the same functions with the binding jar on its classpath:
+
+```sql
+LOAD MODULE mobilitydb;
+```
+
+`org.mobilitydb.flink.sql.MobilityDBModuleFactory`, named in
+`META-INF/services/org.apache.flink.table.factories.Factory`, answers it with
+`MobilityDBModule`, which holds every function `registerAll` registers, read from that method,
+under the same names and with the same types. A module function is a system function, resolved
+module by module in the order `SHOW MODULES` lists, after the `core` module that `LOAD MODULE`
+leaves first, so a name `core` also holds (`lower`, `round`, `abs`, …) answers with the MobilityDB
+function once `USE MODULES mobilitydb, core` lists the module first. A table environment holding
+the module may also call `registerAll`, and answers alike.
+
 ## Generate-then-retire — the green-CI version is the probe
 
 Hand-written facades/glue are replaced by the generated forwarders **family by family,
