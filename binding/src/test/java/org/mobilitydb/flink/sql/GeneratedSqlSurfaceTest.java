@@ -311,6 +311,48 @@ class GeneratedSqlSurfaceTest {
     }
 
     @Test
+    void appendAggregatesAnswerWhatMobilityDBAnswersOrderedByTime() throws Exception {
+        // What MobilityDB answers for the same aggregate over the same values ordered by their
+        // start timestamp, with the time zone set to UTC; the values come in another order, in a
+        // streaming job and in a batch job of two phases, the twin of MobilitySpark's test.
+        TableEnvironment batch = TableEnvironment.create(EnvironmentSettings.inBatchMode());
+        batch.getConfig().set("table.optimizer.agg-phase-strategy", "TWO_PHASE");
+        MobilityFlinkSql.registerAll(batch);
+        for (TableEnvironment env : new TableEnvironment[] {tEnv, batch}) {
+            assertEquals("[1@2001-01-01 00:00:00+00, 2@2001-01-02 00:00:00+00, 3@2001-01-03 00:00:00+00]",
+                aggregateCall(env, "appendInstantAgg(v)", "tintFromText",
+                    "3@2001-01-03 00:00:00+00", "1@2001-01-01 00:00:00+00", "2@2001-01-02 00:00:00+00"));
+            assertEquals("{1@2001-01-01 00:00:00+00, 2@2001-01-02 00:00:00+00, 3@2001-01-03 00:00:00+00}",
+                aggregateCall(env, "appendInstantAgg(v, 'discrete')", "tfloatFromText",
+                    "3@2001-01-03 00:00:00+00", "1@2001-01-01 00:00:00+00", "2@2001-01-02 00:00:00+00"));
+            assertEquals("{[1@2001-01-01 00:00:00+00, 2@2001-01-02 00:00:00+00], [5@2001-01-03 00:00:00+00], "
+                + "[6@2001-01-05 00:00:00+00]}",
+                aggregateCall(env, "appendInstantAgg(v, 'linear', 1.5, INTERVAL '1' DAY)", "tfloatFromText",
+                    "6@2001-01-05 00:00:00+00", "1@2001-01-01 00:00:00+00", "5@2001-01-03 00:00:00+00",
+                    "2@2001-01-02 00:00:00+00"));
+            assertEquals("{[t@2001-01-01 00:00:00+00, f@2001-01-02 00:00:00+00], [f@2001-01-05 00:00:00+00]}",
+                aggregateCall(env, "appendInstantAgg(v, 'step', INTERVAL '1' DAY)", "tboolFromText",
+                    "f@2001-01-05 00:00:00+00", "t@2001-01-01 00:00:00+00", "f@2001-01-02 00:00:00+00"));
+            assertEquals("{[1@2001-01-01 00:00:00+00, 2@2001-01-02 00:00:00+00], "
+                + "[2@2001-01-03 00:00:00+00, 2@2001-01-04 00:00:00+00], "
+                + "[3@2001-01-05 00:00:00+00, 4@2001-01-06 00:00:00+00]}",
+                aggregateCall(env, "appendSequenceAgg(v)", "tintFromText",
+                    "[3@2001-01-05 00:00:00+00, 4@2001-01-06 00:00:00+00]",
+                    "[1@2001-01-01 00:00:00+00, 2@2001-01-02 00:00:00+00]",
+                    "[2@2001-01-03 00:00:00+00, 2@2001-01-04 00:00:00+00]"));
+            // Two values at one timestamp are refused, as MobilityDB refuses them in any order.
+            Exception e = assertThrows(Exception.class, () -> aggregateCall(env, "appendInstantAgg(v)",
+                "tintFromText", "1@2001-01-01 00:00:00+00", "2@2001-01-01 00:00:00+00"));
+            Throwable root = e;
+            while (root.getCause() != null) {
+                root = root.getCause();
+            }
+            assertTrue(String.valueOf(root.getMessage()).contains("different value at their common timestamp"),
+                String.valueOf(root.getMessage()));
+        }
+    }
+
+    @Test
     void aggregatesAnswerWhatMobilityDBAnswers() throws Exception {
         // What MobilityDB answers for the same aggregate over the same values with the time zone
         // set to UTC, in a streaming job folding each value into the bytes of the state, and in
