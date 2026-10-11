@@ -127,9 +127,33 @@ class GeneratedSqlSurfaceTest {
     }
 
     @Test
-    void aBuiltinNameResolvesToTheBuiltinUnlessQualified() throws Exception {
+    void aBuiltinNameStaysTheBuiltinsAndMeosTakesTheClassName() throws Exception {
         assertThrows(Exception.class, () -> scalar("SELECT lower(floatspan_in('[1, 3]'))"));
-        assertEquals(1.0, scalar("SELECT default_database.`lower`(floatspan_in('[1, 3]'))"));
+        assertThrows(Exception.class,
+                () -> scalar("SELECT default_database.`lower`(floatspan_in('[1, 3]'))"));
+        assertEquals(1.0, scalar("SELECT spanLower(floatspan_in('[1, 3]'))"));
+    }
+
+    @Test
+    void aTemporalPointTakesAnotherSpatialReferenceSystem() throws Exception {
+        // geoTransform is the name of transform over the geo types in Flink and Spark
+        String trip = tgeompoint("SRID=4326;[Point(4.35 50.85)@2020-01-01, "
+                + "Point(2.35 48.85)@2020-01-02]");
+        assertEquals(3035, scalar("SELECT SRID(geoTransform(" + trip + ", 3035))"));
+        assertEquals(2, scalar("SELECT numInstants(geoTransform(" + trip + ", 3035))"));
+        // the coordinates MobilityDB answers for transform(trip, 3035)
+        String text = (String) scalar("SELECT asText(geoTransform(" + trip + ", 3035), 6)");
+        assertTrue(text.contains("POINT(3923550.150776 3097410.482363)"), text);
+        assertTrue(text.contains("POINT(3760536.822902 2888771.02095)"), text);
+    }
+
+    @Test
+    void aTemporalPointOverlapsTheExpandedBoxOfAnother() throws Exception {
+        // stboxOverlaps is the function of && between a temporal point and a box
+        String a = tgeompoint("[Point(0 0)@2020-01-01, Point(0 10)@2020-01-02]");
+        String b = tgeompoint("[Point(5 0)@2020-01-01, Point(5 10)@2020-01-02]");
+        assertEquals(true, scalar("SELECT stboxOverlaps(" + a + ", expandSpace(" + b + ", 6.0))"));
+        assertEquals(false, scalar("SELECT stboxOverlaps(" + a + ", expandSpace(" + b + ", 4.0))"));
     }
 
     private static String tgeompoint(String text) {
@@ -177,8 +201,8 @@ class GeneratedSqlSurfaceTest {
 
     @Test
     void arraysCrossAsFlinkArrays() throws Exception {
-        assertEquals("{1, 2, 3}", scalar("SELECT intset_out(`set`(ARRAY[3, 1, 2]))"));
-        assertEquals(Instant.parse("2020-01-01T00:00:00Z"), scalar("SELECT startValue(`set`(ARRAY["
+        assertEquals("{1, 2, 3}", scalar("SELECT intset_out(setMake(ARRAY[3, 1, 2]))"));
+        assertEquals(Instant.parse("2020-01-01T00:00:00Z"), scalar("SELECT startValue(setMake(ARRAY["
                 + "TO_TIMESTAMP_LTZ(1577923200000, 3), TO_TIMESTAMP_LTZ(1577836800000, 3)]))"));
         String origin = tgeompoint("[Point(0 0)@2020-01-01, Point(0 0)@2020-01-02]");
         String far = tgeompoint("[Point(3 4)@2020-01-01, Point(3 4)@2020-01-02]");
@@ -187,28 +211,28 @@ class GeneratedSqlSurfaceTest {
         assertEquals(1.0, scalar("SELECT minDistance(ARRAY[" + origin + "], ARRAY[" + far + ", "
                 + near + "])"));
         assertThrows(Exception.class,
-                () -> scalar("SELECT intset_out(`set`(ARRAY[1, CAST(NULL AS INT)]))"));
+                () -> scalar("SELECT intset_out(setMake(ARRAY[1, CAST(NULL AS INT)]))"));
         // An array of fixed-size values reaches MEOS as the contiguous C array it reads
         assertEquals("{[1, 3), [5, 7)}", scalar("SELECT intspanset_out(spanset(ARRAY["
                 + "intspan_in('[5, 7)'), intspan_in('[1, 3)')]))"));
-        assertEquals(2, scalar("SELECT numValues(`set`(ARRAY[npoint_in('NPoint(1, 0.5)'), "
+        assertEquals(2, scalar("SELECT numValues(setMake(ARRAY[npoint_in('NPoint(1, 0.5)'), "
                 + "npoint_in('NPoint(2, 0.3)'), npoint_in('NPoint(1, 0.5)')]))"));
-        assertEquals(2, scalar("SELECT numValues(`set`(ARRAY[cbuffer_in('Cbuffer(Point(1 1), 0.5)'), "
+        assertEquals(2, scalar("SELECT numValues(setMake(ARRAY[cbuffer_in('Cbuffer(Point(1 1), 0.5)'), "
                 + "cbuffer_in('Cbuffer(Point(2 2), 1)')]))"));
     }
 
     @Test
     void setReturningRowsUnfoldThroughCrossJoinUnnest() throws Exception {
         // A set-returning function answers its rows as an array, which CROSS JOIN UNNEST
-        // unfolds; `unnest` is a keyword Flink's parser takes only quoted.
+        // unfolds: setUnnest over a set, temporalUnnest over a temporal value.
         String one = "(VALUES (1)) AS s(x) CROSS JOIN UNNEST(";
-        List<Row> elems = rows("SELECT v FROM " + one + "`unnest`(`set`(ARRAY[3, 1, 2]))) AS u(v)");
+        List<Row> elems = rows("SELECT v FROM " + one + "setUnnest(setMake(ARRAY[3, 1, 2]))) AS u(v)");
         assertEquals(List.of(1, 2, 3), elems.stream().map(r -> r.getField(0)).toList());
-        // unnest of a tint: one row per distinct value, with the time it holds that value
+        // temporalUnnest of a tint: one row per distinct value, with the time it holds that value
         String tint = "tintFromHexWKB('" + TInt.encode(GeneratedFunctions.tint_in(
                 "[1@2020-01-01 00:00:00+00, 2@2020-01-02 00:00:00+00, 1@2020-01-03 00:00:00+00]"))
                 + "')";
-        List<Row> values = rows("SELECT v FROM " + one + "`unnest`(" + tint + ")) AS u(v, t)");
+        List<Row> values = rows("SELECT v FROM " + one + "temporalUnnest(" + tint + ")) AS u(v, t)");
         assertEquals(List.of(1, 2), values.stream().map(r -> (Integer) r.getField(0)).sorted().toList());
         // timeSplit by a day from the first instant, the upper border included as in SQL:
         // the fragments of the two days and the instant on the last border
