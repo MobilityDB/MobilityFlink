@@ -352,6 +352,56 @@ class GeneratedSqlSurfaceTest {
         }
     }
 
+    /** The text of an aggregate over the SQL literals given, as #aggregateCall reads one over
+     * typed values. */
+    private static String baseAggregate(TableEnvironment env, String agg, String... values)
+            throws Exception {
+        StringBuilder rows = new StringBuilder();
+        for (String v : values) {
+            rows.append(rows.length() == 0 ? "" : ", ").append("(").append(v).append(")");
+        }
+        List<Row> out = new ArrayList<>();
+        try (CloseableIterator<Row> it = env.executeSql("SELECT asText(" + agg + "(v)) FROM (VALUES "
+                + rows + ") AS t(v)").collect()) {
+            it.forEachRemaining(out::add);
+        }
+        return (String) out.get(out.size() - 1).getField(0);
+    }
+
+    @Test
+    void baseValueAggregatesAnswerWhatMobilityDBAnswers() throws Exception {
+        // What MobilityDB answers for the same aggregate over the same values with the time zone
+        // set to UTC, in a streaming job and in a batch job of two phases, the twin of
+        // MobilitySpark's test; day1, day2 and day3 are three consecutive days at UTC.
+        TableEnvironment batch = TableEnvironment.create(EnvironmentSettings.inBatchMode());
+        batch.getConfig().set("table.optimizer.agg-phase-strategy", "TWO_PHASE");
+        MobilityFlinkSql.registerAll(batch);
+        String day1 = "TO_TIMESTAMP_LTZ(978307200000, 3)";
+        String day2 = "TO_TIMESTAMP_LTZ(978393600000, 3)";
+        String day3 = "TO_TIMESTAMP_LTZ(978480000000, 3)";
+        for (TableEnvironment env : new TableEnvironment[] {tEnv, batch}) {
+            assertEquals("{1, 2, 3}", baseAggregate(env, "setUnionAgg", "3", "1", "2", "1"));
+            assertEquals("{10, 20, 30}", baseAggregate(env, "setUnionAgg",
+                "CAST(30 AS BIGINT)", "CAST(10 AS BIGINT)", "CAST(20 AS BIGINT)"));
+            assertEquals("{1.5, 2.5}", baseAggregate(env, "setUnionAgg",
+                "CAST(2.5 AS DOUBLE)", "CAST(1.5 AS DOUBLE)", "CAST(2.5 AS DOUBLE)"));
+            assertEquals("{\"a\", \"b\"}", baseAggregate(env, "setUnionAgg", "'b'", "'a'", "'b'"));
+            assertEquals("{2001-01-01, 2001-01-03}", baseAggregate(env, "setUnionAgg",
+                "DATE '2001-01-03'", "DATE '2001-01-01'"));
+            assertEquals("{\"2001-01-01 00:00:00+00\", \"2001-01-03 00:00:00+00\"}",
+                baseAggregate(env, "setUnionAgg", day3, day1));
+            assertEquals("[1, 4)", baseAggregate(env, "extent", "3", "1", "2"));
+            assertEquals("[10, 31)", baseAggregate(env, "extent", "CAST(30 AS BIGINT)", "CAST(10 AS BIGINT)"));
+            assertEquals("[1.5, 2.5]", baseAggregate(env, "extent", "CAST(2.5 AS DOUBLE)", "CAST(1.5 AS DOUBLE)"));
+            assertEquals("[2001-01-01, 2001-01-04)", baseAggregate(env, "extent",
+                "DATE '2001-01-03'", "DATE '2001-01-01'"));
+            assertEquals("[2001-01-01 00:00:00+00, 2001-01-03 00:00:00+00]",
+                baseAggregate(env, "extent", day3, day1));
+            assertEquals("{1@2001-01-01 00:00:00+00, 2@2001-01-02 00:00:00+00}",
+                baseAggregate(env, "tCount", day2, day1, day2));
+        }
+    }
+
     @Test
     void aggregatesAnswerWhatMobilityDBAnswers() throws Exception {
         // What MobilityDB answers for the same aggregate over the same values with the time zone
