@@ -609,4 +609,27 @@ class GeneratedSqlSurfaceTest {
         assertEquals(6.0, cells.getField(4));
         assertEquals(-9999.0, cells.getField(5));
     }
+
+    @Test
+    void anArrayOfTextsOrOfCellsCrossesAsTheCArrayMeosReads() throws Exception {
+        // MobilityDB answers 1, true and false over this document and these keys, and sorts
+        // the set of the two cells, 8a1fa4418c6ffff first
+        String doc = "jsonbFromText('{\"a\":{\"b\":1},\"c\":2}')";
+        assertEquals("1", scalar("SELECT asText(jsonbExtractPath(" + doc + ", ARRAY['a', 'b']))"));
+        assertEquals(true, scalar("SELECT jsonbExistsAny(" + doc + ", ARRAY['b', 'c'])"));
+        assertEquals(false, scalar("SELECT jsonbExistsAll(" + doc + ", ARRAY['b', 'c'])"));
+        String cells = "setMake(ARRAY[h3indexFromText('8a1fa44192affff'), "
+            + "h3indexFromText('8a1fa4418c6ffff')])";
+        assertEquals(2, scalar("SELECT numValues(" + cells + ")"));
+        assertEquals("8a1fa4418c6ffff", scalar("SELECT asText(getValues(" + cells + ")[1])"));
+    }
+
+    @Test
+    void anArrayAsLongAsItsInputAnswersOneValuePerInputValue() throws Exception {
+        // MobilityDB rounds the two values to 1.2 and 5.7, one per value of the array
+        String rounded = "floatRound(ARRAY[tfloatFromText('1.234@2020-01-01'), "
+            + "tfloatFromText('5.678@2020-01-02')], 1)";
+        assertEquals(2, scalar("SELECT CARDINALITY(" + rounded + ")"));
+        assertEquals(5.7, scalar("SELECT startValue(" + rounded + "[2])"));
+    }
 }
