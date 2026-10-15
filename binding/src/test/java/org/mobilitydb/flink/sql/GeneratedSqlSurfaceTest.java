@@ -477,4 +477,27 @@ class GeneratedSqlSurfaceTest {
         assertEquals(v, back);
         assertEquals(20000, GeneratedFunctions.temporal_num_instants(back.decode()));
     }
+
+    @Test
+    void aRasterDerivedByArithmeticIsReadAlongATrip() throws Exception {
+        // A 3x3 32BF depth raster in SRID 4326 holding 10, 20, 30 / 40, 50, 60 / 70, 80, 90,
+        // as PostGIS's ST_AsHexWKB writes it.
+        String depth = "rasterFromHexWKB('0100000100000000000000F03F000000000000F0BF0000000000000000"
+            + "000000000000084000000000000000000000000000000000E6100000030003000A000000000000204100"
+            + "00A0410000F04100002042000048420000704200008C420000A0420000B442')";
+        String trip = "tgeompointFromText('SRID=4326;[POINT(0.5 2.5)@2001-01-01, "
+            + "POINT(2.5 2.5)@2001-01-02, POINT(0.5 0.5)@2001-01-03]')";
+        // The clearance of a vessel of draught 8.5, as MobilityDB answers rasterValue(trip,
+        // depth - 8.5) in its raster regression test.
+        assertEquals("Interp=Step;[1.5@2001-01-01 00:00:00+00, 11.5@2001-01-01 06:00:00+00, "
+            + "21.5@2001-01-01 18:00:00+00, 41.5@2001-01-02 06:00:00+00, "
+            + "61.5@2001-01-02 18:00:00+00, 61.5@2001-01-03 00:00:00+00]",
+            scalar("SELECT asText(rasterValue(" + trip + ", rasterSub(" + depth
+                + ", CAST(8.5 AS DOUBLE))))"));
+        String read = (String) scalar("SELECT asText(rasterValue(" + trip + ", " + depth + "))");
+        assertEquals(read, scalar("SELECT asText(rasterValue(" + trip + ", rasterDiv(rasterAdd("
+            + depth + ", " + depth + "), CAST(2.0 AS DOUBLE))))"));
+        assertEquals(read, scalar("SELECT asText(rasterValue(" + trip + ", rasterDiv(rasterMul("
+            + depth + ", " + depth + "), " + depth + ")))"));
+    }
 }
