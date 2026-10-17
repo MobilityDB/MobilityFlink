@@ -214,7 +214,7 @@ class GeneratedSqlSurfaceTest {
                 () -> scalar("SELECT intset_out(setMake(ARRAY[1, CAST(NULL AS INT)]))"));
         // An array of fixed-size values reaches MEOS as the contiguous C array it reads
         assertEquals("{[1, 3), [5, 7)}", scalar("SELECT intspanset_out(spanset(ARRAY["
-                + "intspan_in('[5, 7)'), intspan_in('[1, 3)')]))"));
+                + "intspan_in('[1, 3)'), intspan_in('[5, 7)')]))"));
         assertEquals(2, scalar("SELECT numValues(setMake(ARRAY[npoint_in('NPoint(1, 0.5)'), "
                 + "npoint_in('NPoint(2, 0.3)'), npoint_in('NPoint(1, 0.5)')]))"));
         assertEquals(2, scalar("SELECT numValues(setMake(ARRAY[cbuffer_in('Cbuffer(Point(1 1), 0.5)'), "
