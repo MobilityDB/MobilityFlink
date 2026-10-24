@@ -22,7 +22,7 @@ jobs:
 
   # ── Linux ────────────────────────────────────────────────────────────────────
   linux:
-    name: Build and test — Linux (Java 21 / Flink 2.0)
+    name: Build and test — Linux (Java 21 / Flink 2.1)
     runs-on: ubuntu-latest
 
     steps:
