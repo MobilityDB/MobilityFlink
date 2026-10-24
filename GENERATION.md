@@ -68,11 +68,16 @@ each overload an `accumulate` method, run from the public MEOS function of each 
 aggregate states: the transition folds a value into the state, the combine joins two partial
 states, and the final answers the result. The accumulator, `MeosAggState`, holds the bytes of the
 state, those the serialize function writes and the deserialize function reads, or the form the
-codec of the state's type writes (the box of `extent`), never a native pointer. An aggregate
-taking one value with a combine is generated; the others (`appendInstant`, the `w*` window
-aggregates) are counted in the generator's report. A name a scalar function carries goes to the
-scalar, the aggregate taking the `Agg` name the catalog states (`mergeAgg`, `tMinAgg`) or the
-suffix (`tAndAgg`, `setUnionAgg`).
+codec of the state's type writes (the box of `extent`), never a native pointer. An aggregate is
+generated when it takes a value of a type the surface holds or a base value, each further argument
+a value, an interval (the window of `wCount`), a text (the interpolation of `appendInstantAgg`) or
+a float. An aggregate stating no combine (`appendInstantAgg`, the `w*` window aggregates) folds
+its gathered rows in the order of the start timestamp of its first argument
+(`temporal_start_timestamptz`). The aggregates over rasters (`rasterUnion`, `sameAlignmentAgg`,
+`summaryStatsAgg`) take a type the surface does not hold and are counted in the generator's
+report. An aggregate whose name a scalar function also carries is registered under the name the
+catalog states for it, `altSqlName` (`mergeAgg`, `tMinAgg`, `tAndAgg`), every other one under its
+own.
 
 `org.mobilitydb.flink.sql.MobilityFlinkSql.registerAll(tEnv)` registers every function as a
 catalog function under its MobilityDB SQL name. A Flink built-in of the same name (`lower`,
