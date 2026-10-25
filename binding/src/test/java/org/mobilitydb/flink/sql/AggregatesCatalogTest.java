@@ -31,7 +31,12 @@ import java.nio.file.Paths;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import org.apache.flink.table.api.EnvironmentSettings;
 import org.apache.flink.table.api.TableEnvironment;
@@ -69,7 +74,6 @@ class AggregatesCatalogTest {
     }
 
     /** The last row of the query, a grouped query's final answer. */
-    /** The query's last row, the one a streaming aggregate settles on. */
     private static Row row(String sql) throws Exception {
         List<Row> out = new ArrayList<>();
         try (CloseableIterator<Row> it = tEnv.executeSql(sql).collect()) {
@@ -84,6 +88,56 @@ class AggregatesCatalogTest {
 
     private static String answer(String sql) throws Exception {
         return (String) value(sql);
+    }
+
+    /** A case of #OVERLOADS: the expression it answers and the rows it aggregates. */
+    private static final Pattern CASE = Pattern.compile("SELECT (.*?) FROM (\\(.*\\))", Pattern.DOTALL);
+
+    /** The answer of each query of #OVERLOADS, or the exception it raised. */
+    private static Map<String, Object> answers;
+
+    /** The answers of the queries of #OVERLOADS, the queries over the same rows evaluated as the
+     * columns of one query, since each query is a job the mini-cluster plans and submits, as
+     * TopologicalPositionSurfaceTest#answerBoolean shares them; a query that fails is run again
+     * query by query through #answer, so each case answers or fails alone. */
+    private static synchronized Map<String, Object> answers() {
+        if (answers != null) {
+            return answers;
+        }
+        Map<String, List<String>> bySource = new LinkedHashMap<>();
+        for (String[] c : OVERLOADS) {
+            Matcher m = CASE.matcher(c[1]);
+            bySource.computeIfAbsent(m.matches() ? m.group(2) : c[1], k -> new ArrayList<>()).add(c[1]);
+        }
+        answers = new HashMap<>();
+        for (Map.Entry<String, List<String>> e : bySource.entrySet()) {
+            List<String> qs = e.getValue();
+            if (qs.size() > 1) {
+                List<String> exprs = new ArrayList<>();
+                for (String q : qs) {
+                    Matcher m = CASE.matcher(q);
+                    m.matches();
+                    exprs.add(m.group(1));
+                }
+                try {
+                    Row r = row("SELECT " + String.join(", ", exprs) + " FROM " + e.getKey());
+                    for (int i = 0; i < qs.size(); i++) {
+                        answers.put(qs.get(i), r.getField(i));
+                    }
+                    continue;
+                } catch (Exception shared) {
+                    // each query of the group answers or fails alone below
+                }
+            }
+            for (String q : qs) {
+                try {
+                    answers.put(q, answer(q));
+                } catch (Exception x) {
+                    answers.put(q, x);
+                }
+            }
+        }
+        return answers;
     }
 
     /** Each aggregate name of the catalog the surface registers, registered. */
@@ -928,7 +982,13 @@ class AggregatesCatalogTest {
     @TestFactory
     Stream<DynamicTest> theOverloadAnswersWhatMobilityDBAnswers() {
         return Stream.of(OVERLOADS)
-            .map(c -> DynamicTest.dynamicTest(c[0], () -> assertEquals(c[2], answer(c[1]))));
+            .map(c -> DynamicTest.dynamicTest(c[0], () -> {
+                Object a = answers().get(c[1]);
+                if (a instanceof Exception) {
+                    throw (Exception) a;
+                }
+                assertEquals(c[2], a);
+            }));
     }
 
     /** Each overload of summaryStatsAgg: its query over the two rasters of the raster cases
