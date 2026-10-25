@@ -306,11 +306,55 @@ class TopologicalPositionSurfaceTest {
         assertTrue(missing.isEmpty(), "topological names not registered: " + missing);
     }
 
+    /** The first line of the innermost cause of a failed call. */
+    private static String rootMessage(Exception e) {
+        Throwable root = e;
+        while (root.getCause() != null) {
+            root = root.getCause();
+        }
+        return String.valueOf(root.getMessage()).split("\n")[0];
+    }
+
+    /** The calls one query evaluates: each query is a job on the mini-cluster, whose planning and
+     * submission cost far more than a call, so the calls share their jobs. */
+    private static final int CALLS_PER_QUERY = 100;
+
+    /** The failures of the calls {@code exprs}, evaluated as the columns of one query, each call
+     * of a failing query then named by a query of its own, read by #scalar. No test of the
+     * surface evaluates several calls in one query; this extends #scalar, which reads one. */
+    private static List<String> answerBoolean(List<String> exprs) {
+        List<String> failures = new ArrayList<>();
+        try (CloseableIterator<Row> it =
+                tEnv.executeSql("SELECT " + String.join(", ", exprs)).collect()) {
+            Row row = it.next();
+            for (int i = 0; i < exprs.size(); i++) {
+                if (!(row.getField(i) instanceof Boolean)) {
+                    failures.add("SELECT " + exprs.get(i) + " -> " + row.getField(i));
+                }
+            }
+            return failures;
+        } catch (Exception shared) {
+            for (String expr : exprs) {
+                String sql = "SELECT " + expr;
+                try {
+                    Object answer = scalar(sql);
+                    if (!(answer instanceof Boolean)) {
+                        failures.add(sql + " -> " + answer);
+                    }
+                } catch (Exception e) {
+                    failures.add(sql + " -> " + rootMessage(e));
+                }
+            }
+            return failures;
+        }
+    }
+
     @Test
     void everyOverloadAnswersUnquoted() throws Exception {
         Set<String> names = familyNames();
         int calls = 0;
         List<String> failures = new ArrayList<>();
+        List<String> exprs = new ArrayList<>();
         for (String name : names) {
             Matcher m = FAMILY.matcher(name);
             assertTrue(m.matches());
@@ -321,23 +365,17 @@ class TopologicalPositionSurfaceTest {
                     continue;
                 }
                 Class<?>[] p = eval.getParameterTypes();
-                String sql = name + Arrays.toString(p);
                 try {
-                    sql = "SELECT " + name + "(" + arg(p[0], p[1], z) + ", "
-                            + arg(p[1], p[0], z) + ")";
-                    Object answer = scalar(sql);
-                    if (!(answer instanceof Boolean)) {
-                        failures.add(sql + " -> " + answer);
-                    }
+                    exprs.add(name + "(" + arg(p[0], p[1], z) + ", " + arg(p[1], p[0], z) + ")");
                 } catch (Exception e) {
-                    Throwable root = e;
-                    while (root.getCause() != null) {
-                        root = root.getCause();
-                    }
-                    failures.add(sql + " -> " + String.valueOf(root.getMessage()).split("\n")[0]);
+                    failures.add(name + Arrays.toString(p) + " -> " + rootMessage(e));
                 }
                 calls++;
             }
+        }
+        for (int i = 0; i < exprs.size(); i += CALLS_PER_QUERY) {
+            failures.addAll(answerBoolean(
+                    exprs.subList(i, Math.min(i + CALLS_PER_QUERY, exprs.size()))));
         }
         assertTrue(calls > 0, "no overload of the two families is registered");
         assertTrue(failures.isEmpty(), failures.size() + " of " + calls
