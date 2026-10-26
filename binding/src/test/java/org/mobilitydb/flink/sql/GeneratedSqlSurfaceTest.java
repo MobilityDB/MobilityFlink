@@ -552,4 +552,61 @@ class GeneratedSqlSurfaceTest {
         assertEquals(-9999.0, scalar("SELECT rasterBandNoDataValue(addBand(" + empty
             + ", 1, '32BF', CAST(0.0 AS DOUBLE), CAST(-9999.0 AS DOUBLE)), 1)"));
     }
+
+    @Test
+    void theRowsAndTheValuesOfARasterAreTheOnesMobilityDBAnswers() throws Exception {
+        // The rasters of MobilityDB's raster regression test, each a 32BF band with nodata
+        // -9999 built from its pixels, row by row and little-endian, and the answers it states.
+        String grid3x3 = "3, 3, CAST(0.0 AS DOUBLE), CAST(3.0 AS DOUBLE), CAST(1.0 AS DOUBLE), "
+            + "CAST(-1.0 AS DOUBLE), CAST(0.0 AS DOUBLE), CAST(0.0 AS DOUBLE), 4326, '32BF', "
+            + "CAST(-9999.0 AS DOUBLE)";
+        String one = "(VALUES (1)) AS s(k) CROSS JOIN UNNEST(";
+        // Three regions and a nodata pixel: 1, 1, 2 / 1, 2, 2 / 3, 3, nodata.
+        String regions = "raster(X'0000803F0000803F000000400000803F00000040000000400000404000004040"
+            + "003C1CC6', " + grid3x3 + ")";
+        List<Row> grouped = rows("SELECT COUNT(*), SUM(val), SUM(area(geom)) FROM " + one
+            + "dumpAsPolygons(" + regions + ")) AS u(geom, val)");
+        Row polygons = grouped.get(grouped.size() - 1);
+        assertEquals(3L, polygons.getField(0));
+        assertEquals(6.0, polygons.getField(1));
+        assertEquals(8.0, polygons.getField(2));
+        assertEquals(4, scalar("SELECT CARDINALITY(dumpAsPolygons(" + regions + ", 1, false))"));
+        // 1.24, 1.26, nodata / 2, 2, 2 / 3, 1.24, 2: the values 2 and 7 searched.
+        String counts = "raster(X'52B89E3FAE47A13F003C1CC60000004000000040000000400000404052B89E3F"
+            + "00000040', " + grid3x3 + ")";
+        List<Row> searched = rows("SELECT v, c FROM " + one + "valueCount(" + counts + ", 1, true, "
+            + "ARRAY[CAST(2.0 AS DOUBLE), CAST(7.0 AS DOUBLE)], CAST(0.0 AS DOUBLE))) AS u(v, c)");
+        searched.sort(java.util.Comparator.comparing(r -> (Double) r.getField(0)));
+        assertEquals(2, searched.size());
+        assertEquals(2.0, searched.get(0).getField(0));
+        assertEquals(4, searched.get(0).getField(1));
+        assertEquals(7.0, searched.get(1).getField(0));
+        assertEquals(0, searched.get(1).getField(1));
+        // A 3x2 raster over 2x1 pixels from (10, 20) in SRID 3857: 1.5, nodata, 3 / 4, 5, 6.
+        String pixels = "raster(X'0000C03F003C1CC600004040000080400000A0400000C040', 3, 2, "
+            + "CAST(10.0 AS DOUBLE), CAST(20.0 AS DOUBLE), CAST(2.0 AS DOUBLE), CAST(-1.0 AS DOUBLE), "
+            + "CAST(0.0 AS DOUBLE), CAST(0.0 AS DOUBLE), 3857, '32BF', CAST(-9999.0 AS DOUBLE))";
+        List<Row> points = rows("SELECT asHexEWKB(geom), val, x, y FROM " + one + "pixelAsPoints("
+            + pixels + ")) AS u(geom, val, x, y)");
+        points.sort(java.util.Comparator.comparing((Row r) -> (Integer) r.getField(3))
+            .thenComparing(r -> (Integer) r.getField(2)));
+        assertEquals(5, points.size());
+        assertEquals("0101000020110F000000000000000024400000000000003440",
+            ((String) points.get(0).getField(0)).toUpperCase());
+        assertEquals(1.5, points.get(0).getField(1));
+        assertEquals(List.of(1, 1), List.of(points.get(0).getField(2), points.get(0).getField(3)));
+        assertEquals(6.0, points.get(4).getField(1));
+        assertEquals(List.of(3, 2), List.of(points.get(4).getField(2), points.get(4).getField(3)));
+        // {{1.5,NULL,3},{4,5,6}}, and {{1.5,-9999,3},{4,5,6}} with the nodata pixels kept.
+        String values = "dumpValues(" + pixels + ", 1)";
+        Row cells = rows("SELECT CARDINALITY(" + values + "), CARDINALITY(" + values + "[1]), "
+            + values + "[1][2] IS NULL, " + values + "[1][1], " + values + "[2][3], dumpValues("
+            + pixels + ", 1, false)[1][2]").get(0);
+        assertEquals(2, cells.getField(0));
+        assertEquals(3, cells.getField(1));
+        assertEquals(true, cells.getField(2));
+        assertEquals(1.5, cells.getField(3));
+        assertEquals(6.0, cells.getField(4));
+        assertEquals(-9999.0, cells.getField(5));
+    }
 }
