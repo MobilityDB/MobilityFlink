@@ -1008,6 +1008,27 @@ class AggregatesCatalogTest {
 
     @TestFactory
     Stream<DynamicTest> theSummaryAnswersWhatMobilityDBAnswers() {
+        return Stream.concat(summaries(), nodata());
+    }
+
+    /** A band whose every pixel is nodata counts nothing: MobilityDB answers (0,,,,,) for
+     * summaryStats and summaryStatsAgg, and the accessors 0 and NULL. */
+    private static Stream<DynamicTest> nodata() {
+        String h = "0100000100000000000000F03F000000000000F0BF0000000000000000000000000000084000000000000000000000000000000000E6100000030003004A003C1CC6003C1CC6003C1CC6003C1CC6003C1CC6003C1CC6003C1CC6003C1CC6003C1CC6003C1CC6";
+        String acc = "SELECT summarystatsCount(s), summarystatsSum(s), summarystatsMean(s), summarystatsStddev(s), summarystatsMin(s), summarystatsMax(s) FROM ";
+        return Stream.of(
+                acc + "(SELECT summaryStats(rasterFromHexWKB('" + h + "')) AS s)",
+                acc + "(SELECT summaryStatsAgg(v, true) AS s FROM (SELECT rasterFromHexWKB(s) AS v FROM (VALUES ('" + h + "'), ('" + h + "')) AS t(s)))")
+            .map(q -> DynamicTest.dynamicTest("nodata " + q.substring(q.lastIndexOf("summaryStats"), q.lastIndexOf("summaryStats") + 15), () -> {
+                Row got = row(q);
+                assertEquals(0L, ((Number) got.getField(0)).longValue(), q);
+                for (int i = 1; i < 6; i++) {
+                    assertEquals(null, got.getField(i), "field " + i);
+                }
+            }));
+    }
+
+    private static Stream<DynamicTest> summaries() {
         return Stream.of(SUMMARIES)
             .map(c -> DynamicTest.dynamicTest((String) c[0], () -> {
                 double[] expected = (double[]) c[2];
