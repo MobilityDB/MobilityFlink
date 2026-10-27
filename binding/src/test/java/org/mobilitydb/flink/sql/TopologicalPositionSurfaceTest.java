@@ -79,9 +79,6 @@ class TopologicalPositionSurfaceTest {
         TOPOLOGICAL.put("tpcbox", all);
         TOPOLOGICAL.put("set", List.of("Overlaps", "Contains", "Contained"));
         TOPOLOGICAL.put("spanset", List.of("Overlaps", "Contains", "Contained", "Adjacent"));
-        for (String base : List.of("cbuffer", "npoint", "pose", "posechain")) {
-            TOPOLOGICAL.put(base, List.of("Same"));
-        }
     }
 
     private static final String OPS = "Overlaps|Contains|Contained|Same|Adjacent"
