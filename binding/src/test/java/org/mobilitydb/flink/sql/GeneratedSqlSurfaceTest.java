@@ -96,6 +96,18 @@ class GeneratedSqlSurfaceTest {
     }
 
     @Test
+    void aDecimalReachesTheOverloadTakingAFloat() throws Exception {
+        // PostgreSQL's tbox(numeric) is the box of the number as a float, which a decimal
+        // reaches here by Flink's implicit cast to the overload taking a double, as the
+        // literal 1.5 does
+        Row r = rows("SELECT asText(tbox(CAST(1.5 AS DOUBLE))), "
+                + "asText(tbox(CAST(1.5 AS DECIMAL(2,1)))), asText(tbox(1.5))").get(0);
+        assertEquals("TBOXFLOAT X([1.5, 1.5])", r.getField(0));
+        assertEquals(r.getField(0), r.getField(1));
+        assertEquals(r.getField(0), r.getField(2));
+    }
+
+    @Test
     void timeValuesCrossAsFlinkTypes() throws Exception {
         assertEquals(Duration.ofHours(48), scalar("SELECT duration(" + tfloat + ")"));
         assertEquals(Instant.parse("2020-01-01T00:00:00Z"),
