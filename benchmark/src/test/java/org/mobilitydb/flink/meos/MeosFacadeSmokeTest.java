@@ -54,7 +54,7 @@ class MeosFacadeSmokeTest {
     void coreIntspan() {
         Pointer span = MeosOpsIntSpan.intspan_in("[1, 5)");
         assertNotNull(span);
-        String out = MeosOpsIntSpan.intspan_out(span);
+        String out = MeosOpsSpan.span_out(span, 0);
         assertTrue(out.contains("1") && out.contains("5"));
     }
 

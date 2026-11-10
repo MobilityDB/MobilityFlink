@@ -214,7 +214,7 @@ class GeneratedSqlSurfaceTest {
 
     @Test
     void arraysCrossAsFlinkArrays() throws Exception {
-        assertEquals("{1, 2, 3}", scalar("SELECT intset_out(setMake(ARRAY[3, 1, 2]))"));
+        assertEquals("{1, 2, 3}", scalar("SELECT asText(setMake(ARRAY[3, 1, 2]))"));
         assertEquals(Instant.parse("2020-01-01T00:00:00Z"), scalar("SELECT startValue(setMake(ARRAY["
                 + "TO_TIMESTAMP_LTZ(1577923200000, 3), TO_TIMESTAMP_LTZ(1577836800000, 3)]))"));
         String origin = tgeompoint("[Point(0 0)@2020-01-01, Point(0 0)@2020-01-02]");
@@ -224,9 +224,9 @@ class GeneratedSqlSurfaceTest {
         assertEquals(1.0, scalar("SELECT minDistance(ARRAY[" + origin + "], ARRAY[" + far + ", "
                 + near + "])"));
         assertThrows(Exception.class,
-                () -> scalar("SELECT intset_out(setMake(ARRAY[1, CAST(NULL AS INT)]))"));
+                () -> scalar("SELECT asText(setMake(ARRAY[1, CAST(NULL AS INT)]))"));
         // An array of fixed-size values reaches MEOS as the contiguous C array it reads
-        assertEquals("{[1, 3), [5, 7)}", scalar("SELECT intspanset_out(spanset(ARRAY["
+        assertEquals("{[1, 3), [5, 7)}", scalar("SELECT asText(spanset(ARRAY["
                 + "intspan_in('[1, 3)'), intspan_in('[5, 7)')]))"));
         assertEquals(2, scalar("SELECT numValues(setMake(ARRAY[npoint_in('NPoint(1, 0.5)'), "
                 + "npoint_in('NPoint(2, 0.3)'), npoint_in('NPoint(1, 0.5)')]))"));
@@ -468,7 +468,7 @@ class GeneratedSqlSurfaceTest {
         assertEquals("{[1@2001-01-01 00:00:00+00, 2@2001-01-02 00:00:00+00), "
             + "[2.5@2001-01-02 00:00:00+00, 3.5@2001-01-03 00:00:00+00], "
             + "(4@2001-01-03 00:00:00+00, 5@2001-01-04 00:00:00+00]}",
-            GeneratedFunctions.tfloat_out(((TFloat) avg.getValue(a)).decode(), 15));
+            GeneratedFunctions.temporal_out(((TFloat) avg.getValue(a)).decode(), 15));
     }
 
     @Test

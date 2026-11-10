@@ -42,9 +42,9 @@ class MeosNpointSmokeTest {
 
     @Test
     void npoint() {
-        Pointer np = MeosOpsNpoint.npoint_make(1, 0.5);
+        Pointer np = MeosOpsNPoint.npoint_make(1, 0.5);
         assertNotNull(np);
-        assertEquals(1, MeosOpsNpoint.npoint_route(np));
-        assertEquals(0.5, MeosOpsNpoint.npoint_position(np), 1e-9);
+        assertEquals(1, MeosOpsNPoint.npoint_route(np));
+        assertEquals(0.5, MeosOpsNPoint.npoint_position(np), 1e-9);
     }
 }
