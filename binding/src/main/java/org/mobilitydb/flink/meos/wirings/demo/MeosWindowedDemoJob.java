@@ -137,13 +137,13 @@ public final class MeosWindowedDemoJob {
                             Pointer agg = null;
                             int count = 0;
                             for (Tuple3<Integer, String, Long> evt : inWindowEvents) {
-                                Pointer evtTbox = MeosOpsTBox.tbox_in(evt.f1);
+                                Pointer evtTbox = MeosOpsTBox.tboxFromText(evt.f1);
                                 agg = (agg == null)
                                         ? evtTbox
                                         : MeosOpsFreeCore.union_tbox_tbox(agg, evtTbox, /*strict=*/false);
                                 count++;
                             }
-                            String aggWkt = (agg == null) ? "(empty)" : MeosOpsTBox.tbox_out(agg, 6);
+                            String aggWkt = (agg == null) ? "(empty)" : MeosOpsTBox.asText(agg, 6);
                             return Tuple4.of(ctx.getCurrentKey(), window.getStart(), count, aggWkt);
                         }))
                 .returns(org.apache.flink.api.common.typeinfo.TypeInformation.of(

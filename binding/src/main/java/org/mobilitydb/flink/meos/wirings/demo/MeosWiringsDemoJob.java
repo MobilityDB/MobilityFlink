@@ -107,7 +107,7 @@ public final class MeosWiringsDemoJob {
         // Stage 1: parse each WKT and re-serialize via tbox_out (stateless io-meta).
         DataStream<String> normalized = tboxWkts.map(
                 new MeosStatelessMap<String, String>(
-                        wkt -> MeosOpsTBox.tbox_out(MeosOpsTBox.tbox_in(wkt), 6)))
+                        wkt -> MeosOpsTBox.asText(MeosOpsTBox.tboxFromText(wkt), 6)))
                 .returns(Types.STRING);
 
         // Stage 2: filter to those overlapping the query box (stateless).
@@ -116,8 +116,8 @@ public final class MeosWiringsDemoJob {
         DataStream<String> overlapping = normalized.filter(
                 new MeosStatelessFilter<String>(
                         wkt -> MeosOpsFreeCore.overlaps_tbox_tbox(
-                                MeosOpsTBox.tbox_in(wkt),
-                                MeosOpsTBox.tbox_in(QUERY_TBOX_WKT))));
+                                MeosOpsTBox.tboxFromText(wkt),
+                                MeosOpsTBox.tboxFromText(QUERY_TBOX_WKT))));
 
         overlapping.print("overlapping-tbox");
 

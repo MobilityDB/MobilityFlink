@@ -114,19 +114,19 @@ public final class MeosBoundedStateDemoJob {
         DataStream<Tuple2<Integer, String>> runningUnion = keyed.process(
                 new MeosBoundedStateMap<Integer, Tuple2<Integer, String>, Tuple2<Integer, String>>(
                         /* serialize:   Pointer → byte[] */
-                        ptr -> MeosOpsTBox.tbox_out(ptr, 6).getBytes(StandardCharsets.UTF_8),
+                        ptr -> MeosOpsTBox.asText(ptr, 6).getBytes(StandardCharsets.UTF_8),
                         /* deserialize: byte[] → Pointer */
-                        bytes -> MeosOpsTBox.tbox_in(new String(bytes, StandardCharsets.UTF_8)),
+                        bytes -> MeosOpsTBox.tboxFromText(new String(bytes, StandardCharsets.UTF_8)),
                         /* step: (prior union, this event) → (new union, output) */
                         (prior, evt) -> {
-                            Pointer eventTbox = MeosOpsTBox.tbox_in(evt.f1);
+                            Pointer eventTbox = MeosOpsTBox.tboxFromText(evt.f1);
                             // First event for a key: prior is null — seed with the event's tbox.
                             // Subsequent events: union prior with the new event's tbox.
                             Pointer newUnion = (prior == null)
                                     ? eventTbox
                                     : MeosOpsFreeCore.union_tbox_tbox(prior, eventTbox, /*strict=*/false);
                             Tuple2<Integer, String> output =
-                                    Tuple2.of(evt.f0, MeosOpsTBox.tbox_out(newUnion, 6));
+                                    Tuple2.of(evt.f0, MeosOpsTBox.asText(newUnion, 6));
                             return new MeosBoundedStateMap.MeosStep<>(newUnion, output);
                         }))
                 .returns(org.apache.flink.api.common.typeinfo.TypeInformation.of(
