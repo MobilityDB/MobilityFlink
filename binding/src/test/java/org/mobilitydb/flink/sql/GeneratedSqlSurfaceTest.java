@@ -129,7 +129,7 @@ class GeneratedSqlSurfaceTest {
     @Test
     void textConstructorsAndOutput() throws Exception {
         String box = (String) scalar(
-                "SELECT asText(tbox_in('TBOXFLOAT XT([1, 2],[2020-01-01, 2020-01-02])'))");
+                "SELECT asText(tboxFromText('TBOXFLOAT XT([1, 2],[2020-01-01, 2020-01-02])'))");
         assertTrue(box.startsWith("TBOXFLOAT XT([1, 2]"), box);
     }
 
@@ -141,10 +141,10 @@ class GeneratedSqlSurfaceTest {
 
     @Test
     void aBuiltinNameStaysTheBuiltinsAndMeosTakesTheClassName() throws Exception {
-        assertThrows(Exception.class, () -> scalar("SELECT lower(floatspan_in('[1, 3]'))"));
+        assertThrows(Exception.class, () -> scalar("SELECT lower(floatspanFromText('[1, 3]'))"));
         assertThrows(Exception.class,
-                () -> scalar("SELECT default_database.`lower`(floatspan_in('[1, 3]'))"));
-        assertEquals(1.0, scalar("SELECT spanLower(floatspan_in('[1, 3]'))"));
+                () -> scalar("SELECT default_database.`lower`(floatspanFromText('[1, 3]'))"));
+        assertEquals(1.0, scalar("SELECT spanLower(floatspanFromText('[1, 3]'))"));
     }
 
     @Test
@@ -227,11 +227,11 @@ class GeneratedSqlSurfaceTest {
                 () -> scalar("SELECT asText(setMake(ARRAY[1, CAST(NULL AS INT)]))"));
         // An array of fixed-size values reaches MEOS as the contiguous C array it reads
         assertEquals("{[1, 3), [5, 7)}", scalar("SELECT asText(spanset(ARRAY["
-                + "intspan_in('[1, 3)'), intspan_in('[5, 7)')]))"));
-        assertEquals(2, scalar("SELECT numValues(setMake(ARRAY[npoint_in('NPoint(1, 0.5)'), "
-                + "npoint_in('NPoint(2, 0.3)'), npoint_in('NPoint(1, 0.5)')]))"));
-        assertEquals(2, scalar("SELECT numValues(setMake(ARRAY[cbuffer_in('Cbuffer(Point(1 1), 0.5)'), "
-                + "cbuffer_in('Cbuffer(Point(2 2), 1)')]))"));
+                + "intspanFromText('[1, 3)'), intspanFromText('[5, 7)')]))"));
+        assertEquals(2, scalar("SELECT numValues(setMake(ARRAY[npointFromText('NPoint(1, 0.5)'), "
+                + "npointFromText('NPoint(2, 0.3)'), npointFromText('NPoint(1, 0.5)')]))"));
+        assertEquals(2, scalar("SELECT numValues(setMake(ARRAY[cbufferFromText('Cbuffer(Point(1 1), 0.5)'), "
+                + "cbufferFromText('Cbuffer(Point(2 2), 1)')]))"));
     }
 
     @Test

@@ -141,8 +141,8 @@ public final class MeosCrossStreamDemoJob {
                               Tuple4<Integer, Integer, String, Long>,  // R
                               Tuple5<Integer, Integer, Integer, Long, Long>  // OUT: (region, vehA, vehB, lts, rts)
                               >((left, right, ctx) -> {
-                                  Pointer leftTbox  = MeosOpsTBox.tbox_in(left.f2);
-                                  Pointer rightTbox = MeosOpsTBox.tbox_in(right.f2);
+                                  Pointer leftTbox  = MeosOpsTBox.tboxFromText(left.f2);
+                                  Pointer rightTbox = MeosOpsTBox.tboxFromText(right.f2);
                                   if (MeosOpsFreeCore.overlaps_tbox_tbox(leftTbox, rightTbox)) {
                                       return Tuple5.of(left.f0, left.f1, right.f1,
                                                        ctx.getLeftTimestamp(), ctx.getRightTimestamp());

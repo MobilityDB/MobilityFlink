@@ -113,11 +113,11 @@ class MobilityDBModuleTest {
     void aBuiltinNameStaysTheBuiltinsBeforeOrAfterCore() throws Exception {
         // the module twin of GeneratedSqlSurfaceTest#aBuiltinNameStaysTheBuiltinsAndMeosTakesTheClassName
         TableEnvironment env = loaded();
-        assertThrows(Exception.class, () -> column(env, "SELECT lower(floatspan_in('[1, 3]'))"));
-        assertEquals(List.of(1.0), column(env, "SELECT spanLower(floatspan_in('[1, 3]'))"));
+        assertThrows(Exception.class, () -> column(env, "SELECT lower(floatspanFromText('[1, 3]'))"));
+        assertEquals(List.of(1.0), column(env, "SELECT spanLower(floatspanFromText('[1, 3]'))"));
         env.executeSql("USE MODULES mobilitydb, core");
-        assertThrows(Exception.class, () -> column(env, "SELECT lower(floatspan_in('[1, 3]'))"));
-        assertEquals(List.of(1.0), column(env, "SELECT spanLower(floatspan_in('[1, 3]'))"));
+        assertThrows(Exception.class, () -> column(env, "SELECT lower(floatspanFromText('[1, 3]'))"));
+        assertEquals(List.of(1.0), column(env, "SELECT spanLower(floatspanFromText('[1, 3]'))"));
     }
 
     @Test

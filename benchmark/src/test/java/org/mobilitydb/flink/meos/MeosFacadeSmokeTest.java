@@ -45,24 +45,24 @@ class MeosFacadeSmokeTest {
 
     @Test
     void coreTbox() {
-        Pointer tbox = MeosOpsTBox.tbox_in("TBOX X([1, 2])");
+        Pointer tbox = MeosOpsTBox.tboxFromText("TBOX X([1, 2])");
         assertNotNull(tbox);
-        assertTrue(MeosOpsTBox.tbox_out(tbox, 6).contains("TBOX"));
+        assertTrue(MeosOpsTBox.asText(tbox, 6).contains("TBOX"));
     }
 
     @Test
     void coreIntspan() {
-        Pointer span = MeosOpsIntSpan.intspan_in("[1, 5)");
+        Pointer span = MeosOpsIntSpan.intspanFromText("[1, 5)");
         assertNotNull(span);
-        String out = MeosOpsSpan.span_out(span, 0);
+        String out = MeosOpsSpan.asText(span, 0);
         assertTrue(out.contains("1") && out.contains("5"));
     }
 
     @Test
     void geoStbox() {
-        Pointer stbox = MeosOpsSTBox.stbox_in("STBOX X((1,1),(2,2))");
+        Pointer stbox = MeosOpsSTBox.stboxFromEWKT("STBOX X((1,1),(2,2))");
         assertNotNull(stbox);
-        assertTrue(MeosOpsSTBox.stbox_out(stbox, 6).contains("STBOX"));
+        assertTrue(MeosOpsSTBox.asEWKT(stbox, 6).contains("STBOX"));
     }
 
     @Test
