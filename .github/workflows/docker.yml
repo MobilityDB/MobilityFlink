@@ -69,7 +69,7 @@ jobs:
           path: jmeos
 
       - name: Stage the JVM generator JMEOS owns
-        run: cp jmeos/tools/codegen_jvm.py jmeos/tools/codegen_spark_udfs.py tools/
+        run: cp jmeos/tools/codegen_jvm.py tools/
 
       - name: Build + install the JMEOS jar as org.jmeos:meos:1.0
         run: |
