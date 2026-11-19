@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import functions.GeneratedFunctions;
 import types.temporal.TInterpolation;
+import org.mobilitydb.meos.TemporalPoints;
 
 /**
  * Query 5 - Trajectory Creation and High-Speed Alert (SNCB dataset)
@@ -139,7 +140,7 @@ public class Query5_Main {
 
         private static final Logger log = LoggerFactory.getLogger(HighSpeedAlertV1_WKT.class);
         private static final DateTimeFormatter TIMESTAMP_FMT =
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
+                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSxxx");
 
         private final String geofenceWkt;
         private final double geofenceDistMeters;
@@ -221,7 +222,7 @@ public class Query5_Main {
     }
 
     // =========================================================================
-    // V2: Geofence filter + tgeogpoint_in (instant) → temporal_append_tinstant
+    // V2: Geofence filter + tpointinst_make (instant) → temporal_append_tinstant
     // =========================================================================
 
     /**
@@ -280,11 +281,11 @@ public class Query5_Main {
             int count          = 0;
 
             for (SNCBData event : sorted) {
-                String wkt    = String.format("POINT(%f %f)@%s",
-                        event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
-                Pointer inst = GeneratedFunctions.tgeogpoint_in(wkt);
+                Pointer inst = TemporalPoints.tgeogpointInst(
+                        event.getLon(), event.getLat(), event.getTimestamp());
                 if (inst == null) {
-                    log.error("[V2] tgeogpoint_in returned null for DeviceID={} wkt={}", deviceId, wkt);
+                    log.error("[V2] tpointinst_make returned null for DeviceID={} at {}",
+                            deviceId, TemporalPoints.eventTime(event.getTimestamp()));
                     continue;
                 }
 
@@ -308,7 +309,8 @@ public class Query5_Main {
                     Pointer expanded = GeneratedFunctions.temporal_append_tinstant(
                             trajectory, inst, TInterpolation.LINEAR.getValue(), 0.0, null, true);
                     if (expanded == null) {
-                        log.error("[V2] temporal_append_tinstant returned null for DeviceID={} wkt={}", deviceId, wkt);
+                        log.error("[V2] temporal_append_tinstant returned null for DeviceID={} at {}",
+                                deviceId, TemporalPoints.eventTime(event.getTimestamp()));
                         continue;
                     }
                     trajectory = expanded;

@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
+import org.mobilitydb.meos.TemporalPoints;
 
 /**
  * Query 1 - High-Risk Zone Proximity Monitoring
@@ -274,7 +275,7 @@ public class Query1_Main {
             // Parse the INPolygons only once per worker.
             // geog_in(wkt, -1) creates a geography type (SRID=4326), so
             // edwithin_tgeo_geo computes distances geodetically in metres - consistent
-            // with the tgeogpoint created below via tgeogpoint_in.
+            // with the tgeogpoint created below.
             this.hazardZones = new Pointer[zoneWkt.length];
             for (int i = 0; i < zoneWkt.length; i++) {
                 hazardZones[i] = GeneratedFunctions.geog_in(zoneWkt[i], -1);
@@ -290,7 +291,7 @@ public class Query1_Main {
          *
          * <p><b>Paper Line 2</b> - {@code edwithin_tgeo_geo(lon, lat, ts, INPolygons, 20) == 1}:
          * <br>For each vessel event in the window, a {@code tgeogpoint} instant is constructed
-         * via {@code tgeogpoint_in} and tested against every INPolygon via
+         * at the event's time and tested against every INPolygon via
          * {@code edwithin_tgeo_geo}. A return value of {@code 1} means the vessel is within
          * {@link #distanceMeters} of the zone boundary - an alert is emitted.
          *
@@ -322,16 +323,14 @@ public class Query1_Main {
 
                 String ts = millisToTimestamp(event.getTimestamp());
 
-                // Build a temporal geography point instant: "POINT(lon lat)@timestamp".
-                // tgeogpoint_in (not tgeompoint_in) is critical: tgeompoint_in would create
-                // a SRID=0 geometry, causing a MEOS crash on SRID mismatch with the
+                // Build a temporal geography point instant at the event's time.
+                // A geography (not a geometry) point is critical: a geometry point would
+                // have SRID=0, causing a MEOS crash on SRID mismatch with the
                 // SRID=4326 geography zone above.
-                String tpointWkt = String.format(
-                        "POINT(%f %f)@%s", event.getLon(), event.getLat(), ts);
-
-                Pointer tpoint = GeneratedFunctions.tgeogpoint_in(tpointWkt);
+                Pointer tpoint = TemporalPoints.tgeogpointInst(
+                        event.getLon(), event.getLat(), event.getTimestamp());
                 if (tpoint == null) {
-                    log.error("tgeogpoint_in returned null for WKT: {}", tpointWkt);
+                    log.error("tpointinst_make returned null at ts={}", ts);
                     continue;
                 }
 

@@ -32,6 +32,8 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
+import org.mobilitydb.meos.TemporalPoints;
+import types.temporal.TInterpolation;
 
 /**
  * Query 8 - Trajectory Denoising with Extended Kalman Filter (SNCB dataset)
@@ -151,22 +153,19 @@ public class Query8_Main {
 
             double[][] smoothedEnu = applyEkf(rawEnu, sorted, q, variance, gate, dropOutliers);
 
-            StringBuilder rawSeq      = new StringBuilder("{");
-            StringBuilder smoothedSeq = new StringBuilder("{");
+            List<Pointer> rawInstants      = new ArrayList<>(sorted.size());
+            List<Pointer> smoothedInstants = new ArrayList<>(sorted.size());
 
             for (int i = 0; i < sorted.size(); i++) {
-                String ts = millisToTimestamp(sorted.get(i).getTimestamp());
-                if (i > 0) { rawSeq.append(","); smoothedSeq.append(","); }
-                rawSeq.append(String.format("POINT(%f %f)@%s",
-                        sorted.get(i).getLon(), sorted.get(i).getLat(), ts));
+                long t = sorted.get(i).getTimestamp();
+                rawInstants.add(TemporalPoints.tgeogpointInst(
+                        sorted.get(i).getLon(), sorted.get(i).getLat(), t));
                 double[] sll = enuToLatLon(smoothedEnu[i][0], smoothedEnu[i][1], originLat, originLon);
-                smoothedSeq.append(String.format("POINT(%f %f)@%s", sll[1], sll[0], ts));
+                smoothedInstants.add(TemporalPoints.tgeogpointInst(sll[1], sll[0], t));
             }
-            rawSeq.append("}");
-            smoothedSeq.append("}");
 
-            Pointer rawTraj      = GeneratedFunctions.tgeogpoint_in(rawSeq.toString());
-            Pointer smoothedTraj = GeneratedFunctions.tgeogpoint_in(smoothedSeq.toString());
+            Pointer rawTraj      = TemporalPoints.sequence(rawInstants, TInterpolation.DISCRETE);
+            Pointer smoothedTraj = TemporalPoints.sequence(smoothedInstants, TInterpolation.DISCRETE);
             if (rawTraj == null || smoothedTraj == null) return;
 
             String result = String.format(

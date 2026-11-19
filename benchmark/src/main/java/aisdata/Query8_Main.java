@@ -37,6 +37,8 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
+import org.mobilitydb.meos.TemporalPoints;
+import types.temporal.TInterpolation;
 
 /**
  * Query 8 - Trajectory "Denoising" with Extended Kalman Filter (AIS dataset)
@@ -351,30 +353,26 @@ public class Query8_Main {
             // Build two MEOS temporal geometry sequences:
             //   - rawSeq:      the original unfiltered GPS trajectory.
             //   - smoothedSeq: the Kalman-filtered trajectory.
-            // Format: {POINT(lon lat)@timestamp, POINT(lon lat)@timestamp, ...}
-            StringBuilder rawSeq      = new StringBuilder("{");
-            StringBuilder smoothedSeq = new StringBuilder("{");
+            List<Pointer> rawInstants      = new ArrayList<>(sorted.size());
+            List<Pointer> smoothedInstants = new ArrayList<>(sorted.size());
 
             for (int i = 0; i < sorted.size(); i++) {
-                String ts = millisToTimestamp(sorted.get(i).getTimestamp());
-                if (i > 0) { rawSeq.append(","); smoothedSeq.append(","); }
+                long t = sorted.get(i).getTimestamp();
 
-                // Raw point: original GPS coordinates (lon, lat order for MEOS WKT).
-                rawSeq.append(String.format("POINT(%f %f)@%s",
-                        sorted.get(i).getLon(), sorted.get(i).getLat(), ts));
+                // Raw point: original GPS coordinates.
+                rawInstants.add(TemporalPoints.tgeogpointInst(
+                        sorted.get(i).getLon(), sorted.get(i).getLat(), t));
 
                 // Smoothed point: convert ENU result back to WGS-84 degrees.
-                // enuToLatLon returns [lat, lon]; MEOS WKT requires (lon lat).
+                // enuToLatLon returns [lat, lon].
                 double[] smoothedLatLon = enuToLatLon(
                         smoothedEnu[i][0], smoothedEnu[i][1], originLat, originLon);
-                smoothedSeq.append(String.format("POINT(%f %f)@%s",
-                        smoothedLatLon[1], smoothedLatLon[0], ts));
+                smoothedInstants.add(TemporalPoints.tgeogpointInst(
+                        smoothedLatLon[1], smoothedLatLon[0], t));
             }
-            rawSeq.append("}");
-            smoothedSeq.append("}");
 
-            Pointer rawTraj      = GeneratedFunctions.tgeogpoint_in(rawSeq.toString());
-            Pointer smoothedTraj = GeneratedFunctions.tgeogpoint_in(smoothedSeq.toString());
+            Pointer rawTraj      = TemporalPoints.sequence(rawInstants, TInterpolation.DISCRETE);
+            Pointer smoothedTraj = TemporalPoints.sequence(smoothedInstants, TInterpolation.DISCRETE);
             if (rawTraj == null || smoothedTraj == null) return;
 
             String rawEwkt      = GeneratedFunctions.tspatial_as_ewkt(rawTraj,      6);
@@ -747,7 +745,7 @@ public class Query8_Main {
 
         /**
          * Formats a Unix epoch millisecond timestamp as an ISO-8601 string with UTC offset,
-         * compatible with the MEOS {@code tgeogpoint_in()} WKT format.
+         * for the output.
          *
          * @param millis epoch milliseconds
          * @return formatted timestamp, e.g. {@code "2024-08-02 10:05:48+00"}

@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
+import org.mobilitydb.meos.TemporalPoints;
 
 /**
  * Query 6 - Positional Divergence for a Device
@@ -217,13 +218,11 @@ public class Query6_Main {
             String tsRight = millisToTimestamp(right.getTimestamp());
 
             // Build tgeogpoint instants for both sides of the pair.
-            Pointer tpointLeft = GeneratedFunctions.tgeogpoint_in(
-                    String.format("POINT(%f %f)@%s", left.getLon(),  left.getLat(),  tsLeft));
-            Pointer tpointRight = GeneratedFunctions.tgeogpoint_in(
-                    String.format("POINT(%f %f)@%s", right.getLon(), right.getLat(), tsRight));
+            Pointer tpointLeft = TemporalPoints.tgeogpointInst(left.getLon(), left.getLat(), left.getTimestamp());
+            Pointer tpointRight = TemporalPoints.tgeogpointInst(right.getLon(), right.getLat(), right.getTimestamp());
 
             if (tpointLeft == null || tpointRight == null) {
-                log.error("tgeogpoint_in returned null for pair MMSI={}", left.getMmsi());
+                log.error("tpointinst_make returned null for pair MMSI={}", left.getMmsi());
                 return null;
             }
 

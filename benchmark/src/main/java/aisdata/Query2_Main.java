@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
+import org.mobilitydb.meos.TemporalPoints;
 
 /**
  * Query 2 - Brake System Monitoring
@@ -137,7 +138,7 @@ public class Query2_Main {
      * (INPolygons), by applying the function eintersects_tgeo_geo"</i>.
      *
      * <p>Plain WKT strings parsed with {@code geog_in(wkt, -1)} (SRID=4326 implicit),
-     * consistent with the {@code tgeogpoint} created by {@code tgeogpoint_in}.
+     * consistent with the {@code tgeogpoint} instants of the events.
      *
      * <p>In the paper these represent railway maintenance depots where brake monitoring is
      * not meaningful. Here they are placed in open sea areas away from the vessel clusters
@@ -306,7 +307,7 @@ public class Query2_Main {
             GeneratedFunctions.meos_initialize_timezone("UTC");
             // Parse the maintenance area polygons only once per worker.
             // geog_in(wkt, -1) creates a geography type (SRID=4326 implicit), consistent
-            // with the tgeogpoint created by tgeogpoint_in below.
+            // with the tgeogpoint instants created below.
             maintenanceZones = new Pointer[maintenanceAreasWkt.length];
             for (int i = 0; i < maintenanceAreasWkt.length; i++) {
                 maintenanceZones[i] = GeneratedFunctions.geog_in(maintenanceAreasWkt[i], -1);
@@ -344,12 +345,10 @@ public class Query2_Main {
                 String ts = millisToTimestamp(event.getTimestamp());
 
                 // Build a temporal geography point for this event: same approach as Query 1.
-                String tpointWkt = String.format(
-                        "POINT(%f %f)@%s", event.getLon(), event.getLat(), ts);
-
-                Pointer tpoint = GeneratedFunctions.tgeogpoint_in(tpointWkt);
+                Pointer tpoint = TemporalPoints.tgeogpointInst(
+                        event.getLon(), event.getLat(), event.getTimestamp());
                 if (tpoint == null) {
-                    log.error("tgeogpoint_in returned null for WKT: {}", tpointWkt);
+                    log.error("tpointinst_make returned null at ts={}", ts);
                     continue;
                 }
 

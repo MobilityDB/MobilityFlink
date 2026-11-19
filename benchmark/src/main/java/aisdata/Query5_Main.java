@@ -26,6 +26,8 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
+import org.mobilitydb.meos.TemporalPoints;
+import types.temporal.TInterpolation;
 
 /**
  * Query 5 - Trajectory Creation and High-Speed Alert
@@ -147,7 +149,7 @@ public class Query5_Main {
      * alerts fire on the AIS data.
      *
      * <p>Parsed with {@code geog_in(wkt, -1)}: SRID=4326 geography, consistent with
-     * {@code tgeogpoint_in}. Distance = {@link #GEOFENCE_DISTANCE_METERS}.
+     * the {@code tgeogpoint} instants. Distance = {@link #GEOFENCE_DISTANCE_METERS}.
      */
     private static final String GEOFENCE_WKT =
             "POLYGON((11.76 55.82, 11.76 55.95, 12.07 55.95, 12.07 55.82, 11.76 55.82))";
@@ -349,10 +351,9 @@ public class Query5_Main {
 
                 String ts = millisToTimestamp(event.getTimestamp());
 
-                Pointer tpoint = GeneratedFunctions.tgeogpoint_in(
-                        String.format("POINT(%f %f)@%s", event.getLon(), event.getLat(), ts));
+                Pointer tpoint = TemporalPoints.tgeogpointInst(event.getLon(), event.getLat(), event.getTimestamp());
                 if (tpoint == null) {
-                    log.error("tgeogpoint_in returned null for MMSI={} at ts={}", mmsi, ts);
+                    log.error("tpointinst_make returned null for MMSI={} at ts={}", mmsi, ts);
                     continue;
                 }
 
@@ -373,16 +374,13 @@ public class Query5_Main {
             // Paper Line 5: three aggregations computation
 
             // (a) temporal_sequence(lon, lat, ts).
-            StringBuilder seq = new StringBuilder("{");
+            List<Pointer> instants = new ArrayList<>(surviving.size());
             double speedSumMs = 0.0;
             double minSpeedMs = Double.MAX_VALUE;
 
-            for (int i = 0; i < surviving.size(); i++) {
-                AISData event = surviving.get(i);
-                String ts = millisToTimestamp(event.getTimestamp());
-
-                if (i > 0) seq.append(",");
-                seq.append(String.format("POINT(%f %f)@%s", event.getLon(), event.getLat(), ts));
+            for (AISData event : surviving) {
+                instants.add(TemporalPoints.tgeogpointInst(
+                        event.getLon(), event.getLat(), event.getTimestamp()));
 
                 // (b) avg(gps_speed) and (c) min(gps_speed):
                 // Convert knots → m/s before accumulating.
@@ -390,7 +388,6 @@ public class Query5_Main {
                 speedSumMs += speedMs;
                 if (speedMs < minSpeedMs) minSpeedMs = speedMs;
             }
-            seq.append("}");
 
             double avgSpeedMs = speedSumMs / surviving.size();
 
@@ -399,10 +396,10 @@ public class Query5_Main {
             if (avgSpeedMs <= avgSpeedThresholdMs && minSpeedMs <= minSpeedThresholdMs) return;
 
             // Build trajectory for output.
-            Pointer trajectory = GeneratedFunctions.tgeogpoint_in(seq.toString());
+            Pointer trajectory = TemporalPoints.sequence(instants, TInterpolation.DISCRETE);
             String trajectoryEwkt = (trajectory != null)
                     ? GeneratedFunctions.tspatial_as_ewkt(trajectory, 6)
-                    : seq.toString(); // fallback to raw WKT if MEOS parse fails
+                    : "(no trajectory)";
 
             String triggerReason = buildTriggerReason(avgSpeedMs, minSpeedMs);
 

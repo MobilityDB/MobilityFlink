@@ -27,6 +27,8 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
+import org.mobilitydb.meos.TemporalPoints;
+import types.temporal.TInterpolation;
 
 /**
  * Query 3 - Trajectory Creation
@@ -60,12 +62,10 @@ import functions.GeneratedFunctions;
  *       assembles individual GPS instants into a MobilityDB temporal sequence. In this
  *       implementation:
  *       <ol>
- *         <li>Each event is formatted as a {@code tgeogpoint} instant:
- *             {@code "POINT(lon lat)@timestamp"}.</li>
- *         <li>All instants are sorted by timestamp and concatenated into a sequence literal:
- *             {@code "{POINT(lon1 lat1)@ts1, POINT(lon2 lat2)@ts2, ...}"}.</li>
- *         <li>The sequence is parsed by {@code tgeogpoint_in} to create a native MEOS
- *             {@code tgeogpoint} sequence pointer.</li>
+ *         <li>Each event is made a {@code tgeogpoint} instant at the event's time
+ *             ({@code tpointinst_make}).</li>
+ *         <li>The instants, sorted by timestamp, are made a {@code tgeogpoint} sequence
+ *             ({@code tsequence_make}).</li>
  *         <li>The sequence is serialised back to EWKT via {@code tspatial_as_ewkt} for human-readable output.</li>
  *       </ol>
  *   </li>
@@ -198,11 +198,9 @@ public class Query3_Main {
          * <ol>
          *   <li>Collect all events and sort by timestamp (MEOS requires strictly increasing
          *       timestamps in a sequence).</li>
-         *   <li>Format each event as a {@code tgeogpoint} instant WKT:
-         *       {@code "POINT(lon lat)@timestamp"}.</li>
-         *   <li>Concatenate into a sequence literal:
-         *       {@code "{POINT(lon1 lat1)@ts1, POINT(lon2 lat2)@ts2, ...}"}.</li>
-         *   <li>Parse the sequence with {@code tgeogpoint_in} to obtain a native MEOS pointer.</li>
+         *   <li>Make each event a {@code tgeogpoint} instant at the event's time
+         *       ({@code tpointinst_make}).</li>
+         *   <li>Make the discrete sequence of the instants ({@code tsequence_make}).</li>
          *   <li>Serialise back to EWKT via {@code tspatial_as_ewkt} and emit.</li>
          * </ol>
          *
@@ -222,7 +220,7 @@ public class Query3_Main {
             String windowEnd   = millisToTimestamp(context.window().getEnd());
 
             // Step 1: collect and sort by timestamp.
-            // MEOS tgeogpoint_in requires instants in strictly increasing temporal order;
+            // MEOS requires the instants of a sequence in strictly increasing temporal order;
             // Flink does not guarantee arrival order within a window.
             List<AISData> sorted = new ArrayList<>();
             for (AISData e : elements) sorted.add(e);
@@ -230,23 +228,17 @@ public class Query3_Main {
 
             if (sorted.isEmpty()) return;
 
-            // Step 2 & 3: build the sequence literal: {POINT(lon lat)@ts, ...}
-            // This is the WKT representation of a tgeogpoint TSequence
-            StringBuilder seq = new StringBuilder("{");
-            for (int i = 0; i < sorted.size(); i++) {
-                AISData event = sorted.get(i);
-                String ts = millisToTimestamp(event.getTimestamp());
-                if (i > 0) seq.append(",");
-                seq.append(String.format("POINT(%f %f)@%s", event.getLon(), event.getLat(), ts));
+            // Step 2 & 3: one tgeogpoint instant per event, at the event's time
+            List<Pointer> instants = new ArrayList<>(sorted.size());
+            for (AISData event : sorted) {
+                instants.add(TemporalPoints.tgeogpointInst(
+                        event.getLon(), event.getLat(), event.getTimestamp()));
             }
-            seq.append("}");
 
-            // Step 4: parse the sequence into a native MEOS tgeogpoint pointer.
-            // tgeogpoint_in accepts both single instants ("POINT(lon lat)@ts") and sequences
-            // ("{POINT(...)@ts,...}"). Here we always pass a sequence.
-            Pointer trajectory = GeneratedFunctions.tgeogpoint_in(seq.toString());
+            // Step 4: the discrete tgeogpoint sequence of the instants.
+            Pointer trajectory = TemporalPoints.sequence(instants, TInterpolation.DISCRETE);
             if (trajectory == null) {
-                log.error("tgeogpoint_in returned null for sequence: {}", seq);
+                log.error("tsequence_make returned null for MMSI={}", mmsi);
                 return;
             }
 
