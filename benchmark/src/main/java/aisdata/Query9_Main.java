@@ -1,10 +1,6 @@
 package aisdata;
 
 import java.time.Duration;
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -29,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
+import org.mobilitydb.meos.TemporalPoints;
 
 /**
  * Query 9 - Windowed Per-Device kNN Join
@@ -189,9 +186,6 @@ public class Query9_Main {
 
         private final int k;
 
-        private static final DateTimeFormatter TIMESTAMP_FMT =
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
-
         public KnnCoGroupFunction(int k) {
             this.k = k;
         }
@@ -218,18 +212,14 @@ public class Query9_Main {
             // Same precalculation logic as in Query 7
             List<Pointer> geoLefts  = new ArrayList<>(lefts.size());
             for (AISData left : lefts) {
-                String ts = millisToTimestamp(left.getTimestamp());
-                Pointer tp  = GeneratedFunctions.tgeogpoint_in(
-                        String.format("POINT(%f %f)@%s", left.getLon(), left.getLat(), ts));
+                Pointer tp  = TemporalPoints.tgeogpointInst(left.getLon(), left.getLat(), left.getTimestamp());
                 Pointer geo = (tp != null) ? GeneratedFunctions.tgeo_end_value(tp) : null;
-                geoLefts.add(geo); // null if tgeogpoint_in or temporal_end_value failed
+                geoLefts.add(geo); // null if tpointinst_make or temporal_end_value failed
             }
 
             List<Pointer> geoRights = new ArrayList<>(rights.size());
             for (AISData right : rights) {
-                String ts = millisToTimestamp(right.getTimestamp());
-                Pointer tp  = GeneratedFunctions.tgeogpoint_in(
-                        String.format("POINT(%f %f)@%s", right.getLon(), right.getLat(), ts));
+                Pointer tp  = TemporalPoints.tgeogpointInst(right.getLon(), right.getLat(), right.getTimestamp());
                 Pointer geo = (tp != null) ? GeneratedFunctions.tgeo_end_value(tp) : null;
                 geoRights.add(geo);
             }
@@ -304,11 +294,6 @@ public class Query9_Main {
                 log.info(result);
                 out.collect(result);
             }
-        }
-
-        private String millisToTimestamp(long millis) {
-            OffsetDateTime dt = Instant.ofEpochMilli(millis).atOffset(ZoneOffset.UTC);
-            return dt.format(TIMESTAMP_FMT);
         }
     }
 }

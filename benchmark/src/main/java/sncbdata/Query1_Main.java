@@ -24,6 +24,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Properties;
+import org.mobilitydb.meos.TemporalPoints;
 
 /**
  * Query 1 - High-Risk Zone Proximity Monitoring (SNCB dataset)
@@ -159,10 +160,9 @@ public class Query1_Main {
 
             for (SNCBData event : elements) {
                 String ts = millisToTimestamp(event.getTimestamp());
-                String tpointWkt = String.format("POINT(%f %f)@%s", event.getLon(), event.getLat(), ts);
-
-                Pointer tpoint = GeneratedFunctions.tgeogpoint_in(tpointWkt);
-                if (tpoint == null) { log.error("tgeogpoint_in returned null for WKT: {}", tpointWkt); continue; }
+                Pointer tpoint = TemporalPoints.tgeogpointInst(
+                        event.getLon(), event.getLat(), event.getTimestamp());
+                if (tpoint == null) { log.error("tpointinst_make returned null at ts={}", ts); continue; }
 
                 for (int i = 0; i < hazardZones.length; i++) {
                     if (hazardZones[i] == null) continue;

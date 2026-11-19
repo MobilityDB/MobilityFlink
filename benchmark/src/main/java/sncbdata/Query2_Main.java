@@ -24,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import org.mobilitydb.meos.TemporalPoints;
 
 /**
  * Query 2 - Brake System Monitoring (SNCB dataset)
@@ -160,11 +161,10 @@ public class Query2_Main {
 
             for (SNCBData elem : elements) {
                 String timestamp = millisToTimestamp(elem.getTimestamp());
-                String point = String.format("Point(%f %f)@%s", elem.getLon(), elem.getLat(), timestamp);
-
-                Pointer tpoint = GeneratedFunctions.tgeogpoint_in(point);
+                Pointer tpoint = TemporalPoints.tgeogpointInst(
+                        elem.getLon(), elem.getLat(), elem.getTimestamp());
                 if (tpoint == null) {
-                    log.error("tgeogpoint_in returned null for WKT: {}", point);
+                    log.error("tpointinst_make returned null at ts={}", timestamp);
                     continue;
                 }
 

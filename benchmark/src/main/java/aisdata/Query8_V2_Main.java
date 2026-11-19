@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import functions.GeneratedFunctions;
 import types.temporal.TInterpolation;
+import org.mobilitydb.meos.TemporalPoints;
 
 /**
  * Query 8 V2 - Trajectory Denoising with MEOS native EKF (AIS dataset)
@@ -141,9 +142,8 @@ public class Query8_V2_Main {
             // 2. Single-point case: EKF not applicable, emit raw point directly.
             if (sorted.size() < 2) {
                 AISData event = sorted.get(0);
-                String wkt   = String.format("POINT(%f %f)@%s",
-                        event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
-                Pointer inst = GeneratedFunctions.tgeompoint_in(wkt);
+                Pointer inst = TemporalPoints.tgeompointInst(
+                        event.getLon(), event.getLat(), event.getTimestamp());
                 if (inst == null) return;
                 Pointer seedArray = Memory.allocate(runtime, Long.BYTES);
                 seedArray.putPointer(0, inst);
@@ -161,14 +161,13 @@ public class Query8_V2_Main {
                 return;
             }
 
-            // 3. Build tgeompoint instants via tgeompoint_in (WKT string).
+            // 3. Build tgeompoint instants at the events' times.
             List<Pointer> instants = new ArrayList<>(sorted.size());
             for (AISData event : sorted) {
-                String ts   = millisToTs(event.getTimestamp());
-                String wkt  = String.format("POINT(%f %f)@%s", event.getLon(), event.getLat(), ts);
-                Pointer inst = GeneratedFunctions.tgeompoint_in(wkt);
+                Pointer inst = TemporalPoints.tgeompointInst(
+                        event.getLon(), event.getLat(), event.getTimestamp());
                 if (inst == null) {
-                    log.error("[EKF-V2] tgeompoint_in returned null for MMSI={} wkt={}", mmsi, wkt);
+                    log.error("[EKF-V2] tpointinst_make returned null for MMSI={}", mmsi);
                     continue;
                 }
                 instants.add(inst);

@@ -26,6 +26,8 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
+import org.mobilitydb.meos.TemporalPoints;
+import types.temporal.TInterpolation;
 
 /**
  * Query 4 - Trajectory Creation in a Restricted Space
@@ -67,7 +69,7 @@ import functions.GeneratedFunctions;
  *   <li><b>Line 3 (sliding window 10s / 10ms)</b>:
  *       {@code SlidingEventTimeWindows.of(Duration.ofSeconds(10), Duration.ofMillis(10))}.</li>
  *   <li><b>Line 4 (temporal_sequence)</b>: surviving events are
- *       assembled into a {@code tgeogpoint} sequence via {@code tgeogpoint_in} and serialised
+ *       assembled into a {@code tgeogpoint} sequence via {@code tsequence_make} and serialised
  *       to EWKT via {@code tspatial_as_ewkt}.</li>
  * </ul>
  *
@@ -268,7 +270,7 @@ public class Query4_Main {
            // stbox_make parameters:
             //   hasx=true   → include spatial (XY) dimensions
             //   hasz=false  → no Z (altitude) dimension
-            //   geodetic=true → geography/WGS-84, consistent with tgeogpoint_in
+            //   geodetic=true → geography/WGS-84, consistent with the tgeogpoint instants
             //   srid=4326   → WGS-84
             //   xmin/xmax/ymin/ymax → spatial bounds (lon/lat in degrees)
             //   zmin/zmax=0 → unused (hasz=false)
@@ -303,8 +305,8 @@ public class Query4_Main {
          * </ul>
          *
          * <p><b>Paper Line 4</b>: {@code temporal_sequence(lon, lat, ts)}:
-         * <br>surviving events are sorted, concatenated into a sequence
-         * literal, parsed by {@code tgeogpoint_in}, and serialised via {@code tspatial_as_ewkt}.
+         * <br>surviving events are sorted, made a sequence by {@code tsequence_make},
+         * and serialised via {@code tspatial_as_ewkt}.
          *
          * @param mmsi     vessel identifier (the key used by keyBy)
          * @param context  window metadata (start/end timestamps)
@@ -331,12 +333,10 @@ public class Query4_Main {
                 String ts = millisToTimestamp(event.getTimestamp());
 
                 // Build the tgeogpoint instant for this event.
-                String tpointWkt = String.format(
-                        "POINT(%f %f)@%s", event.getLon(), event.getLat(), ts);
-
-                Pointer tpoint = GeneratedFunctions.tgeogpoint_in(tpointWkt);
+                Pointer tpoint = TemporalPoints.tgeogpointInst(
+                        event.getLon(), event.getLat(), event.getTimestamp());
                 if (tpoint == null) {
-                    log.error("tgeogpoint_in returned null for WKT: {}", tpointWkt);
+                    log.error("tpointinst_make returned null at ts={}", ts);
                     continue;
                 }
 
@@ -356,22 +356,19 @@ public class Query4_Main {
 
             if (surviving.isEmpty()) return; // no event survived the STBox filter
 
-            // Sort by timestamp: required by tgeogpoint_in for sequence construction.
+            // Sort by timestamp: required by tsequence_make for sequence construction.
             surviving.sort((a, b) -> Long.compare(a.getTimestamp(), b.getTimestamp()));
 
             // Paper Line 4: temporal_sequence(lon, lat, ts).
-            StringBuilder seq = new StringBuilder("{");
-            for (int i = 0; i < surviving.size(); i++) {
-                AISData event = surviving.get(i);
-                String ts = millisToTimestamp(event.getTimestamp());
-                if (i > 0) seq.append(",");
-                seq.append(String.format("POINT(%f %f)@%s", event.getLon(), event.getLat(), ts));
+            List<Pointer> instants = new ArrayList<>(surviving.size());
+            for (AISData event : surviving) {
+                instants.add(TemporalPoints.tgeogpointInst(
+                        event.getLon(), event.getLat(), event.getTimestamp()));
             }
-            seq.append("}");
 
-            Pointer trajectory = GeneratedFunctions.tgeogpoint_in(seq.toString());
+            Pointer trajectory = TemporalPoints.sequence(instants, TInterpolation.DISCRETE);
             if (trajectory == null) {
-                log.error("tgeogpoint_in returned null for sequence: {}", seq);
+                log.error("tsequence_make returned null for MMSI={}", mmsi);
                 return;
             }
 

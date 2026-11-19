@@ -1,10 +1,6 @@
 package aisdata;
 
 import java.time.Duration;
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -28,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
+import org.mobilitydb.meos.TemporalPoints;
 
 /**
  * Query 7 - Global Closest Device Pairs (Top-k Closest Pairs)
@@ -217,9 +214,6 @@ public class Query7_Main {
 
         private final int topK;
 
-        private static final DateTimeFormatter TIMESTAMP_FMT =
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
-
         public ClosestPairsCoGroupFunction(int topK) {
             this.topK = topK;
         }
@@ -252,7 +246,7 @@ public class Query7_Main {
             if (lefts.isEmpty() || rights.isEmpty()) return;
 
             // Precalculate geo Pointers for every event in lefts and rights BEFORE the
-            // double loop. Without this, tgeogpoint_in + temporal_end_value would be called
+            // double loop. Without this, tpointinst_make + temporal_end_value would be called
             // once per pair (i.e. lefts.size() × rights.size() times), meaning each event's
             // pointer is recomputed N times instead of once.
             //
@@ -261,18 +255,14 @@ public class Query7_Main {
             // With precalculation    : 100 + 100  =    200 native calls.
             List<Pointer> geoLefts  = new ArrayList<>(lefts.size());
             for (AISData left : lefts) {
-                String ts = millisToTimestamp(left.getTimestamp());
-                Pointer tp  = GeneratedFunctions.tgeogpoint_in(
-                        String.format("POINT(%f %f)@%s", left.getLon(), left.getLat(), ts));
+                Pointer tp  = TemporalPoints.tgeogpointInst(left.getLon(), left.getLat(), left.getTimestamp());
                 Pointer geo = (tp != null) ? GeneratedFunctions.tgeo_end_value(tp) : null;
-                geoLefts.add(geo); // null if tgeogpoint_in or temporal_end_value failed
+                geoLefts.add(geo); // null if tpointinst_make or temporal_end_value failed
             }
 
             List<Pointer> geoRights = new ArrayList<>(rights.size());
             for (AISData right : rights) {
-                String ts = millisToTimestamp(right.getTimestamp());
-                Pointer tp  = GeneratedFunctions.tgeogpoint_in(
-                        String.format("POINT(%f %f)@%s", right.getLon(), right.getLat(), ts));
+                Pointer tp  = TemporalPoints.tgeogpointInst(right.getLon(), right.getLat(), right.getTimestamp());
                 Pointer geo = (tp != null) ? GeneratedFunctions.tgeo_end_value(tp) : null;
                 geoRights.add(geo);
             }
@@ -334,12 +324,6 @@ public class Query7_Main {
                 log.info(result);
                 out.collect(result);
             }
-        }
-
-        private String millisToTimestamp(long millis) {
-            Instant instant = Instant.ofEpochMilli(millis);
-            OffsetDateTime dt = instant.atOffset(ZoneOffset.UTC);
-            return dt.format(TIMESTAMP_FMT);
         }
     }
 }

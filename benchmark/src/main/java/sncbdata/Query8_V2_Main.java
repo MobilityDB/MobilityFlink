@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import functions.GeneratedFunctions;
 import types.temporal.TInterpolation;
+import org.mobilitydb.meos.TemporalPoints;
 
 /**
  * Query 8 V2 - Trajectory Denoising with MEOS native EKF (SNCB dataset)
@@ -161,9 +162,8 @@ public class Query8_V2_Main {
             // With 1 point, we skip the filter and emit the raw single-point sequence directly.
             if (sorted.size() < 2) {
                 SNCBData event = sorted.get(0);
-                String wkt   = String.format("POINT(%f %f)@%s",
-                        event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
-                Pointer inst = GeneratedFunctions.tgeompoint_in(wkt);
+                Pointer inst = TemporalPoints.tgeompointInst(
+                        event.getLon(), event.getLat(), event.getTimestamp());
                 if (inst == null) return;
                 Runtime runtime = Runtime.getSystemRuntime();
                 Pointer seedArray = Memory.allocate(runtime, Long.BYTES);
@@ -182,16 +182,15 @@ public class Query8_V2_Main {
                 return;
             }
 
-            // 2. Build tgeompoint instants via tgeompoint_in (WKT string).
+            // 2. Build tgeompoint instants at the events' times.
             Runtime runtime = Runtime.getSystemRuntime();
             List<Pointer> instants = new ArrayList<>(sorted.size());
 
             for (SNCBData event : sorted) {
-                String wkt   = String.format("POINT(%f %f)@%s",
-                        event.getLon(), event.getLat(), millisToTs(event.getTimestamp()));
-                Pointer inst = GeneratedFunctions.tgeompoint_in(wkt);
+                Pointer inst = TemporalPoints.tgeompointInst(
+                        event.getLon(), event.getLat(), event.getTimestamp());
                 if (inst == null) {
-                    log.error("[EKF-V2] tgeompoint_in returned null for DeviceID={} wkt={}", deviceId, wkt);
+                    log.error("[EKF-V2] tpointinst_make returned null for DeviceID={}", deviceId);
                     continue;
                 }
                 instants.add(inst);

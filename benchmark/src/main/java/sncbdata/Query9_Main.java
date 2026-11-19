@@ -1,9 +1,6 @@
 package sncbdata;
 
 import java.time.Duration;
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -24,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import jnr.ffi.Pointer;
 import functions.GeneratedFunctions;
+import org.mobilitydb.meos.TemporalPoints;
 
 /**
  * Query 9 - Windowed Per-Device kNN Join (SNCB dataset)
@@ -111,9 +109,6 @@ public class Query9_Main {
             extends RichCoGroupFunction<SNCBData, SNCBData, String> {
 
         private static final Logger log = LoggerFactory.getLogger(KnnCoGroupFunction.class);
-        private static final DateTimeFormatter TIMESTAMP_FMT =
-                DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ssxxx");
-
         private final int k;
 
         // Initialized once per worker in open().
@@ -137,22 +132,18 @@ public class Query9_Main {
             if (lefts.isEmpty() || rights.isEmpty()) return;
 
             // Precalculate geo Pointers for every event BEFORE the double loop.
-            // Without this, tgeogpoint_in + temporal_end_value would be called once per
+            // Without this, tpointinst_make + temporal_end_value would be called once per
             // pair: O(N×M).
             List<Pointer> geoLefts = new ArrayList<>(lefts.size());
             for (SNCBData left : lefts) {
-                String ts = millisToTimestamp(left.getTimestamp());
-                Pointer tp  = GeneratedFunctions.tgeogpoint_in(
-                        String.format("POINT(%f %f)@%s", left.getLon(), left.getLat(), ts));
+                Pointer tp  = TemporalPoints.tgeogpointInst(left.getLon(), left.getLat(), left.getTimestamp());
                 Pointer geo = (tp != null) ? GeneratedFunctions.tgeo_end_value(tp) : null;
                 geoLefts.add(geo);
             }
 
             List<Pointer> geoRights = new ArrayList<>(rights.size());
             for (SNCBData right : rights) {
-                String ts = millisToTimestamp(right.getTimestamp());
-                Pointer tp  = GeneratedFunctions.tgeogpoint_in(
-                        String.format("POINT(%f %f)@%s", right.getLon(), right.getLat(), ts));
+                Pointer tp  = TemporalPoints.tgeogpointInst(right.getLon(), right.getLat(), right.getTimestamp());
                 Pointer geo = (tp != null) ? GeneratedFunctions.tgeo_end_value(tp) : null;
                 geoRights.add(geo);
             }
@@ -221,10 +212,6 @@ public class Query9_Main {
                 log.info(result);
                 out.collect(result);
             }
-        }
-
-        private String millisToTimestamp(long millis) {
-            return Instant.ofEpochMilli(millis).atOffset(ZoneOffset.UTC).format(TIMESTAMP_FMT);
         }
     }
 }

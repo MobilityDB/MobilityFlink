@@ -42,6 +42,9 @@ import functions.GeneratedFunctions;
 import types.boxes.*;
 import types.basic.tpoint.tgeom.*;
 import types.basic.tpoint.tgeom.TGeomPointSeq;
+import types.temporal.TInterpolation;
+import jnr.ffi.Pointer;
+import org.mobilitydb.meos.TemporalPoints;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
@@ -97,22 +100,11 @@ ProcessWindowFunction<Tuple4<Integer, Double, Double, Long>, TGeomPointSeq, Inte
 
         if (sortedElements.isEmpty()) return;
 
-        StringBuilder trajbuffer = new StringBuilder();
-        boolean firstPoint = true;
-        
+        List<Pointer> instants = new ArrayList<>(sortedElements.size());
         for (Tuple4<Integer, Double, Double, Long> tuple : sortedElements) {
-            String t = convertMillisToTimestamp(tuple.f3);
             // Tuple: f0=mmsi, f1=lon, f2=lat, f3=timestamp
-            String str_pointbuffer = String.format("POINT(%f %f)@%s", tuple.f1, tuple.f2, t);
-
-            if (firstPoint) {
-                trajbuffer.append("{" + str_pointbuffer);
-                firstPoint = false;
-            } else {
-                trajbuffer.append("," + str_pointbuffer);
-            }
+            instants.add(TemporalPoints.tgeompointInst(tuple.f1, tuple.f2, tuple.f3));
         }
-        trajbuffer.append("}");
 
         logger.info("MMSI={}, Window [{} - {}]: {} trajectory points", 
             mmsiKey,
@@ -120,10 +112,9 @@ ProcessWindowFunction<Tuple4<Integer, Double, Double, Long>, TGeomPointSeq, Inte
             convertMillisToTimestamp(context.window().getEnd()),
             sortedElements.size());
     
-        logger.info("trajbuffer for MMSI {}: {}", mmsiKey, trajbuffer.toString());
-        
         try {
-            TGeomPointSeq trajectoryMEOS = new TGeomPointSeq(trajbuffer.toString());
+            TGeomPointSeq trajectoryMEOS = new TGeomPointSeq(
+                    TemporalPoints.sequence(instants, TInterpolation.DISCRETE));
             logger.info("trajectoryMEOS created for MMSI {} in window [{} - {}]", 
                 mmsiKey,
                 convertMillisToTimestamp(context.window().getStart()),
@@ -131,8 +122,8 @@ ProcessWindowFunction<Tuple4<Integer, Double, Double, Long>, TGeomPointSeq, Inte
                 
             out.collect(trajectoryMEOS);
         } catch (Exception e) {
-            logger.error("Error creating or collecting TGeomPointSeq for MMSI {} with buffer [{}]: {}", 
-                         mmsiKey, trajbuffer.toString(), e.getMessage(), e);
+            logger.error("Error creating or collecting TGeomPointSeq for MMSI {}: {}",
+                         mmsiKey, e.getMessage(), e);
         }
     }
 

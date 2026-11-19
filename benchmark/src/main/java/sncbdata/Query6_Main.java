@@ -19,6 +19,7 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import org.mobilitydb.meos.TemporalPoints;
 
 public class Query6_Main {
     private static final Logger logger = LoggerFactory.getLogger(Query6_Main.class);
@@ -112,14 +113,13 @@ public class Query6_Main {
             String tsLeft = millisToTimestamp(left.getTimestamp());
             String tsRight = millisToTimestamp(right.getTimestamp());
 
-            String pointLeft = String.format("Point(%f %f)@%s", left.getLon(), left.getLat(), tsLeft);
-            String pointRight = String.format("Point(%f %f)@%s", right.getLon(), right.getLat(), tsRight);
-
-            Pointer tpointLeft = GeneratedFunctions.tgeogpoint_in(pointLeft);
-            Pointer tpointRight = GeneratedFunctions.tgeogpoint_in(pointRight);
+            Pointer tpointLeft = TemporalPoints.tgeogpointInst(
+                    left.getLon(), left.getLat(), left.getTimestamp());
+            Pointer tpointRight = TemporalPoints.tgeogpointInst(
+                    right.getLon(), right.getLat(), right.getTimestamp());
 
             if (tpointLeft == null || tpointRight == null) {
-                log.error("tgeogpoint_in returned null for DeviceID={}", left.getDeviceId());
+                log.error("tpointinst_make returned null for DeviceID={}", left.getDeviceId());
                 return null;
             }
 
